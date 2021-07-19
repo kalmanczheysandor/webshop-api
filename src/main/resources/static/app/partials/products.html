@@ -1,0 +1,85 @@
+﻿<div>
+    <div class="container">
+        <header>
+            <h3>Products</h3>
+        </header>
+        <div class="row">
+            <div >
+                Name:
+                <br>
+                <input data-ng-model="newProduct.name" type="text" placeholder="Name">
+            </div>
+            <div >
+                Code:
+                <br>
+                <input data-ng-model="newProduct.code" type="text" placeholder="Code">
+            </div>
+            <div>
+                Category:
+                <br>
+                <input data-ng-model="newProduct.category" type="text" placeholder="Category">
+            </div>
+        </div>
+        <div class="row">
+            <button id="submitProduct" class="btn btn-primary" type="button"
+                    data-ng-disabled="!newProduct.name || !newProduct.code || !newProduct.category"
+                    data-ng-click="addProduct()">Add Product
+            </button>
+        </div>
+        <br>
+        <a ui-sref="products.dialog({productId:5})">load</a>
+        <ui-view></ui-view>
+        <br>
+        <div class="row">
+            <table class="table table-hover table-striped table-condensed table-bordered ordersTable">
+                <thead>
+                <tr>
+                    <th data-ng-click="setColumnOrder('id')">ID</th>
+                    <th data-ng-click="setColumnOrder('name')">Name</th>
+                    <th data-ng-click="setColumnOrder('code')">Code</th>
+                    <th data-ng-click="setColumnOrder('category')">Category</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-hide="products || products.length > 0" class="error">
+                    <td colspan="5">
+                        <div class="text-center"><strong>No products found</strong></div>
+                    </td>
+                </tr>
+                <tr data-ng-repeat="row in products | orderBy:orderby:reverse">
+                    <td>
+                        {{ row.id }}
+                    </td>
+                    <td>
+                        {{ row.name }}
+                    </td>
+                    <td>
+                        {{ row.code }}
+                    </td>
+                    <td>
+                        {{ row.category }}
+                    </td>
+                    <td>
+                        <button  class="btn btn-primary" type="button" data-ng-click="deleteProductById(row.id)">Delete</button>
+                    </td>
+
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <!--        <div>-->
+        <!--            <div class="row cardContainer">-->
+        <!--                <div class="span3 card" data-ng-repeat="product in products | orderBy:'name'">-->
+        <!--                    <button class="btn close cardClose" data-ng-click="deleteProduct(product.id)">&times;</button>-->
+        <!--                    <div class="cardHeader">{{product.name + ' ' + product.code}}</div>-->
+        <!--                    <div class="cardBody">{{product.category}}</div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+
+    </div>
+</div>
