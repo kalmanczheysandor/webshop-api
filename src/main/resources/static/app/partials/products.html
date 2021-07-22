@@ -1,34 +1,49 @@
 ﻿<div>
     <div class="container">
         <header>
-            <h3>Products</h3>
+            <h3>Termékek</h3>
         </header>
-        <div class="row">
-            <div >
-                Name:
-                <br>
-                <input data-ng-model="newProduct.name" type="text" placeholder="Name">
+
+
+        <form>
+            <div class="form-row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label for="input_ProductName">Terméknév</label>
+                            <input type="text" class="form-control" id="input_ProductName" placeholder="Terméknév" data-ng-model="formItem.name">
+                        </div>
+                        <div class="form-group">
+                            <label for="input_ProductCode">Kód</label>
+                            <input type="text" class="form-control" id="input_ProductCode" placeholder="Kód" data-ng-model="formItem.code">
+                        </div>
+                        <div class="form-group">
+                            <label for="input_ProductCategory">Kategória</label>
+                            <input type="text" class="form-control" id="input_ProductCategory" placeholder="Kategória" data-ng-model="formItem.category">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="input_ProductPrice">Ár</label>
+                            <input type="number" class="form-control" id="input_ProductPrice" placeholder="Ár(HUF)">
+                        </div>
+                        <div class="form-group">
+                            <label for="input_ProductDescription">Leírás</label>
+                            <textarea class="form-control" id="input_ProductDescription" rows="10" placeholder="Leírás" data-ng-model="formItem.description"></textarea>
+
+                        </div>
+                    </div>
             </div>
-            <div >
-                Code:
-                <br>
-                <input data-ng-model="newProduct.code" type="text" placeholder="Code">
+            <div class="form-row">
+                <div class="col-md-11"></div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-outline-primary" data-ng-click="addProduct(this.event)">Mentés</button>
+                </div>
             </div>
-            <div>
-                Category:
-                <br>
-                <input data-ng-model="newProduct.category" type="text" placeholder="Category">
-            </div>
-        </div>
-        <div class="row">
-            <button id="submitProduct" class="btn btn-primary" type="button"
-                    data-ng-disabled="!newProduct.name || !newProduct.code || !newProduct.category"
-                    data-ng-click="addProduct()">Add Product
-            </button>
-        </div>
+        </form>
+
+
+
         <br>
-        <a ui-sref="products.dialog({productId:5})">load</a>
-        <ui-view></ui-view>
         <br>
         <div class="row">
             <table class="table table-hover table-striped table-condensed table-bordered ordersTable">
@@ -61,7 +76,8 @@
                         {{ row.category }}
                     </td>
                     <td>
-                        <button  class="btn btn-primary" type="button" data-ng-click="deleteProductById(row.id)">Delete</button>
+                        <button class="btn btn-primary" type="button" data-ng-click="deleteProductById(row.id)">Delete
+                        </button>
                     </td>
 
 

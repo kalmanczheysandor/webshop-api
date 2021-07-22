@@ -12,8 +12,13 @@ import javax.validation.constraints.NotBlank;
 public class ProductCreateCommand {
     @NotBlank
     private String name;
-    @NotBlank
+
+    private String price;
+
     private String code;
-    @NotBlank
-    private String category;
+
+    private int categoryId;
+
+    private String description;
+
 }
