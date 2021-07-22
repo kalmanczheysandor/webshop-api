@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/data/products")
+@RequestMapping("/api/admin/product")
 @Slf4j
 public class ProductController {
 

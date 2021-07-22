@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Order {
+public class Customer {
+
     private Integer id;
 }

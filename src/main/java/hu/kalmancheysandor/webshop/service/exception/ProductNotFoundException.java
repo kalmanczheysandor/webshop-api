@@ -1,6 +1,6 @@
 package hu.kalmancheysandor.webshop.service.exception;
 
-public class ProductNotFoundException extends Exception {
+public class ProductNotFoundException extends RuntimeException {
     private int productId;
 
 

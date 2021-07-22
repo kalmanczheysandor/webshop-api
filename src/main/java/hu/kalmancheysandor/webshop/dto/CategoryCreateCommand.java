@@ -7,6 +7,6 @@ import org.springframework.validation.annotation.Validated;
 @Data
 @NoArgsConstructor
 @Validated
-public class CustomerCreateCommand {
+public class CategoryCreateCommand {
     
 }

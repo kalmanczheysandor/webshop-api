@@ -2,11 +2,11 @@ package hu.kalmancheysandor.webshop.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 
 @Data
 @NoArgsConstructor
-@Validated
-public class CustomerCreateCommand {
-    
+public class CustomerInfo {
+    private Integer id;
+    private String name;
+
 }
