@@ -12,13 +12,14 @@ import hu.kalmancheysandor.webshop.service.exception.ProductNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class CustomerService {
-
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -31,34 +32,44 @@ public class CustomerService {
         this.modelMapper = modelMapper;
     }
 
-    public CustomerInfo saveProduct(CustomerCreateCommand command) {
+
+    public CustomerInfo saveCustomer(CustomerCreateCommand command) {
         Customer customerToSave = modelMapper.map(command, Customer.class);
+        System.out.println("Hello:"+customerToSave.getBillingAddress());
+
         Customer customerSaved = customerRepository.saveCustomer(customerToSave);
         return modelMapper.map(customerSaved, CustomerInfo.class);
     }
 
-    public List<CustomerInfo> listAllCustomer() {
-        List<Customer> costumers = customerRepository.listAllCustomer();
-        return costumers.stream()
-                .map(item -> modelMapper.map(item, CustomerInfo.class))
-                .collect(Collectors.toList());
-    }
 
-    public CustomerInfo findProductById(int customerId) {
-        try {
-            Customer customer = customerRepository.findCustomerById(customerId);
-            return modelMapper.map(customer, CustomerInfo.class);
-        } catch (RecordNotFoundByIdException e) {
-            throw new ProductNotFoundException(e.getId());
-        }
-    }
-
-    public CustomerInfo deleteProductById(int customerId) {
-        try {
-            Customer deletedCustomer = customerRepository.deleteCustomerById(customerId);
-            return modelMapper.map(deletedCustomer, CustomerInfo.class);
-        } catch (RecordNotFoundByIdException e) {
-            throw new ProductNotFoundException(e.getId());
-        }
-    }
+//    public CustomerInfo saveProduct(CustomerCreateCommand command) {
+//        Customer customerToSave = modelMapper.map(command, Customer.class);
+//        Customer customerSaved = customerRepository.saveCustomer(customerToSave);
+//        return modelMapper.map(customerSaved, CustomerInfo.class);
+//    }
+//
+//    public List<CustomerInfo> listAllCustomer() {
+//        List<Customer> costumers = customerRepository.listAllCustomer();
+//        return costumers.stream()
+//                .map(item -> modelMapper.map(item, CustomerInfo.class))
+//                .collect(Collectors.toList());
+//    }
+//
+//    public CustomerInfo findProductById(int customerId) {
+//        try {
+//            Customer customer = customerRepository.findCustomerById(customerId);
+//            return modelMapper.map(customer, CustomerInfo.class);
+//        } catch (RecordNotFoundByIdException e) {
+//            throw new ProductNotFoundException(e.getId());
+//        }
+//    }
+//
+//    public CustomerInfo deleteProductById(int customerId) {
+//        try {
+//            Customer deletedCustomer = customerRepository.deleteCustomerById(customerId);
+//            return modelMapper.map(deletedCustomer, CustomerInfo.class);
+//        } catch (RecordNotFoundByIdException e) {
+//            throw new ProductNotFoundException(e.getId());
+//        }
+//    }
 }

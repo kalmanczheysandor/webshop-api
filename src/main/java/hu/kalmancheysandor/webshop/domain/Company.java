@@ -29,7 +29,8 @@ public class Company {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    //@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    @OneToMany
     private List<Product> products;
 
 }

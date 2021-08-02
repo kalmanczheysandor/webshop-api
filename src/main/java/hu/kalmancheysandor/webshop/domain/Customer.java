@@ -34,12 +34,14 @@ public class Customer {
     @OneToOne(mappedBy = "customer")
     private BillingCustomerAddress billingAddress;
 
+
+
     @Column(name = "billing_name")
     private String billingName;
 
-    //@JoinColumn(name = "shipping_address_id")
-    @OneToOne(mappedBy = "customer")
-    private ShippingCustomerAddress shippingAddress;
+
+//    @OneToOne(mappedBy = "customer",cascade = CascadeType.PERSIST)
+//    private ShippingCustomerAddress shippingAddress;
 
     @Column(name = "shipping_name")
     private String shippingName;

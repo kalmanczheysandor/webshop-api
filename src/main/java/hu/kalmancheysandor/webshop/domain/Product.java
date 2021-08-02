@@ -14,15 +14,18 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(name = "product_name")
     private String name;
-    @Column(name = "code")
-    private String code;
+    @Column(name = "price_net")
+    private Integer priceNet;
+
+    @Column(name = "price_vat")
+    private Float priceVat;
+
     @Column(name = "description")
     private String description;
 
-    @JoinColumn(name = "company_id")
-    @ManyToOne
-    private Company company;
-
+    @Column(name = "is_active")
+    private Boolean active;
 }

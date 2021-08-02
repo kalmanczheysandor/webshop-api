@@ -7,6 +7,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CustomerInfo {
     private Integer id;
-    private String name;
+    private String identifier;
+    private String password;
+    private String firstname;
+    private String lastname;
+    private String phone;
+    private String email;
+
+    private String billingName;
+    private String shippingName;
+    private Boolean active;
 
 }

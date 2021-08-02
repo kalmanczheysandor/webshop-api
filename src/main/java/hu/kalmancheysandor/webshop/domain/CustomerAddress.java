@@ -23,7 +23,7 @@ public abstract class CustomerAddress {
     @Column(name = "postcode")
     private String postcode;
 
-    @Column(name = "postcode")
+    @JoinColumn(name = "customer_id")
     @OneToOne
     private Customer customer;
 }
