@@ -54,8 +54,8 @@ public class ProductService {
 
     public ProductInfo deleteProductById(int productId) {
         try {
-            Product deletedProduct = productRepository.deleteProductById(productId);
-            return modelMapper.map(deletedProduct, ProductInfo.class);
+            Product deletedProduct  = productRepository.deleteProductById(productId);
+            return modelMapper.map(deletedProduct,ProductInfo.class);
         } catch (RecordNotFoundByIdException e) {
             throw new ProductNotFoundException(e.getId());
         }

@@ -1,8 +1,14 @@
 package hu.kalmancheysandor.webshop.domain;
 
 
-import javax.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+import java.util.List;
+
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "t_company")
 public class Company {
@@ -22,5 +28,8 @@ public class Company {
 
     @Column(name = "email")
     private String email;
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    private List<Product> products;
 
 }

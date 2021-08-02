@@ -3,20 +3,26 @@ package hu.kalmancheysandor.webshop.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
+
 
 @Data
 @NoArgsConstructor
+@Entity
+@Table(name = "t_product")
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "product_name")
     private String name;
+    @Column(name = "code")
     private String code;
-    private int categoryId;
+    @Column(name = "description")
     private String description;
 
-    public Product(String name, String code, int categoryId, String description) {
-        this.name = name;
-        this.code = code;
-        this.categoryId = categoryId;
-        this.description = description;
-    }
+    @JoinColumn(name = "company_id")
+    @ManyToOne
+    private Company company;
+
 }
