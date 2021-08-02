@@ -1,6 +1,6 @@
 package hu.kalmancheysandor.webshop.controller;
 
-import hu.kalmancheysandor.webshop.domain.ProductItem;
+
 import hu.kalmancheysandor.webshop.dto.ProductCreateCommand;
 import hu.kalmancheysandor.webshop.dto.ProductInfo;
 import hu.kalmancheysandor.webshop.service.ProductService;
@@ -26,24 +26,32 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @PostMapping("add")
-    public ResponseEntity<ProductInfo> saveProduct(@Valid @RequestBody ProductCreateCommand command) {
+    @PostMapping("/")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProductInfo saveProduct(@Valid @RequestBody ProductCreateCommand command) {
         log.info("Http request; Invocation-type:POST; URL:/api; body: " + command.toString());
 
-        ProductInfo info = productService.saveProduct(command);
-        return new ResponseEntity<>(info, HttpStatus.CREATED);
+        return productService.saveProduct(command);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<List<ProductInfo>> listAllProduct() {
+    @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ProductInfo> listAllProduct() {
         List<ProductInfo> products = productService.listAllProduct();
-        return new ResponseEntity<>(products, HttpStatus.OK);
+        return products;
     }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductInfo findProduct(@PathVariable("id") int productId) {
+        return productService.findProductById(productId);
+    }
+
 
     @DeleteMapping("/delete/{productId}")
-    public ResponseEntity<ProductInfo> deleteProduct(@PathVariable("productId") int productId) throws ProductNotFoundException  {
+    public ResponseEntity<ProductInfo> deleteProduct(@PathVariable("productId") int productId) throws ProductNotFoundException {
         ProductInfo deletedProduct = productService.deleteProductById(productId);
-        System.err.println("TÖRLÉS:"+productId);
+        System.err.println("TÖRLÉS:" + productId);
         return new ResponseEntity<>(deletedProduct, HttpStatus.OK);
     }
 

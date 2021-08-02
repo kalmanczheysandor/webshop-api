@@ -41,6 +41,8 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+
+
     public ProductInfo findProductById(int productId) {
         try {
             Product product = productRepository.findProductById(productId);

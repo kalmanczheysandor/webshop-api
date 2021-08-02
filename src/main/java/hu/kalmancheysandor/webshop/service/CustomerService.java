@@ -11,10 +11,12 @@ import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdExcep
 import hu.kalmancheysandor.webshop.service.exception.ProductNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class CustomerService {
 
 
