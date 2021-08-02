@@ -1,7 +1,6 @@
 package hu.kalmancheysandor.webshop.controller;
 
 
-import hu.kalmancheysandor.webshop.dto.CompanyInfo;
 import hu.kalmancheysandor.webshop.dto.CustomerCreateCommand;
 import hu.kalmancheysandor.webshop.dto.CustomerInfo;
 import hu.kalmancheysandor.webshop.service.CustomerService;

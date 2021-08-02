@@ -28,9 +28,7 @@ public class ProductController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductInfo saveProduct(@Valid @RequestBody ProductCreateCommand command) {
-        log.info("Http request; Invocation-type:POST; URL:/api; body: " + command.toString());
-
+    public ProductInfo saveCompany(@Valid @RequestBody ProductCreateCommand command) {
         return productService.saveProduct(command);
     }
 
@@ -43,34 +41,14 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductInfo findProduct(@PathVariable("id") int productId) {
+    public ProductInfo findProductById(@PathVariable("id") int productId) {
         return productService.findProductById(productId);
     }
 
-
-    @DeleteMapping("/delete/{productId}")
-    public ResponseEntity<ProductInfo> deleteProduct(@PathVariable("productId") int productId) throws ProductNotFoundException {
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductInfo deleteProductById(@PathVariable("id") int productId){
         ProductInfo deletedProduct = productService.deleteProductById(productId);
-        System.err.println("TÖRLÉS:" + productId);
-        return new ResponseEntity<>(deletedProduct, HttpStatus.OK);
+        return deletedProduct;
     }
-
-    @RequestMapping("/bloggers")
-    public String bloggers() {
-        return "bloggers";
-    }
-
-//    @PostMapping
-//    public ResponseEntity<GameEventInfo> save(@Valid @RequestBody GameEventCreateCommand command) {
-//        LOGGER.info("Http request, POST /api/gameevent, body: " + command.toString());
-//        GameEventInfo savedEvent = gameEventService.save(command);
-//        return new ResponseEntity<>(savedEvent, HttpStatus.CREATED);
-//    }
-//
-//    @GetMapping
-//    public ResponseEntity<List<GameEventInfo>> findAll() {
-//        LOGGER.info("Http request, GET /api/gameevent");
-//        List<GameEventInfo> events = gameEventService.findAll();
-//        return new ResponseEntity<>(events, HttpStatus.OK);
-//    }
 }

@@ -10,15 +10,9 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @Validated
 public class ProductCreateCommand {
-    @NotBlank
     private String name;
-
-    private String price;
-
-    private String code;
-
-    private int categoryId;
-
+    private Integer priceNet;
+    private Float priceVat;
     private String description;
-
+    private Boolean active;
 }
