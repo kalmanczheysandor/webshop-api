@@ -17,10 +17,19 @@ public class CustomerCreateCommand {
     private String lastname;
     private String phone;
     private String email;
-    private Address billingAddress;
+
+    private String billingCountry;
+    private String billingCity;
+    private String billingStreet;
+    private String billingPostcode;
     private String billingName;
-    private Address shippingAddress;
+
+    private String shippingCountry;
+    private String shippingCity;
+    private String shippingStreet;
+    private String shippingPostcode;
     private String shippingName;
+
     private Boolean active;
     
 }

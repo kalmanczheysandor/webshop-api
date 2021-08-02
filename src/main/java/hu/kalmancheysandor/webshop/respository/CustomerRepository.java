@@ -12,46 +12,40 @@ import java.util.*;
 
 @Repository
 public class CustomerRepository {
+
     @PersistenceContext
     EntityManager entityManager;
 
-
     public Customer saveCustomer(Customer customer) {
-
-        //entityManager.persist(customer.getBillingAddress());
-        //entityManager.persist(customer.getShippingAddress());
         entityManager.persist(customer);
-
+        return customer;
+    }
+    public List<Customer> listAllCustomer() {
+        List<Customer> customers = entityManager.createQuery("SELECT c FROM Customer c", Customer.class).getResultList();
+        return customers;
+    }
+    public Customer findCustomerById(Integer customerId) {
+        Customer customer = entityManager.find(Customer.class, customerId);
+        if( customer==null) {
+            throw new RecordNotFoundByIdException(customerId);
+        }
         return customer;
     }
 
-//    public Product findProductById(Integer productId) {
-//        Product product = entityManager.find(Product.class, productId);
-//        if( product==null) {
-//            throw new RecordNotFoundByIdException(productId);
-//        }
-//        return product;
-//    }
-//
-//    public List<Product> listAllProduct() {
-//
-//        List<Product> products = entityManager.createQuery("SELECT p FROM Product p", Product.class).getResultList();
-//        return products;
-//    }
-//
-//    public Product updateProduct(Product product) {
-//        Product updated = entityManager.merge(product);
-//        return updated;
-//    }
-//
-//    public Product deleteProductById(int productId) {
-//        Product productToDelete = findProductById(productId);
-//        entityManager.remove(productToDelete);
-//        return productToDelete;
-//    }
-//
-//    public Product deleteProduct(Product product) {
-//        entityManager.remove(product);
-//        return product;
-//    }
+    public Customer updateCustomer(Customer customer) {
+        Customer updatedCustomer = entityManager.merge(customer);
+        return updatedCustomer;
+    }
+
+    public Customer deleteCustomerById(Integer customerId) {
+        Customer customerToDelete = findCustomerById(customerId);
+
+        entityManager.remove(customerToDelete);
+        return customerToDelete;
+    }
+
+    public Customer deleteCustomer(Customer customer) {
+        entityManager.remove(customer);
+        return customer;
+    }
 }

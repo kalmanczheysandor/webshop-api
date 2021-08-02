@@ -10,8 +10,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "t_customer")
 public class Customer {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -30,20 +28,26 @@ public class Customer {
     @Column(name = "email")
     private String email;
 
-    //@JoinColumn(name = "billing_address_id")
-    @OneToOne(mappedBy = "customer")
-    private BillingCustomerAddress billingAddress;
-
-
-
-    @Column(name = "billing_name")
+    @Column(name = "address_billing_country")
+    private String billingCountry;
+    @Column(name = "address_billing_city")
+    private String billingCity;
+    @Column(name = "address_billing_street")
+    private String billingStreet;
+    @Column(name = "address_billing_postcode")
+    private String billingPostcode;
+    @Column(name = "address_billing_name")
     private String billingName;
 
-
-//    @OneToOne(mappedBy = "customer",cascade = CascadeType.PERSIST)
-//    private ShippingCustomerAddress shippingAddress;
-
-    @Column(name = "shipping_name")
+    @Column(name = "address_shipping_country")
+    private String shippingCountry;
+    @Column(name = "address_shipping_city")
+    private String shippingCity;
+    @Column(name = "address_shipping_street")
+    private String shippingStreet;
+    @Column(name = "address_shipping_postcode")
+    private String shippingPostcode;
+    @Column(name = "address_shipping_name")
     private String shippingName;
 
     @Column(name = "is_active")
