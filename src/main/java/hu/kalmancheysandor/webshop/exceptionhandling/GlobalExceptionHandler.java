@@ -1,5 +1,6 @@
 package hu.kalmancheysandor.webshop.exceptionhandling;
 
+import hu.kalmancheysandor.webshop.service.exception.CustomerNotFoundException;
 import hu.kalmancheysandor.webshop.service.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<List<FieldError>> handleProductNotFoundException(ProductNotFoundException exception) {
         FieldError fieldError = new FieldError("productId","Product with id " + exception.getProductId() + " is not found");
+        return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<List<FieldError>> handleCustomerNotFoundException(CustomerNotFoundException exception) {
+        FieldError fieldError = new FieldError("customerId","Customer with id " + exception.getCustomerId() + " is not found");
         return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
     }
 
