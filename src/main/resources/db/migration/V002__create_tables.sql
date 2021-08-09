@@ -1,0 +1,33 @@
+CREATE TABLE IF NOT EXISTS t_company (
+`id` INT UNSIGNED NOT NULL,
+`name` VARCHAR(255) NOT NULL,
+`is_active` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+PRIMARY KEY (id),
+CONSTRAINT name_01 UNIQUE (name),
+CONSTRAINT is_active_01 CHECK (is_active=0 or is_active=1)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS t_company_address (
+`id` INT UNSIGNED NOT NULL,
+`country` VARCHAR(255) NOT NULL,
+`city` VARCHAR(255) NOT NULL,
+`street` VARCHAR(255) NOT NULL,
+`postcode` VARCHAR(255) NOT NULL,
+`name` VARCHAR(255) NOT NULL,
+`company_id` INT UNSIGNED NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (company_id) REFERENCES t_company(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE IF NOT EXISTS t_product (
+`id` INT UNSIGNED NOT NULL,
+`product_name` VARCHAR(255) NOT NULL,
+`price_net` INT NOT NULL DEFAULT 0,
+`price_vat` FLOAT NOT NULL DEFAULT 0.0,
+`description` TEXT NOT NULL DEFAULT '',
+`is_active` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+PRIMARY KEY (id),
+CONSTRAINT product_name_01 UNIQUE (product_name),
+CONSTRAINT is_active_01 CHECK (is_active=0 or is_active=1)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
