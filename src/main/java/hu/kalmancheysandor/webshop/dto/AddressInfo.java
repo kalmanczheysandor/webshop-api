@@ -12,5 +12,4 @@ public class AddressInfo {
     private String city;
     private String street;
     private String postcode;
-    private String name;
 }

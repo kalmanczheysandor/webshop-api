@@ -111,7 +111,7 @@ public class CompanyService {
 //    }
 
     public List<CompanyInfo> listAllCompany() {
-        List<Company> companys = companyRepository.listAllCompany();
+        List<Company> companys = companyRepository.listCompanies();
         return companys.stream()
                 .map(item -> modelMapper.map(item, CompanyInfo.class))
                 .collect(Collectors.toList());

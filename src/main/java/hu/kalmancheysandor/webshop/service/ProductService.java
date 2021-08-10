@@ -35,7 +35,7 @@ public class ProductService {
     }
 
     public List<ProductInfo> listAllProduct() {
-        List<Product> products = productRepository.listAllProduct();
+        List<Product> products = productRepository.listProducts();
         return products.stream()
                 .map(item -> modelMapper.map(item, ProductInfo.class))
                 .collect(Collectors.toList());

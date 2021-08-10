@@ -33,7 +33,7 @@ public class CompanyRepository {
         return company;
     }
 
-    public List<Company> listAllCompany() {
+    public List<Company> listCompanies() {
 
         List<Company> companys = entityManager.createQuery("SELECT p FROM Company p", Company.class).getResultList();
         return companys;

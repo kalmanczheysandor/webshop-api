@@ -16,6 +16,7 @@ import java.util.List;
 @RequestMapping("/api/admin/customer")
 @Slf4j
 public class CustomerController {
+
     @Autowired
     private CustomerService customerService;
 
@@ -25,7 +26,7 @@ public class CustomerController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public CustomerInfo saveCompany(@Valid @RequestBody CustomerCreateCommand command) {
+    public CustomerInfo saveCustomer(@Valid @RequestBody CustomerCreateCommand command) {
         return customerService.saveCustomer(command);
     }
 
@@ -44,8 +45,7 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CustomerInfo deleteCustomerById(@PathVariable("id") int customerId){
-        CustomerInfo deletedCustomer = customerService.deleteCustomerById(customerId);
-        return deletedCustomer;
+    public void deleteCustomerById(@PathVariable("id") int customerId){
+        customerService.deleteCustomerById(customerId);
     }
 }

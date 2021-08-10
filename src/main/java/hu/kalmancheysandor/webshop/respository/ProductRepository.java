@@ -27,7 +27,7 @@ public class ProductRepository {
         return product;
     }
 
-    public List<Product> listAllProduct() {
+    public List<Product> listProducts() {
 
         List<Product> products = entityManager.createQuery("SELECT p FROM Product p", Product.class).getResultList();
         return products;
