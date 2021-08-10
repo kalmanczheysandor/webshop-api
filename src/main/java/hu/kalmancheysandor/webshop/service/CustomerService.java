@@ -4,6 +4,7 @@ import hu.kalmancheysandor.webshop.domain.Customer;
 import hu.kalmancheysandor.webshop.domain.CustomerAddress;
 import hu.kalmancheysandor.webshop.dto.CustomerCreateCommand;
 import hu.kalmancheysandor.webshop.dto.CustomerInfo;
+import hu.kalmancheysandor.webshop.dto.CustomerUpdateCommand;
 import hu.kalmancheysandor.webshop.respository.CustomerAddressRepository;
 import hu.kalmancheysandor.webshop.respository.CustomerRepository;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
@@ -50,6 +51,38 @@ public class CustomerService {
         savedCustomer.setAddress(savedAddress);
         return modelMapper.map(savedCustomer, CustomerInfo.class);
     }
+
+
+    public CustomerInfo updateCustomer(int customerId, CustomerUpdateCommand command) {
+        Customer persistedCustomer = customerRepository.findCustomerById(customerId);
+
+        //
+        CustomerAddress persistedAddress    = persistedCustomer.getAddress();
+        CustomerAddress modifyAddressData = modelMapper.map(command.getAddress(), CustomerAddress.class);        // no id arrives
+        modifyAddressData.setId(persistedAddress.getId());
+        modifyAddressData.setCustomer(persistedCustomer);
+        modelMapper.map(modifyAddressData,persistedAddress);
+        customerAddressRepository.updateAddress(persistedAddress);
+
+        //
+        Customer modifyData = modelMapper.map(command, Customer.class);        // no id arrives
+        modifyData.setId(persistedCustomer.getId());
+        modifyData.setAddress(persistedCustomer.getAddress());
+        modelMapper.map(modifyData,persistedCustomer);
+
+        Customer modifiedCustomer = customerRepository.updateCustomer(persistedCustomer);
+
+//        Customer persistedCustomer = customerRepository.findCustomerById(customerId);
+//        Customer modifyData = modelMapper.map(command, Customer.class);        // no id arrives
+//        modifyData.setId(persistedCustomer.getId());
+//        modifyData.setAddress(persistedCustomer.getAddress());
+//
+//        modelMapper.map(modifyData,persistedCustomer);
+
+
+        return modelMapper.map(modifiedCustomer, CustomerInfo.class);
+    }
+
 
 
     public List<CustomerInfo> listAllCustomer() {

@@ -3,6 +3,7 @@ package hu.kalmancheysandor.webshop.controller;
 
 import hu.kalmancheysandor.webshop.dto.CustomerCreateCommand;
 import hu.kalmancheysandor.webshop.dto.CustomerInfo;
+import hu.kalmancheysandor.webshop.dto.CustomerUpdateCommand;
 import hu.kalmancheysandor.webshop.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,12 @@ public class CustomerController {
         return customerService.saveCustomer(command);
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public CustomerInfo updateCustomer(@PathVariable("id") int customerId, @Valid @RequestBody CustomerUpdateCommand command) {
+        return customerService.updateCustomer(customerId,command);
+    }
+
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public List<CustomerInfo> listAllCustomer() {
@@ -48,4 +55,6 @@ public class CustomerController {
     public void deleteCustomerById(@PathVariable("id") int customerId){
         customerService.deleteCustomerById(customerId);
     }
+
+
 }
