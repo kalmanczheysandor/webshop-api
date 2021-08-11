@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Column;
+import javax.persistence.OneToOne;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,23 +56,73 @@ public class CustomerService {
 
 
     public CustomerInfo updateCustomer(int customerId, CustomerUpdateCommand command) {
+
+        Customer modifyingCustomerData = modelMapper.map(command, Customer.class);
         Customer persistedCustomer = customerRepository.findCustomerById(customerId);
 
-        //
-        CustomerAddress persistedAddress    = persistedCustomer.getAddress();
-        CustomerAddress modifyAddressData = modelMapper.map(command.getAddress(), CustomerAddress.class);        // no id arrives
-        modifyAddressData.setId(persistedAddress.getId());
-        modifyAddressData.setCustomer(persistedCustomer);
-        modelMapper.map(modifyAddressData,persistedAddress);
-        customerAddressRepository.updateAddress(persistedAddress);
 
-        //
-        Customer modifyData = modelMapper.map(command, Customer.class);        // no id arrives
-        modifyData.setId(persistedCustomer.getId());
-        modifyData.setAddress(persistedCustomer.getAddress());
-        modelMapper.map(modifyData,persistedCustomer);
-
+        persistedCustomer.setIdentifier(modifyingCustomerData.getIdentifier());
+        persistedCustomer.setPassword(modifyingCustomerData.getPassword());
+        persistedCustomer.setFirstname(modifyingCustomerData.getFirstname());
+        persistedCustomer.setLastname(modifyingCustomerData.getLastname());
+        persistedCustomer.setPhone(modifyingCustomerData.getPhone());
+        persistedCustomer.setEmail(modifyingCustomerData.getEmail());
+        persistedCustomer.setActive(modifyingCustomerData.getActive());
         Customer modifiedCustomer = customerRepository.updateCustomer(persistedCustomer);
+
+
+        CustomerAddress modifyingAddressData = modelMapper.map(command.getAddress(), CustomerAddress.class);
+        CustomerAddress persistedAddress = modifiedCustomer.getAddress();
+
+//        persistedAddress.setCountry(modifyingAddressData.getCountry());
+//        persistedAddress.setCity(modifyingAddressData.getCity());
+//        persistedAddress.setStreet(modifyingAddressData.getStreet());
+//        persistedAddress.setPostcode(modifyingAddressData.getPostcode());
+//        customerAddressRepository.updateAddress(persistedAddress);
+
+        modelMapper.map(modifyingAddressData,persistedCustomer);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        Customer persistedCustomer = customerRepository.findCustomerById(customerId);
+//        Customer modifyData = modelMapper.map(command, Customer.class);        // no id arrives
+//        modifyData.setId(persistedCustomer.getId());
+//        modifyData.setAddress(persistedCustomer.getAddress());
+//        modelMapper.map(modifyData,persistedCustomer);
+//        Customer modifiedCustomer = customerRepository.updateCustomer(persistedCustomer);
+//
+//        //
+//
+//        CustomerAddress persistedAddress    = modifiedCustomer.getAddress();
+//        CustomerAddress modifyAddressData = modelMapper.map(command.getAddress(), CustomerAddress.class);        // no id arrives
+//
+//        persistedAddress.setCountry(modifyAddressData.getCountry());
+//        persistedAddress.setCity(modifyAddressData.getCountry());
+
+
+//        CustomerAddress persistedAddress    = modifiedCustomer.getAddress();
+//        CustomerAddress modifyAddressData = modelMapper.map(command.getAddress(), CustomerAddress.class);        // no id arrives
+//        modifyAddressData.setId(persistedAddress.getId());
+//        modifyAddressData.setCustomer(modifiedCustomer);
+//        modelMapper.map(modifyAddressData,persistedAddress);
+//        customerAddressRepository.updateAddress(persistedAddress);
+
 
 //        Customer persistedCustomer = customerRepository.findCustomerById(customerId);
 //        Customer modifyData = modelMapper.map(command, Customer.class);        // no id arrives
@@ -82,7 +134,6 @@ public class CustomerService {
 
         return modelMapper.map(modifiedCustomer, CustomerInfo.class);
     }
-
 
 
     public List<CustomerInfo> listAllCustomer() {
