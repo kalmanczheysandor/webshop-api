@@ -22,4 +22,19 @@ public class CustomerAddress {
     @OneToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+
+    @Override
+    public String toString() {
+        return "CustomerAddress{" +
+                "id=" + id +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                (customer==null?", customer='null' ":", customer='XXXXXXX' ")+
+                ", postcode='" + postcode + '\'' +
+
+                '}';
+//        return ((Object)this).toString();
+    }
 }

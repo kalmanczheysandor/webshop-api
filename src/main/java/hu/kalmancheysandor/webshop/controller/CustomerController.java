@@ -28,7 +28,13 @@ public class CustomerController {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerInfo saveCustomer(@Valid @RequestBody CustomerCreateCommand command) {
-        return customerService.saveCustomer(command);
+        try {
+            return customerService.saveCustomer(command);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @PutMapping("/{id}")

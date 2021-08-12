@@ -28,9 +28,27 @@ public class Customer {
     @Column(name = "email")
     private String email;
 
-    @OneToOne(mappedBy = "customer")
+    @OneToOne(mappedBy = "customer",cascade = CascadeType.PERSIST)
     private CustomerAddress address;
 
     @Column(name = "is_active")
     private Boolean active;
+
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", identifier='" + identifier + '\'' +
+                ", password='" + password + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                (address==null?", address='null' ":", address='YYYYY' ")+
+                ", active=" + active +
+                '}';
+
+
+    }
 }
