@@ -1,6 +1,8 @@
 package hu.kalmancheysandor.webshop.controller;
 
 
+import hu.kalmancheysandor.webshop.dto.CustomerInfo;
+import hu.kalmancheysandor.webshop.dto.CustomerUpdateCommand;
 import hu.kalmancheysandor.webshop.dto.ProductCreateCommand;
 import hu.kalmancheysandor.webshop.dto.ProductInfo;
 import hu.kalmancheysandor.webshop.service.ProductService;
@@ -32,6 +34,15 @@ public class ProductController {
         return productService.saveProduct(command);
     }
 
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProductInfo updateProduct(@PathVariable("id") int productId, @Valid @RequestBody ProductUpdateCommand command) {
+        return productService.updateProduct(productId,command);
+    }
+
+
+
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public List<ProductInfo> listAllProduct() {
@@ -47,8 +58,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductInfo deleteProductById(@PathVariable("id") int productId){
-        ProductInfo deletedProduct = productService.deleteProductById(productId);
-        return deletedProduct;
+    public void deleteProductById(@PathVariable("id") int productId) {
+        productService.deleteProductById(productId);
     }
 }

@@ -1,11 +1,14 @@
 package hu.kalmancheysandor.webshop.service;
 
+import hu.kalmancheysandor.webshop.domain.Customer;
+import hu.kalmancheysandor.webshop.domain.CustomerAddress;
 import hu.kalmancheysandor.webshop.domain.Product;
-import hu.kalmancheysandor.webshop.dto.ProductCreateCommand;
-import hu.kalmancheysandor.webshop.dto.ProductInfo;
+import hu.kalmancheysandor.webshop.dto.*;
 import hu.kalmancheysandor.webshop.respository.ProductRepository;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
+import hu.kalmancheysandor.webshop.service.exception.CustomerNotFoundException;
 import hu.kalmancheysandor.webshop.service.exception.ProductNotFoundException;
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,32 @@ public class ProductService {
         Product productToSave = modelMapper.map(command, Product.class);
         Product productSaved = productRepository.saveProduct(productToSave);
         return modelMapper.map(productSaved, ProductInfo.class);
+    }
+
+
+    public ProductInfo updateProduct(int productId, ProductUpdateCommand command) {
+        try {
+
+            //Find persistant entities which references each-other
+            Product productCurrentState = productRepository.findProductById(productId);
+
+            // Creating overwriting objects
+            Product productNewState = modelMapper.map(command, Product.class);
+
+            // Ignore (by null value) overwriting fields to participate in overwrite act
+            productNewState.setId(null);
+
+            // The overwrite-act when all field value copied into the persisted object fields. However 'null' values are ignored to be copied!
+            modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+            modelMapper.map(productNewState, productCurrentState);
+
+            // Providing persistence update
+            Product modifiedProduct = productRepository.updateProduct(productCurrentState);
+
+            return modelMapper.map(modifiedProduct, ProductInfo.class);
+        } catch (RecordNotFoundByIdException e) {
+            throw new CustomerNotFoundException(e.getId());
+        }
     }
 
     public List<ProductInfo> listAllProduct() {
