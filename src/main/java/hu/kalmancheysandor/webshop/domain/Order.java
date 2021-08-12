@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,32 +15,21 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
-    @Column(name = "address_billing_country")
-    private String billingCountry;
-    @Column(name = "address_billing_city")
-    private String billingCity;
-    @Column(name = "address_billing_street")
-    private String billingStreet;
-    @Column(name = "address_billing_postcode")
-    private String billingPostcode;
-    @Column(name = "address_billing_name")
-    private String billingName;
-
-    @Column(name = "address_shipping_country")
-    private String shippingCountry;
-    @Column(name = "address_shipping_city")
-    private String shippingCity;
-    @Column(name = "address_shipping_street")
-    private String shippingStreet;
-    @Column(name = "address_shipping_postcode")
-    private String shippingPostcode;
-    @Column(name = "address_shipping_name")
-    private String shippingName;
+    @Column(name = "buyer_firstname")
+    private String buyerFirstname;
+    @Column(name = "buyer_lastname")
+    private String buyerLastname;
 
     @Column(name = "price_total_net")
-    private Integer totalNetPrice;
+    private float totalNetPrice;
 
     @Column(name = "price_total_gross")
-    private Integer totalGrossPrice;
+    private float totalGrossPrice;
+
+    @OneToOne(mappedBy = "order")
+    private OrderAddress address;
+
+    @OneToMany(mappedBy = "order")
+    List<OrderItem> items;
+
 }
