@@ -1,7 +1,6 @@
 package hu.kalmancheysandor.webshop.exceptionhandling;
 
-import hu.kalmancheysandor.webshop.service.exception.CustomerNotFoundException;
-import hu.kalmancheysandor.webshop.service.exception.ProductNotFoundException;
+import hu.kalmancheysandor.webshop.service.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,9 +29,40 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ProductCategoryNotFoundException.class)
+    public ResponseEntity<List<FieldError>> handleProductCategoryNotFoundException(ProductCategoryNotFoundException exception) {
+        FieldError fieldError = new FieldError("productId","Product category with id " + exception.getProductCategoryId() + " is not found");
+        return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ProductCategoryStillInUseException.class)
+    public ResponseEntity<List<FieldError>> handleProductCategoryStillInUseException(ProductCategoryStillInUseException exception) {
+        FieldError fieldError = new FieldError("productId","Product category with id " + exception.getProductCategoryId() + " is still in use!");
+        return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(CustomerNotFoundException.class)
     public ResponseEntity<List<FieldError>> handleCustomerNotFoundException(CustomerNotFoundException exception) {
         FieldError fieldError = new FieldError("customerId","Customer with id " + exception.getCustomerId() + " is not found");
+        return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<List<FieldError>> handleOrderNotFoundException(OrderNotFoundException exception) {
+        FieldError fieldError = new FieldError("orderId","Order with id " + exception.getOrderId() + " is not found");
+        return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(OrderItemNotFoundException.class)
+    public ResponseEntity<List<FieldError>> handleOrderItemNotFoundException(OrderItemNotFoundException exception) {
+
+        FieldError fieldError = new FieldError("orderItemId","Order item with id " + exception.getOrderItemId() + " is not found");
+        return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(OrderItemDuplicationException.class)
+    public ResponseEntity<List<FieldError>> handleOrderItemDuplicationException(OrderItemDuplicationException exception) {
+        FieldError fieldError = new FieldError("productId","Order item with productid " + exception.getProductId() + " is already in use in another item!");
         return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
     }
 

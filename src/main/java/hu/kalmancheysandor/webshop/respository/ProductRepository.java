@@ -1,6 +1,6 @@
 package hu.kalmancheysandor.webshop.respository;
 
-import hu.kalmancheysandor.webshop.domain.Product;
+import hu.kalmancheysandor.webshop.domain.product.Product;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +19,7 @@ public class ProductRepository {
         return product;
     }
 
-    public Product findProductById(Integer productId) {
+    public Product findProductById(int productId) {
         Product product = entityManager.find(Product.class, productId);
         if( product==null) {
             throw new RecordNotFoundByIdException(productId);

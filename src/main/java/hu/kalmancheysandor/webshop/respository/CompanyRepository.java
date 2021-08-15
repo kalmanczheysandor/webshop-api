@@ -1,7 +1,7 @@
 package hu.kalmancheysandor.webshop.respository;
 
-import hu.kalmancheysandor.webshop.domain.Address;
-import hu.kalmancheysandor.webshop.domain.Company;
+import hu.kalmancheysandor.webshop.domain.company.Address;
+import hu.kalmancheysandor.webshop.domain.company.Company;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +25,7 @@ public class CompanyRepository {
         return address;
     }
 
-    public Company findCompanyById(Integer companyId) {
+    public Company findCompanyById(int companyId) {
         Company company = entityManager.find(Company.class, companyId);
         if( company==null) {
             throw new RecordNotFoundByIdException(companyId);

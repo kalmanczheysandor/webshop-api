@@ -1,7 +1,6 @@
 package hu.kalmancheysandor.webshop.respository;
 
-import hu.kalmancheysandor.webshop.domain.Customer;
-import hu.kalmancheysandor.webshop.domain.CustomerAddress;
+import hu.kalmancheysandor.webshop.domain.customer.CustomerAddress;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
 import org.springframework.stereotype.Repository;
 

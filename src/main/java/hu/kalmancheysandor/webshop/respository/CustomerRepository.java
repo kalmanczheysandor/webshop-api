@@ -1,7 +1,6 @@
 package hu.kalmancheysandor.webshop.respository;
 
-import hu.kalmancheysandor.webshop.domain.Address;
-import hu.kalmancheysandor.webshop.domain.Customer;
+import hu.kalmancheysandor.webshop.domain.customer.Customer;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +20,7 @@ public class CustomerRepository {
     }
 
 
-    public Customer findCustomerById(Integer customerId) {
+    public Customer findCustomerById(int customerId) {
         Customer customer = entityManager.find(Customer.class, customerId);
         if( customer==null) {
             throw new RecordNotFoundByIdException(customerId);

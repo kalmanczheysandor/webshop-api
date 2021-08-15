@@ -1,9 +1,9 @@
 package hu.kalmancheysandor.webshop.service;
 
-import hu.kalmancheysandor.webshop.domain.Address;
-import hu.kalmancheysandor.webshop.domain.Company;
-import hu.kalmancheysandor.webshop.dto.CompanyCreateCommand;
-import hu.kalmancheysandor.webshop.dto.CompanyInfo;
+import hu.kalmancheysandor.webshop.domain.company.Address;
+import hu.kalmancheysandor.webshop.domain.company.Company;
+import hu.kalmancheysandor.webshop.dto.company.CompanyCreateCommand;
+import hu.kalmancheysandor.webshop.dto.company.CompanyInfo;
 import hu.kalmancheysandor.webshop.respository.CompanyRepository;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
 import hu.kalmancheysandor.webshop.service.exception.CompanyNotFoundException;

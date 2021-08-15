@@ -1,8 +1,8 @@
 package hu.kalmancheysandor.webshop.controller;
 
 
-import hu.kalmancheysandor.webshop.dto.CompanyCreateCommand;
-import hu.kalmancheysandor.webshop.dto.CompanyInfo;
+import hu.kalmancheysandor.webshop.dto.company.CompanyCreateCommand;
+import hu.kalmancheysandor.webshop.dto.company.CompanyInfo;
 import hu.kalmancheysandor.webshop.service.CompanyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

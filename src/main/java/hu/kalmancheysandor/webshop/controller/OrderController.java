@@ -1,11 +1,8 @@
 package hu.kalmancheysandor.webshop.controller;
 
-import hu.kalmancheysandor.webshop.dto.OrderCreateCommand;
-import hu.kalmancheysandor.webshop.dto.OrderInfo;
-import hu.kalmancheysandor.webshop.dto.ProductCreateCommand;
-import hu.kalmancheysandor.webshop.dto.ProductInfo;
+import hu.kalmancheysandor.webshop.dto.order.OrderCreateRequest;
+import hu.kalmancheysandor.webshop.dto.order.OrderResponse;
 import hu.kalmancheysandor.webshop.service.OrderService;
-import hu.kalmancheysandor.webshop.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +23,7 @@ public class OrderController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderInfo saveOrder(@Valid @RequestBody OrderCreateCommand command) {
+    public OrderResponse saveOrder(@Valid @RequestBody OrderCreateRequest command) {
         return orderService.saveOrder(command);
     }
 }

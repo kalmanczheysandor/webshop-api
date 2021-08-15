@@ -1,0 +1,60 @@
+
+GET http://localhost:8080/api/admin/product/
+Accept: application/json
+
+###
+
+GET http://localhost:8080/api/admin/product/28
+Accept: application/json
+
+###
+
+POST http://localhost:8080/api/admin/product/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "identifier": "Veronika",
+  "password": "Verinika889",
+  "firstname": "Veronika",
+  "lastname": "Horváth",
+  "phone": "656565656",
+  "email": "dasdasd@gmail.com",
+  "address": {
+    "country": "Hungary",
+    "city": "string",
+    "street": "string",
+    "postcode": "string"
+  },
+  "active": true
+}
+
+###
+
+
+PUT http://localhost:8080/api/admin/product/28
+Content-Type: application/json
+Accept: application/json
+
+{
+  "identifier": "Berni",
+  "password": "Verinika889",
+  "firstname": "Veronika",
+  "lastname": "Horváth",
+  "phone": "656565656",
+  "email": "dasdasd@gmail.com",
+  "address": {
+    "country": "Bukarest",
+    "city": "string",
+    "street": "string",
+    "postcode": "string"
+  },
+  "active": false
+}
+
+###
+
+DELETE http://localhost:8080/api/admin/product/28
+Accept: application/json
+
+###

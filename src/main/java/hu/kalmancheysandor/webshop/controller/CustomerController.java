@@ -1,9 +1,9 @@
 package hu.kalmancheysandor.webshop.controller;
 
 
-import hu.kalmancheysandor.webshop.dto.CustomerCreateCommand;
-import hu.kalmancheysandor.webshop.dto.CustomerInfo;
-import hu.kalmancheysandor.webshop.dto.CustomerUpdateCommand;
+import hu.kalmancheysandor.webshop.dto.customer.CustomerCreateRequest;
+import hu.kalmancheysandor.webshop.dto.customer.CustomerResponse;
+import hu.kalmancheysandor.webshop.dto.customer.CustomerUpdateRequest;
 import hu.kalmancheysandor.webshop.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class CustomerController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public CustomerInfo saveCustomer(@Valid @RequestBody CustomerCreateCommand command) {
+    public CustomerResponse saveCustomer(@Valid @RequestBody CustomerCreateRequest command) {
         try {
             return customerService.saveCustomer(command);
         }
@@ -39,20 +39,20 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CustomerInfo updateCustomer(@PathVariable("id") int customerId, @Valid @RequestBody CustomerUpdateCommand command) {
+    public CustomerResponse updateCustomer(@PathVariable("id") int customerId, @Valid @RequestBody CustomerUpdateRequest command) {
         return customerService.updateCustomer(customerId,command);
     }
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    public List<CustomerInfo> listAllCustomer() {
-        List<CustomerInfo> customers = customerService.listAllCustomer();
+    public List<CustomerResponse> listAllCustomer() {
+        List<CustomerResponse> customers = customerService.listAllCustomer();
         return customers;
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CustomerInfo findCustomerById(@PathVariable("id") int customerId) {
+    public CustomerResponse findCustomerById(@PathVariable("id") int customerId) {
         return customerService.findCustomerById(customerId);
     }
 

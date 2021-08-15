@@ -1,16 +1,13 @@
 package hu.kalmancheysandor.webshop.controller;
 
 
-import hu.kalmancheysandor.webshop.dto.CustomerInfo;
-import hu.kalmancheysandor.webshop.dto.CustomerUpdateCommand;
-import hu.kalmancheysandor.webshop.dto.ProductCreateCommand;
-import hu.kalmancheysandor.webshop.dto.ProductInfo;
+import hu.kalmancheysandor.webshop.dto.product.ProductCreateRequest;
+import hu.kalmancheysandor.webshop.dto.product.ProductResponse;
+import hu.kalmancheysandor.webshop.dto.product.ProductUpdateRequest;
 import hu.kalmancheysandor.webshop.service.ProductService;
-import hu.kalmancheysandor.webshop.service.exception.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,14 +27,14 @@ public class ProductController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductInfo saveCompany(@Valid @RequestBody ProductCreateCommand command) {
+    public ProductResponse saveCompany(@Valid @RequestBody ProductCreateRequest command) {
         return productService.saveProduct(command);
     }
 
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductInfo updateProduct(@PathVariable("id") int productId, @Valid @RequestBody ProductUpdateCommand command) {
+    public ProductResponse updateProduct(@PathVariable("id") int productId, @Valid @RequestBody ProductUpdateRequest command) {
         return productService.updateProduct(productId,command);
     }
 
@@ -45,14 +42,14 @@ public class ProductController {
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductInfo> listAllProduct() {
-        List<ProductInfo> products = productService.listAllProduct();
+    public List<ProductResponse> listAllProduct() {
+        List<ProductResponse> products = productService.listAllProduct();
         return products;
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductInfo findProductById(@PathVariable("id") int productId) {
+    public ProductResponse findProductById(@PathVariable("id") int productId) {
         return productService.findProductById(productId);
     }
 
