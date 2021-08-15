@@ -41,25 +41,20 @@ public class ProductService {
     public ProductResponse updateProduct(int productId, ProductUpdateRequest command) {
         try {
 
-            //Find persistant entities which references each-other
+
             Product productCurrentState = productRepository.findProductById(productId);
-
-            // Creating overwriting objects
             Product productNewState = modelMapper.map(command, Product.class);
-
-            // Ignore (by null value) overwriting fields to participate in overwrite act
             productNewState.setId(null);
 
-            // The overwrite-act when all field value copied into the persisted object fields. However 'null' values are ignored to be copied!
+
             modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
             modelMapper.map(productNewState, productCurrentState);
 
-            // Providing persistence update
             Product modifiedProduct = productRepository.updateProduct(productCurrentState);
 
             return modelMapper.map(modifiedProduct, ProductResponse.class);
         } catch (RecordNotFoundByIdException e) {
-            throw new CustomerNotFoundException(e.getId());
+            throw new ProductNotFoundException(e.getId());
         }
     }
 

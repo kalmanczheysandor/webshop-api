@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/company")
+@RequestMapping("/api/admin/companies")
 @Slf4j
 public class CompanyController {
 

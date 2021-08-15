@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/customer")
+@RequestMapping("/api/admin/customers")
 @Slf4j
 public class CustomerController {
 
@@ -28,13 +28,7 @@ public class CustomerController {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerResponse saveCustomer(@Valid @RequestBody CustomerCreateRequest command) {
-        try {
-            return customerService.saveCustomer(command);
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return customerService.saveCustomer(command);
     }
 
     @PutMapping("/{id}")

@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/category")
+@RequestMapping("/api/admin/categories")
 @Slf4j
 public class ProductCategoryController {
 
