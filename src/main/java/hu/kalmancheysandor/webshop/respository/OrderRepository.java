@@ -2,6 +2,7 @@ package hu.kalmancheysandor.webshop.respository;
 
 import hu.kalmancheysandor.webshop.domain.order.Order;
 import hu.kalmancheysandor.webshop.domain.order.OrderItem;
+import hu.kalmancheysandor.webshop.domain.product.Product;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
 import org.springframework.stereotype.Repository;
 
@@ -43,18 +44,29 @@ public class OrderRepository {
     }
 
     public List<Order> listAllOrder() {
-        List<Order> orders = entityManager.createQuery("SELECT c FROM Order c", Order.class).getResultList();
-        return orders;
+        return entityManager.createQuery("SELECT o FROM Order o", Order.class).getResultList();
     }
 
     public List<OrderItem> listAllOrderItem() {
-        List<OrderItem> orderItems = entityManager.createQuery("SELECT c FROM OrderItem c", OrderItem.class).getResultList();
-        return orderItems;
+        return entityManager.createQuery("SELECT c FROM OrderItem c", OrderItem.class).getResultList();
     }
 
+    public List<OrderItem> listAllOrderItemByOrderId(int orderId) {
+        Order order = entityManager.find(Order.class, orderId);
+        if( order==null) {
+            throw new RecordNotFoundByIdException(orderId);
+        }
+
+        return entityManager.createQuery("SELECT i FROM OrderItem i " +
+                "JOIN i.order o " +
+                "WHERE o.id=:paramOrderId", OrderItem.class)
+                .setParameter("paramOrderId",orderId)
+                .getResultList();
+    }
+
+
     public Order updateOrder(Order order) {
-        Order updated = entityManager.merge(order);
-        return updated;
+        return entityManager.merge(order);
     }
 
     public OrderItem updateOrderItem(OrderItem orderItem) {
@@ -70,6 +82,20 @@ public class OrderRepository {
     public void deleteOrderItemById(int orderItemId) {
         OrderItem orderItemToDelete = findOrderItemById(orderItemId);
         deleteOrderItem(orderItemToDelete);
+    }
+
+
+
+    public void deleteAllOrderItemByOrderId(int orderId) {
+        Order order = entityManager.find(Order.class, orderId);
+        if( order==null) {
+            throw new RecordNotFoundByIdException(orderId);
+        }
+
+        List<OrderItem> orderItems = listAllOrderItemByOrderId(orderId);
+        for(OrderItem orderItem:orderItems) {
+            deleteOrderItem(orderItem);
+        }
     }
 
     private void deleteOrder(Order order) {

@@ -7,14 +7,13 @@ import hu.kalmancheysandor.webshop.domain.product.Product;
 import hu.kalmancheysandor.webshop.dto.order.OrderCreateRequest;
 import hu.kalmancheysandor.webshop.dto.order.OrderResponse;
 import hu.kalmancheysandor.webshop.dto.order.OrderUpdateRequest;
+import hu.kalmancheysandor.webshop.dto.product.ProductResponse;
 import hu.kalmancheysandor.webshop.respository.CustomerRepository;
 import hu.kalmancheysandor.webshop.respository.OrderItemRepository;
 import hu.kalmancheysandor.webshop.respository.OrderRepository;
 import hu.kalmancheysandor.webshop.respository.ProductRepository;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
-import hu.kalmancheysandor.webshop.service.exception.CustomerNotFoundException;
-import hu.kalmancheysandor.webshop.service.exception.OrderItemDuplicationException;
-import hu.kalmancheysandor.webshop.service.exception.ProductNotFoundException;
+import hu.kalmancheysandor.webshop.service.exception.*;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +47,7 @@ public class OrderService {
         this.productRepository = productRepository;
         this.modelMapper = modelMapper;
     }
+
     @Transactional
     public OrderResponse saveOrder(OrderCreateRequest command) {
 
@@ -71,7 +71,7 @@ public class OrderService {
         // Convert and save children entities
         int sumTotalNet = 0;
         int sumTotalGross = 0;
-        List<Integer> usedProductIdList  = new ArrayList<>();
+        List<Integer> usedProductIdList = new ArrayList<>();
         List<OrderCreateRequest.Item> items = command.getItems();
         for (OrderCreateRequest.Item item : items) {
             OrderItem orderItemToSave = modelMapper.map(item, OrderItem.class);
@@ -84,7 +84,7 @@ public class OrderService {
                 Integer productId = item.getProductId();
 
                 // Test whether the productId is in use only once
-                if(usedProductIdList.contains(productId)) {
+                if (usedProductIdList.contains(productId)) {
                     throw new OrderItemDuplicationException(productId);
                 }
                 usedProductIdList.add(productId);
@@ -125,37 +125,22 @@ public class OrderService {
     }
 
 
-//    public OrderResponse updateOrder(int orderId, OrderUpdateRequest command) {
-//        try {
-//
-//            //Find persistent entities which referencing each-other
-//            Order orderCurrentState = orderRepository.findOrderById(orderId);
-//            OrderItem addressCurrentState = orderCurrentState.getAddress();
-//
-//            // Creating overwriting objects
-//            Order orderNewState = modelMapper.map(command, Order.class);
-//            OrderItem addressNewState = modelMapper.map(command.getAddress(), OrderItem.class);
-//
-//            // Ignore (by null value) overwriting fields to participate in overwrite act
-//            orderNewState.setId(null);
-//            orderNewState.setAddress(null);
-//            addressNewState.setId(null);
-//            addressNewState.setOrder(null);
-//
-//            // The overwrite-act when all field value copied into the persisted object fields. However 'null' values are ignored to be copied!
-//            modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
-//            modelMapper.map(orderNewState, orderCurrentState);
-//            modelMapper.map(addressNewState, addressCurrentState);
-//
-//            // Providing persistence update
-//            Order modifiedOrder = orderRepository.updateOrder(orderCurrentState);
-//            OrderItem modifiedAddress = orderItemRepository.updateAddress(addressCurrentState);
-//
-//            return modelMapper.map(modifiedOrder, OrderResponse.class);
-//        } catch (RecordNotFoundByIdException e) {
-//            throw new OrderNotFoundException(e.getId());
-//        }
-//    }
+    public OrderResponse updateOrder(int orderId, OrderUpdateRequest command) {
+        try {
+            Order orderCurrentState = orderRepository.findOrderById(orderId);
+            Order orderNewState = modelMapper.map(command, Order.class);
+            orderNewState.setId(null);
+
+            modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+            modelMapper.map(orderNewState, orderCurrentState);
+
+            Order modifiedOrder = orderRepository.updateOrder(orderCurrentState);
+
+            return modelMapper.map(modifiedOrder, OrderResponse.class);
+        } catch (RecordNotFoundByIdException e) {
+            throw new OrderNotFoundException(e.getId());
+        }
+    }
 
 
     public List<OrderResponse> listAllOrder() {
@@ -165,21 +150,24 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
-//    public OrderResponse findOrderById(int orderId) {
-//        try {
-//            Order order = orderRepository.findOrderById(orderId);
-//            return modelMapper.map(order, OrderResponse.class);
-//        } catch (RecordNotFoundByIdException e) {
-//            throw new OrderNotFoundException(e.getId());
-//        }
-//    }
-//
-//    public void deleteOrderById(int orderId) {
-//        try {
-//            orderItemRepository.deleteAllAddressByOrderId(orderId);
-//            orderRepository.deleteOrderById(orderId);
-//        } catch (RecordNotFoundByIdException e) {
-//            throw new OrderNotFoundException(e.getId());
-//        }
-//    }
+    public OrderResponse findOrderById(int orderId) {
+        try {
+            Order order = orderRepository.findOrderById(orderId);
+            return modelMapper.map(order, OrderResponse.class);
+        } catch (RecordNotFoundByIdException e) {
+            throw new OrderNotFoundException(e.getId());
+        }
+    }
+
+    public void deleteOrderById(int orderId) {
+        try {
+            // Delete all children entities
+            orderRepository.deleteAllOrderItemByOrderId(orderId);
+
+            // Delete the main entity
+            orderRepository.deleteOrderById(orderId);
+        } catch (RecordNotFoundByIdException e) {
+            throw new OrderNotFoundException(e.getId());
+        }
+    }
 }

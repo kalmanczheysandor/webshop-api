@@ -17,29 +17,6 @@ public class OrderResponse {
     private Customer customer;
     private List<Item> items;
 
-    @Data
-    @NoArgsConstructor
-    public static class Item {
-        private Integer id;
-        private Product product;
-        private float totalNetPrice;
-        private float totalGrossPrice;
-        private Integer quantity;
-
-
-
-    }
-
-
-    @Data
-    @NoArgsConstructor
-    public static class Product {
-        private Integer id;
-        private String name;
-        private Integer priceNet;
-        private Float priceVat;
-    }
-
 
     @Data
     @NoArgsConstructor
@@ -50,7 +27,7 @@ public class OrderResponse {
         private String lastname;
         private String phone;
         private String email;
-        private Address addsess;
+        private Address address;
     }
 
     @Data
@@ -61,6 +38,27 @@ public class OrderResponse {
         private String city;
         private String street;
         private String postcode;
+    }
+
+
+    @Data
+    @NoArgsConstructor
+    public static class Item {
+        private Integer id;
+        private Product product;
+        private float totalNetPrice;
+        private float totalGrossPrice;
+        private Integer quantity;
+    }
+
+
+    @Data
+    @NoArgsConstructor
+    public static class Product {
+        private Integer id;
+        private String name;
+        private Integer priceNet;
+        private Float priceVat;
     }
 
 }
