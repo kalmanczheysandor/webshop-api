@@ -2,11 +2,13 @@ package hu.kalmancheysandor.webshop.respository;
 
 import hu.kalmancheysandor.webshop.domain.customer.CustomerAddress;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import static org.springframework.util.StringUtils.capitalize;
 
 @Repository
 public class CustomerAddressRepository {
@@ -14,7 +16,14 @@ public class CustomerAddressRepository {
     @PersistenceContext
     EntityManager entityManager;
 
+    @Value("${customerRegistration.useUppercaseCorrection}")
+    private boolean useUppercaseCorrection;
+
     public CustomerAddress saveAddress(CustomerAddress customerAddress) {
+        if(useUppercaseCorrection) {
+            customerAddress.setCountry(capitalize(customerAddress.getCountry()));
+            customerAddress.setCity(capitalize(customerAddress.getCity()));
+        }
         entityManager.persist(customerAddress);
         return customerAddress;
     }
@@ -31,14 +40,11 @@ public class CustomerAddressRepository {
         return entityManager.createQuery("SELECT a FROM CustomerAddress a", CustomerAddress.class).getResultList();
     }
 
-//    public List<CustomerAddress> listAllAddressOfCustomer(Customer customer) {
-//        return entityManager.createQuery("SELECT ca FROM CustomerAddress ca " +
-//                "WHERE ca.customer=:paramCustomer", CustomerAddress.class)
-//                .setParameter("paramCustomer", customer)
-//                .getResultList();
-//    }
-
     public CustomerAddress updateAddress(CustomerAddress customerAddress) {
+        if(useUppercaseCorrection) {
+            customerAddress.setCountry(capitalize(customerAddress.getCountry()));
+            customerAddress.setCity(capitalize(customerAddress.getCity()));
+        }
         CustomerAddress updated = entityManager.merge(customerAddress);
         return updated;
     }
@@ -64,11 +70,5 @@ public class CustomerAddressRepository {
         entityManager.remove(customerAddress);
     }
 
-//    public void deleteAllAddressOfCustomer(Customer customer) {
-//        List<CustomerAddress> addressList = listAddressesOfCustomer(customer);
-//        for (CustomerAddress address : addressList) {
-//            deleteAddress(address);
-//        }
-//    }
 
 }
