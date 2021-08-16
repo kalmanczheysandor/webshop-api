@@ -27,7 +27,8 @@ public class ProductController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponse saveCompany(@Valid @RequestBody ProductCreateRequest command) {
+    public ProductResponse saveProduct(@Valid @RequestBody ProductCreateRequest command) {
+        log.info("Http request; Method type:POST; URL:/api/admin/products/; Body:" + command.toString());
         return productService.saveProduct(command);
     }
 
@@ -35,6 +36,7 @@ public class ProductController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ProductResponse updateProduct(@PathVariable("id") int productId, @Valid @RequestBody ProductUpdateRequest command) {
+        log.info("Http request; Method type:PUT; URL:/api/admin/product/"+productId+"/; Body:" + command.toString());
         return productService.updateProduct(productId,command);
     }
 
@@ -43,6 +45,7 @@ public class ProductController {
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public List<ProductResponse> listAllProduct() {
+        log.info("Http request; Method type:GET; URL:/api/admin/products/");
         List<ProductResponse> products = productService.listAllProduct();
         return products;
     }
@@ -50,12 +53,14 @@ public class ProductController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ProductResponse findProductById(@PathVariable("id") int productId) {
+        log.info("Http request; Method type:GET; URL:/api/admin/products/"+productId+"/");
         return productService.findProductById(productId);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteProductById(@PathVariable("id") int productId) {
+        log.info("Http request; Method type:DELETE; URL:/api/admin/products/"+productId+"/");
         productService.deleteProductById(productId);
     }
 }

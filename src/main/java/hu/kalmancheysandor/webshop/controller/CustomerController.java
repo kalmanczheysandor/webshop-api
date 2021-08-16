@@ -28,18 +28,21 @@ public class CustomerController {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerResponse saveCustomer(@Valid @RequestBody CustomerCreateRequest command) {
+        log.info("Http request; Method type:POST; URL:/api/admin/customers/; Body:" + command.toString());
         return customerService.saveCustomer(command);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CustomerResponse updateCustomer(@PathVariable("id") int customerId, @Valid @RequestBody CustomerUpdateRequest command) {
+        log.info("Http request; Method type:PUT; URL:/api/admin/customers/"+customerId+"/; Body:" + command.toString());
         return customerService.updateCustomer(customerId,command);
     }
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public List<CustomerResponse> listAllCustomer() {
+        log.info("Http request; Method type:GET; URL:/api/admin/customers/");
         List<CustomerResponse> customers = customerService.listAllCustomer();
         return customers;
     }
@@ -47,12 +50,14 @@ public class CustomerController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public CustomerResponse findCustomerById(@PathVariable("id") int customerId) {
+        log.info("Http request; Method type:GET; URL:/api/admin/customers/"+customerId+"/");
         return customerService.findCustomerById(customerId);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteCustomerById(@PathVariable("id") int customerId){
+        log.info("Http request; Method type:DELETE; URL:/api/admin/customers/"+customerId+"/");
         customerService.deleteCustomerById(customerId);
     }
 
