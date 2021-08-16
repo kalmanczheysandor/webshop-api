@@ -29,17 +29,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ProductCategoryNotFoundException.class)
-    public ResponseEntity<List<FieldError>> handleProductCategoryNotFoundException(ProductCategoryNotFoundException exception) {
-        FieldError fieldError = new FieldError("productId","Product category with id " + exception.getProductCategoryId() + " is not found");
-        return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
-    }
 
-    @ExceptionHandler(ProductCategoryStillInUseException.class)
-    public ResponseEntity<List<FieldError>> handleProductCategoryStillInUseException(ProductCategoryStillInUseException exception) {
-        FieldError fieldError = new FieldError("productId","Product category with id " + exception.getProductCategoryId() + " is still in use!");
-        return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
-    }
 
     @ExceptionHandler(CustomerNotFoundException.class)
     public ResponseEntity<List<FieldError>> handleCustomerNotFoundException(CustomerNotFoundException exception) {
@@ -66,11 +56,5 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
     }
 
-//    @ExceptionHandler(GameEventNotFound.class)
-//    public ResponseEntity<List<hu.progmasters.boardgamepub.exceptionhandling.ValidationError>> handleGameEventNotFound(GameEventNotFound exception) {
-//        hu.progmasters.boardgamepub.exceptionhandling.ValidationError validationError = new hu.progmasters.boardgamepub.exceptionhandling.ValidationError("gameEventId",
-//                "game event with id " + exception.getIdNotFound() + " is not found");
-//        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
-//    }
 
 }
