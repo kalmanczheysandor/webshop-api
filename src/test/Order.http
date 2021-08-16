@@ -1,0 +1,46 @@
+
+GET http://localhost:8080/api/admin/orders/
+Accept: application/json
+
+###
+
+GET http://localhost:8080/api/admin/orders/20
+Accept: application/json
+
+###
+
+POST http://localhost:8080/api/admin/orders/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "customerId": 3,
+  "items": [
+    {
+      "productId": 1,
+      "quantity": 10
+    },
+    {
+      "productId": 2,
+      "quantity": 3
+    }
+  ]
+}
+
+###
+
+
+PUT http://localhost:8080/api/admin/orders/20
+Content-Type: application/json
+Accept: application/json
+
+{
+  "deliveryStatus": "DELIVERING"
+}
+
+###
+
+DELETE http://localhost:8080/api/admin/orders/20
+Accept: application/json
+
+###

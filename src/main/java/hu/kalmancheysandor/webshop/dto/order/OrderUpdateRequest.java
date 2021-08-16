@@ -1,5 +1,6 @@
 package hu.kalmancheysandor.webshop.dto.order;
 
+import hu.kalmancheysandor.webshop.domain.order.DeliveryStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -11,5 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 @Validated
 public class OrderUpdateRequest {
-    private Integer customerId;
+    private DeliveryStatus deliveryStatus;
 }

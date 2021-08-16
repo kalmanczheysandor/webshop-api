@@ -1,6 +1,7 @@
 package hu.kalmancheysandor.webshop.service;
 
 import hu.kalmancheysandor.webshop.domain.customer.Customer;
+import hu.kalmancheysandor.webshop.domain.order.DeliveryStatus;
 import hu.kalmancheysandor.webshop.domain.order.Order;
 import hu.kalmancheysandor.webshop.domain.order.OrderItem;
 import hu.kalmancheysandor.webshop.domain.product.Product;
@@ -57,6 +58,7 @@ public class OrderService {
         orderToSave.setId(null);
         orderToSave.getOrderItems().clear();
         orderToSave.setCustomer(null);
+        orderToSave.setDeliveryStatus(DeliveryStatus.PURCHASED);
 
         //Save parent entity
         Order savedOrder = orderRepository.saveOrder(orderToSave);
@@ -128,11 +130,8 @@ public class OrderService {
     public OrderResponse updateOrder(int orderId, OrderUpdateRequest command) {
         try {
             Order orderCurrentState = orderRepository.findOrderById(orderId);
-            Order orderNewState = modelMapper.map(command, Order.class);
-            orderNewState.setId(null);
 
-            modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
-            modelMapper.map(orderNewState, orderCurrentState);
+            orderCurrentState.setDeliveryStatus(command.getDeliveryStatus());
 
             Order modifiedOrder = orderRepository.updateOrder(orderCurrentState);
 

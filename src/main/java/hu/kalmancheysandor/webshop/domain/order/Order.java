@@ -29,6 +29,9 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
 
+    @Column(name = "delivery_status")
+    @Enumerated(EnumType.STRING)
+    private DeliveryStatus deliveryStatus;
 
     public OrderItem addOrderItem(OrderItem orderItem) {
         if(!orderItems.contains(orderItem)) {
@@ -46,10 +49,5 @@ public class Order {
                 ", totalNetPrice=" + totalNetPrice +
                 ", totalGrossPrice=" + totalGrossPrice +
                 '}';
-    }
-
-    public void entityReset(){
-        setId(null);
-
     }
 }

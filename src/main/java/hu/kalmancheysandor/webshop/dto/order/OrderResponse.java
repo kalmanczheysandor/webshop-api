@@ -1,6 +1,7 @@
 package hu.kalmancheysandor.webshop.dto.order;
 
 
+import hu.kalmancheysandor.webshop.domain.order.DeliveryStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +17,7 @@ public class OrderResponse {
     private float totalGrossPrice;
     private Customer customer;
     private List<Item> items;
-
+    private DeliveryStatus deliveryStatus;
 
     @Data
     @NoArgsConstructor
