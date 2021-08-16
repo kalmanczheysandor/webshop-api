@@ -21,10 +21,10 @@ public class Product {
     @Column(name = "product_name")
     private String name;
     @Column(name = "price_net")
-    private Integer priceNet;
+    private Float priceNet;
 
     @Column(name = "price_vat")
-    private Float priceVat;
+    private Integer priceVat;
 
     @Column(name = "description")
     private String description;
