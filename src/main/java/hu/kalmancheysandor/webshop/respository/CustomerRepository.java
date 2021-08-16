@@ -1,7 +1,9 @@
 package hu.kalmancheysandor.webshop.respository;
 
 import hu.kalmancheysandor.webshop.domain.customer.Customer;
+import hu.kalmancheysandor.webshop.domain.product.Product;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
+import hu.kalmancheysandor.webshop.respository.exception.RecordStillInUseException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -29,13 +31,11 @@ public class CustomerRepository {
     }
 
     public List<Customer> listAllCustomer() {
-        List<Customer> customers = entityManager.createQuery("SELECT c FROM Customer c", Customer.class).getResultList();
-        return customers;
+        return entityManager.createQuery("SELECT c FROM Customer c", Customer.class).getResultList();
     }
 
     public Customer updateCustomer(Customer customer) {
-        Customer updated = entityManager.merge(customer);
-        return updated;
+        return entityManager.merge(customer);
     }
 
     public void deleteCustomerById(int customerId) {
@@ -44,8 +44,24 @@ public class CustomerRepository {
     }
 
     private void deleteCustomer(Customer customer) {
+        if(isCustomerStillInUse(customer)) {
+            throw new RecordStillInUseException(customer.getId());
+        }
         entityManager.remove(customer);
     }
 
+    private boolean isCustomerStillInUse(Customer customer) {
+        List<Object> list = entityManager.createQuery("SELECT o FROM Order o " +
+                "WHERE o.customer=:paramCustomer")
+                .setParameter("paramCustomer",customer)
+                .setMaxResults(1)
+                .getResultList();
+
+        // Some older JPA implementations returns null instead of empty list
+        if(list==null) {
+            return false;
+        }
+        return !list.isEmpty();
+    }
 
 }

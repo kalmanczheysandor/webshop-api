@@ -8,7 +8,9 @@ import hu.kalmancheysandor.webshop.dto.customer.CustomerUpdateRequest;
 import hu.kalmancheysandor.webshop.respository.CustomerAddressRepository;
 import hu.kalmancheysandor.webshop.respository.CustomerRepository;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
+import hu.kalmancheysandor.webshop.respository.exception.RecordStillInUseException;
 import hu.kalmancheysandor.webshop.service.exception.CustomerNotFoundException;
+import hu.kalmancheysandor.webshop.service.exception.CustomerStillInUseException;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,6 +113,9 @@ public class CustomerService {
             customerRepository.deleteCustomerById(customerId);
         } catch (RecordNotFoundByIdException e) {
             throw new CustomerNotFoundException(e.getId());
+        }
+        catch (RecordStillInUseException e){
+            throw new CustomerStillInUseException(e.getId());
         }
     }
 }

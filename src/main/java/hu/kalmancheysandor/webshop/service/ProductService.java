@@ -6,8 +6,9 @@ import hu.kalmancheysandor.webshop.dto.product.ProductResponse;
 import hu.kalmancheysandor.webshop.dto.product.ProductUpdateRequest;
 import hu.kalmancheysandor.webshop.respository.ProductRepository;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
-import hu.kalmancheysandor.webshop.service.exception.CustomerNotFoundException;
+import hu.kalmancheysandor.webshop.respository.exception.RecordStillInUseException;
 import hu.kalmancheysandor.webshop.service.exception.ProductNotFoundException;
+import hu.kalmancheysandor.webshop.service.exception.ProductStillInUseException;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,6 @@ public class ProductService {
     public ProductResponse updateProduct(int productId, ProductUpdateRequest command) {
         try {
 
-
             Product productCurrentState = productRepository.findProductById(productId);
             Product productNewState = modelMapper.map(command, Product.class);
             productNewState.setId(null);
@@ -59,7 +59,7 @@ public class ProductService {
     }
 
     public List<ProductResponse> listAllProduct() {
-        List<Product> products = productRepository.listProducts();
+        List<Product> products = productRepository.listAllProduct();
         return products.stream()
                 .map(item -> modelMapper.map(item, ProductResponse.class))
                 .collect(Collectors.toList());
@@ -76,12 +76,14 @@ public class ProductService {
         }
     }
 
-    public ProductResponse deleteProductById(int productId) {
+    public void deleteProductById(int productId) {
         try {
-            Product deletedProduct  = productRepository.deleteProductById(productId);
-            return modelMapper.map(deletedProduct, ProductResponse.class);
+            productRepository.deleteProductById(productId);
         } catch (RecordNotFoundByIdException e) {
             throw new ProductNotFoundException(e.getId());
+        }
+        catch (RecordStillInUseException e){
+            throw new ProductStillInUseException(e.getId());
         }
     }
 }

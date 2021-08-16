@@ -26,7 +26,6 @@ public class OrderRepository {
         return orderItem;
     }
 
-
     public Order findOrderById(int orderId) {
         Order order = entityManager.find(Order.class, orderId);
         if( order==null) {
@@ -70,8 +69,7 @@ public class OrderRepository {
     }
 
     public OrderItem updateOrderItem(OrderItem orderItem) {
-        OrderItem updated = entityManager.merge(orderItem);
-        return updated;
+        return entityManager.merge(orderItem);
     }
 
     public void deleteOrderById(int orderId) {

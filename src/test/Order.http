@@ -14,7 +14,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "customerId": 3,
+  "customerId": 1,
   "items": [
     {
       "productId": 1,

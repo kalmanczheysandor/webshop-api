@@ -1,9 +1,7 @@
 package hu.kalmancheysandor.webshop.dto.customer;
 
-import hu.kalmancheysandor.webshop.dto.company.CustomerAddressResponse;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 
 @Data
 @NoArgsConstructor

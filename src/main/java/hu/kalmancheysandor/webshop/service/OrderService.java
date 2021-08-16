@@ -8,9 +8,7 @@ import hu.kalmancheysandor.webshop.domain.product.Product;
 import hu.kalmancheysandor.webshop.dto.order.OrderCreateRequest;
 import hu.kalmancheysandor.webshop.dto.order.OrderResponse;
 import hu.kalmancheysandor.webshop.dto.order.OrderUpdateRequest;
-import hu.kalmancheysandor.webshop.dto.product.ProductResponse;
 import hu.kalmancheysandor.webshop.respository.CustomerRepository;
-import hu.kalmancheysandor.webshop.respository.OrderItemRepository;
 import hu.kalmancheysandor.webshop.respository.OrderRepository;
 import hu.kalmancheysandor.webshop.respository.ProductRepository;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
@@ -18,7 +16,6 @@ import hu.kalmancheysandor.webshop.service.exception.*;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

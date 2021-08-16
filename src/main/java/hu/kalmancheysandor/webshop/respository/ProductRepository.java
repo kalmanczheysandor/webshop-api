@@ -1,7 +1,10 @@
 package hu.kalmancheysandor.webshop.respository;
 
+import hu.kalmancheysandor.webshop.domain.order.Order;
+import hu.kalmancheysandor.webshop.domain.order.OrderItem;
 import hu.kalmancheysandor.webshop.domain.product.Product;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
+import hu.kalmancheysandor.webshop.respository.exception.RecordStillInUseException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -27,27 +30,45 @@ public class ProductRepository {
         return product;
     }
 
-    public List<Product> listProducts() {
-
-        List<Product> products = entityManager.createQuery("SELECT p FROM Product p", Product.class).getResultList();
-        return products;
+    public List<Product> listAllProduct() {
+        return entityManager.createQuery("SELECT p FROM Product p", Product.class).getResultList();
     }
 
     public Product updateProduct(Product product) {
-        Product updated = entityManager.merge(product);
-        return updated;
+        return entityManager.merge(product);
     }
 
-    public Product deleteProductById(int productId) {
+
+
+    public void deleteProductById(int productId) {
         Product productToDelete = findProductById(productId);
-        entityManager.remove(productToDelete);
-        return productToDelete;
+        deleteProduct(productToDelete);
     }
 
-    public Product deleteProduct(Product product) {
+    private void deleteProduct(Product product) {
+        if(isProductStillInUse(product)) {
+            throw new RecordStillInUseException(product.getId());
+        }
         entityManager.remove(product);
-        return product;
     }
+
+
+    private boolean isProductStillInUse(Product product) {
+        List<Object> list = entityManager.createQuery("SELECT i FROM OrderItem i " +
+                "WHERE i.product=:paramProduct")
+                .setParameter("paramProduct",product)
+                .setMaxResults(1)
+                .getResultList();
+
+        // Some older JPA implementations returns null instead of empty list
+        if(list==null) {
+            return false;
+        }
+        return !list.isEmpty();
+    }
+
+
+
 
 
 }
