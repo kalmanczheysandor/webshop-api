@@ -16,7 +16,6 @@ public class ProductRepository {
     @PersistenceContext
     EntityManager entityManager;
 
-
     public Product saveProduct(Product product) {
         entityManager.persist(product);
         return product;
@@ -38,8 +37,6 @@ public class ProductRepository {
         return entityManager.merge(product);
     }
 
-
-
     public void deleteProductById(int productId) {
         Product productToDelete = findProductById(productId);
         deleteProduct(productToDelete);
@@ -51,7 +48,6 @@ public class ProductRepository {
         }
         entityManager.remove(product);
     }
-
 
     private boolean isProductStillInUse(Product product) {
         List<Object> list = entityManager.createQuery("SELECT i FROM OrderItem i " +

@@ -4,6 +4,7 @@ import hu.kalmancheysandor.webshop.domain.customer.Customer;
 import hu.kalmancheysandor.webshop.domain.product.Product;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
 import hu.kalmancheysandor.webshop.respository.exception.RecordStillInUseException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Repository
 public class CustomerRepository {
+
     @PersistenceContext
     EntityManager entityManager;
 
