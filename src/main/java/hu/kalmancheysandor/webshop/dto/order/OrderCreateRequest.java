@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 
@@ -13,6 +14,8 @@ import java.util.List;
 public class OrderCreateRequest {
 
     private Integer customerId;
+
+    @NotEmpty(message = "Field must not be empty")
     private List<Item> items;
 
     @Data
