@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -53,7 +54,18 @@ public class Customer {
                 (address==null?", address='null' ":", address='YYYYY' ")+
                 ", active=" + active +
                 '}';
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Customer)) return false;
+        Customer customer = (Customer) o;
+        return id.equals(customer.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

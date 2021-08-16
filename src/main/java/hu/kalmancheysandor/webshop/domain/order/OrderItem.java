@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 
 @Data
@@ -20,10 +21,10 @@ public class OrderItem {
     //@Formula("product_id.")
     //@Formula("product_id.")
     @Column(name="price_total_net")
-    private int totalNetPrice;
+    private float totalNetPrice;
 
     @Column(name="price_total_gross")
-    private int totalGrossPrice;
+    private float totalGrossPrice;
 
     @Column(name = "quantity")
     private Integer quantity;
@@ -35,4 +36,27 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "id=" + id +
+                ", totalNetPrice=" + totalNetPrice +
+                ", totalGrossPrice=" + totalGrossPrice +
+                ", quantity=" + quantity +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OrderItem)) return false;
+        OrderItem orderItem = (OrderItem) o;
+        return id.equals(orderItem.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
