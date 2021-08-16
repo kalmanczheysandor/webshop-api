@@ -5,9 +5,7 @@ import hu.kalmancheysandor.webshop.domain.order.DeliveryStatus;
 import hu.kalmancheysandor.webshop.domain.order.Order;
 import hu.kalmancheysandor.webshop.domain.order.OrderItem;
 import hu.kalmancheysandor.webshop.domain.product.Product;
-import hu.kalmancheysandor.webshop.dto.order.OrderCreateRequest;
-import hu.kalmancheysandor.webshop.dto.order.OrderResponse;
-import hu.kalmancheysandor.webshop.dto.order.OrderUpdateRequest;
+import hu.kalmancheysandor.webshop.dto.order.*;
 import hu.kalmancheysandor.webshop.respository.CustomerRepository;
 import hu.kalmancheysandor.webshop.respository.OrderRepository;
 import hu.kalmancheysandor.webshop.respository.ProductRepository;
@@ -19,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,7 +47,83 @@ public class OrderService {
         this.modelMapper = modelMapper;
     }
 
-    @Transactional
+
+//    public OrderResponse saveOrder(OrderCreateRequest command) {
+//
+//        // Convert parent dto object to entity
+//        modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+//        Order orderToSave = modelMapper.map(command, Order.class);
+//        orderToSave.setId(null);
+//        orderToSave.getOrderItems().clear();
+//        orderToSave.setCustomer(null);
+//        orderToSave.setDeliveryStatus(DeliveryStatus.PURCHASED);
+//
+//        //Save parent entity
+//        Order savedOrder = orderRepository.saveOrder(orderToSave);
+//        try {
+//            Integer customerId = command.getCustomerId();
+//            Customer customer = customerRepository.findCustomerById(customerId);
+//            orderToSave.setCustomer(customer);
+//        } catch (RecordNotFoundByIdException e) {
+//            throw new CustomerNotFoundException(e.getId());
+//        }
+//
+//        // Convert and save children entities
+//        int sumTotalNet = 0;
+//        int sumTotalGross = 0;
+//        List<Integer> usedProductIdList = new ArrayList<>();
+//        List<OrderCreateRequest.Item> items = command.getItems();
+//        for (OrderCreateRequest.Item item : items) {
+//            OrderItem orderItemToSave = modelMapper.map(item, OrderItem.class);
+//            orderItemToSave.setId(null);
+//            orderItemToSave.setOrder(null);
+//            orderItemToSave.setProduct(null);
+//
+//            Product product;
+//            try {
+//                Integer productId = item.getProductId();
+//
+//                // Test whether the productId is in use only once
+//                if (usedProductIdList.contains(productId)) {
+//                    throw new OrderItemDuplicationException(productId);
+//                }
+//                usedProductIdList.add(productId);
+//
+//
+//                product = productRepository.findProductById(productId);
+//                orderItemToSave.setProduct(product);
+//            } catch (RecordNotFoundByIdException e) {
+//                throw new ProductNotFoundException(e.getId());
+//            }
+//
+//
+//            int totalNet = product.getPriceNet();
+//            totalNet *= orderItemToSave.getQuantity();
+//            int totalGross = (int) (totalNet + (totalNet * (product.getPriceVat() / 100)));
+//
+//
+//            orderItemToSave.setTotalNetPrice(totalNet);
+//            orderItemToSave.setTotalGrossPrice(totalGross);
+//
+//            sumTotalNet += totalNet;
+//            sumTotalGross += totalGross;
+//
+//            // Set relationship references between entities
+//
+//            orderToSave.addOrderItem(orderItemToSave);
+//            orderItemToSave.setOrder(orderToSave);
+//
+//
+//            //Save child entities
+//            orderRepository.saveOrderItem(orderItemToSave);
+//        }
+//
+//        orderToSave.setTotalNetPrice(sumTotalNet);
+//        orderToSave.setTotalGrossPrice(sumTotalGross);
+//
+//        return modelMapper.map(savedOrder, OrderResponse.class);
+//    }
+
     public OrderResponse saveOrder(OrderCreateRequest command) {
 
         // Convert parent dto object to entity
@@ -68,8 +145,8 @@ public class OrderService {
         }
 
         // Convert and save children entities
-        int sumTotalNet = 0;
-        int sumTotalGross = 0;
+        float sumTotalNet = 0;
+        float sumTotalGross = 0;
         List<Integer> usedProductIdList = new ArrayList<>();
         List<OrderCreateRequest.Item> items = command.getItems();
         for (OrderCreateRequest.Item item : items) {
@@ -96,9 +173,9 @@ public class OrderService {
             }
 
 
-            int totalNet = product.getPriceNet();
+            float totalNet = product.getPriceNet();
             totalNet *= orderItemToSave.getQuantity();
-            int totalGross = (int) (totalNet + (totalNet * (product.getPriceVat() / 100)));
+            float totalGross = (totalNet + (totalNet * (product.getPriceVat() / 100)));
 
 
             orderItemToSave.setTotalNetPrice(totalNet);
@@ -123,7 +200,6 @@ public class OrderService {
         return modelMapper.map(savedOrder, OrderResponse.class);
     }
 
-
     public OrderResponse updateOrder(int orderId, OrderUpdateRequest command) {
         try {
             Order orderCurrentState = orderRepository.findOrderById(orderId);
@@ -137,7 +213,6 @@ public class OrderService {
             throw new OrderNotFoundException(e.getId());
         }
     }
-
 
     public List<OrderResponse> listAllOrder() {
         List<Order> orders = orderRepository.listAllOrder();
@@ -166,4 +241,157 @@ public class OrderService {
             throw new OrderNotFoundException(e.getId());
         }
     }
+
+    public OrderItemResponse addOrderItemToOrder(int orderId, OrderItemCreateRequest command) {
+
+        Order parentOrder;
+        try {
+            parentOrder = orderRepository.findOrderById(orderId);
+        } catch (RecordNotFoundByIdException e) {
+            throw new OrderNotFoundException(e.getId());
+        }
+
+        Product product;
+        try {
+            Integer productId = command.getProductId();
+            //TODO csak 1x lehet az orderben az adott termék
+            product = productRepository.findProductById(productId);
+        } catch (RecordNotFoundByIdException e) {
+            throw new ProductNotFoundException(e.getId());
+        }
+
+        float totalNet = product.getPriceNet() * command.getQuantity();
+        float totalGross = totalNet + (totalNet * (product.getPriceVat() / 100));
+
+        OrderItem itemToSave = new OrderItem();
+        itemToSave.setTotalNetPrice(totalNet);
+        itemToSave.setTotalGrossPrice(totalGross);
+        itemToSave.setQuantity(command.getQuantity());
+        itemToSave.setOrder(parentOrder);
+        itemToSave.setProduct(product);
+
+        parentOrder.addOrderItem(itemToSave);
+        parentOrder.setTotalNetPrice(parentOrder.getTotalNetPrice() + itemToSave.getTotalNetPrice());
+        parentOrder.setTotalGrossPrice(parentOrder.getTotalGrossPrice() + itemToSave.getTotalGrossPrice());
+        orderRepository.saveOrderItem(itemToSave);
+        orderRepository.updateOrder(parentOrder);
+        return modelMapper.map(itemToSave, OrderItemResponse.class);
+    }
+
+    public OrderItemResponse updateOrderItem(int orderId, int orderItemId, OrderItemUpdateRequest command) {
+
+        Order parentOrder;
+        try {
+            parentOrder = orderRepository.findOrderById(orderId);
+        } catch (RecordNotFoundByIdException e) {
+            throw new OrderNotFoundException(e.getId());
+        }
+
+        OrderItem orderItem;
+        try {
+            orderItem = orderRepository.findOrderItemById(orderItemId);
+
+            // OrderItem must be child of the specified order otherwise item not counted as "Found"
+            if (!parentOrder.equals(orderItem.getOrder())) {
+                throw new OrderItemNotFoundException(orderItemId);
+            }
+        } catch (RecordNotFoundByIdException e) {
+            throw new OrderItemNotFoundException(e.getId());
+        }
+
+
+        Product product;
+        try {
+            Integer productId = command.getProductId();
+            //TODO csak 1x lehet az orderben az adott termék
+            product = productRepository.findProductById(productId);
+        } catch (RecordNotFoundByIdException e) {
+            throw new ProductNotFoundException(e.getId());
+        }
+
+        float previousTotalNet = orderItem.getTotalNetPrice();
+        float previousTotalGross = orderItem.getTotalGrossPrice();
+
+        float newTotalNet = product.getPriceNet() * command.getQuantity();
+        float newTotalGross = newTotalNet + (newTotalNet * (product.getPriceVat() / 100));
+
+        // Setting new values
+        orderItem.setTotalNetPrice(newTotalNet);
+        orderItem.setTotalGrossPrice(newTotalGross);
+        orderItem.setQuantity(command.getQuantity());
+        //orderItem.setOrder(parentOrder);
+        orderItem.setProduct(product);
+
+        parentOrder.setTotalNetPrice(parentOrder.getTotalNetPrice() - previousTotalNet + orderItem.getTotalNetPrice());
+        parentOrder.setTotalGrossPrice(parentOrder.getTotalGrossPrice() - previousTotalGross + orderItem.getTotalGrossPrice());
+        orderRepository.updateOrderItem(orderItem);
+        //orderRepository.updateOrder(parentOrder);
+        return modelMapper.map(orderItem, OrderItemResponse.class);
+    }
+
+    public List<OrderItemResponse> listAllOrderItemByOrderId(int orderId) {
+        try {
+            List<OrderItem> orderItems = orderRepository.listAllOrderItemByOrderId(orderId);
+            return orderItems.stream()
+                    .map(orderItem -> modelMapper.map(orderItem, OrderItemResponse.class))
+                    .collect(Collectors.toList());
+        } catch (RecordNotFoundByIdException e) {
+            throw new OrderNotFoundException(e.getId());
+        }
+    }
+
+    public OrderItemResponse findOrderItem(int orderId, int orderItemId) {
+        Order parentOrder;
+        try {
+            parentOrder = orderRepository.findOrderById(orderId);
+        } catch (RecordNotFoundByIdException e) {
+            throw new OrderNotFoundException(e.getId());
+        }
+
+        OrderItem orderItem;
+        try {
+            orderItem = orderRepository.findOrderItemById(orderItemId);
+
+            // OrderItem must be child of the specified order otherwise item not counted as "Found"
+            if (!parentOrder.equals(orderItem.getOrder())) {
+                throw new OrderItemNotFoundException(orderItemId);
+            }
+        } catch (RecordNotFoundByIdException e) {
+            throw new OrderItemNotFoundException(e.getId());
+        }
+
+        return modelMapper.map(orderItem, OrderItemResponse.class);
+    }
+
+    public void deleteOrderItem(int orderId, int orderItemId) {
+        Order parentOrder;
+        try {
+            parentOrder = orderRepository.findOrderById(orderId);
+        } catch (RecordNotFoundByIdException e) {
+            throw new OrderNotFoundException(e.getId());
+        }
+
+        OrderItem orderItem;
+        try {
+            orderItem = orderRepository.findOrderItemById(orderItemId);
+
+            // OrderItem must be child of the specified order otherwise item not counted as "Found"
+            if (!parentOrder.equals(orderItem.getOrder())) {
+                throw new OrderItemNotFoundException(orderItemId);
+            }
+        } catch (RecordNotFoundByIdException e) {
+            throw new OrderItemNotFoundException(e.getId());
+        }
+
+        if (parentOrder.getOrderItems().size() == 1) {
+            throw new OrderMustNotBeEmptyException(orderId);
+        }
+
+        parentOrder.getOrderItems().remove(orderItem);
+        parentOrder.setTotalNetPrice(parentOrder.getTotalNetPrice() - orderItem.getTotalNetPrice());
+        parentOrder.setTotalGrossPrice(parentOrder.getTotalGrossPrice() - orderItem.getTotalGrossPrice());
+        orderRepository.deleteOrderItem(orderItem);
+    }
+
+
 }

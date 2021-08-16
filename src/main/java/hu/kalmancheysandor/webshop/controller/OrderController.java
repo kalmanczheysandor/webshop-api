@@ -1,11 +1,7 @@
 package hu.kalmancheysandor.webshop.controller;
 
 import hu.kalmancheysandor.webshop.dto.customer.CustomerResponse;
-import hu.kalmancheysandor.webshop.dto.customer.CustomerUpdateRequest;
-import hu.kalmancheysandor.webshop.dto.order.OrderCreateRequest;
-import hu.kalmancheysandor.webshop.dto.order.OrderItemResponse;
-import hu.kalmancheysandor.webshop.dto.order.OrderResponse;
-import hu.kalmancheysandor.webshop.dto.order.OrderUpdateRequest;
+import hu.kalmancheysandor.webshop.dto.order.*;
 import hu.kalmancheysandor.webshop.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,39 +54,35 @@ public class OrderController {
 
 
 
+    @PostMapping("/{orderId}/items/")
+    @ResponseStatus(HttpStatus.CREATED)
+    public OrderItemResponse addOrderItemToOrder(@PathVariable("orderId") int orderId, @Valid @RequestBody OrderItemCreateRequest command) {
+        return orderService.addOrderItemToOrder(orderId,command);
+    }
 
 
+    @PutMapping("/{orderId}/items/{orderItemId}")
+    @ResponseStatus(HttpStatus.OK)
+    public OrderItemResponse updateOrderItem(@PathVariable("orderId") int orderId, @PathVariable("orderItemId") int orderItemId, @Valid @RequestBody OrderItemUpdateRequest command) {
+        return orderService.updateOrderItem(orderId,orderItemId,command);
+    }
 
-//    @PostMapping("/{orderId}/items/")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public CustomerResponse updateCustomer(@PathVariable("orderId") int orderId, @Valid @RequestBody OrderItemCreateRequest command) {
-//        //return customerService.updateCustomer(customerId,command);
-//        return null;
-//    }
-//
-//    @PutMapping("/{orderId}/items/{orderItemid}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public OrderItemResponse updateCustomer(@PathVariable("orderId") int orderId, @PathVariable("orderItemId") int orderItemId, @Valid @RequestBody OrderItemUpdateRequest command) {
-//        //return customerService.updateCustomer(customerId,command);
-//        return null;
-//    }
-//
-//
-//    @GetMapping("/{orderId}/items/")
-//    @ResponseStatus(HttpStatus.OK)
-//    public List<OrderItemResponse> listAllOrder() {
-//        return null;
-//    }
-//
-//    @GetMapping("/{orderId}/items/{orderItemId}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public OrderItemResponse findOrderItemById(@PathVariable("orderId") int orderId,@PathVariable("orderItemId") int orderItemId) {
-//        return null;
-//    }
-//
-//    @DeleteMapping("/{orderId}/items/{orderItemId}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public void deleteOrderById(@PathVariable("orderId") int orderId,@PathVariable("orderItemId") int orderItemId) {
-//
-//    }
+
+    @GetMapping("/{orderId}/items/")
+    @ResponseStatus(HttpStatus.OK)
+    public List<OrderItemResponse> listAllOrder(@PathVariable("orderId") int orderId) {
+        return orderService.listAllOrderItemByOrderId(orderId);
+    }
+
+    @GetMapping("/{orderId}/items/{orderItemId}")
+    @ResponseStatus(HttpStatus.OK)
+    public OrderItemResponse findOrderItemById(@PathVariable("orderId") int orderId,@PathVariable("orderItemId") int orderItemId) {
+        return null;
+    }
+
+    @DeleteMapping("/{orderId}/items/{orderItemId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteOrderById(@PathVariable("orderId") int orderId,@PathVariable("orderItemId") int orderItemId) {
+        orderService.findOrderItem(orderId,orderItemId);
+    }
 }

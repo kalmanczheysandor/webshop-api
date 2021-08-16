@@ -53,6 +53,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(OrderMustNotBeEmptyException.class)
+    public ResponseEntity<List<FieldError>> handleOrderMustNotBeEmptyException(OrderMustNotBeEmptyException exception) {
+        FieldError fieldError = new FieldError("orderId","Order at id " + exception.getOrderId() + " must not be empty");
+        return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(OrderItemNotFoundException.class)
     public ResponseEntity<List<FieldError>> handleOrderItemNotFoundException(OrderItemNotFoundException exception) {
 

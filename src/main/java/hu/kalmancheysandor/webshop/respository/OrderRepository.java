@@ -63,7 +63,6 @@ public class OrderRepository {
                 .getResultList();
     }
 
-
     public Order updateOrder(Order order) {
         return entityManager.merge(order);
     }
@@ -82,8 +81,6 @@ public class OrderRepository {
         deleteOrderItem(orderItemToDelete);
     }
 
-
-
     public void deleteAllOrderItemByOrderId(int orderId) {
         Order order = entityManager.find(Order.class, orderId);
         if( order==null) {
@@ -99,7 +96,7 @@ public class OrderRepository {
     private void deleteOrder(Order order) {
         entityManager.remove(order);
     }
-    private void deleteOrderItem(OrderItem orderItem) {
+    public void deleteOrderItem(OrderItem orderItem) {
         entityManager.remove(orderItem);
     }
 
