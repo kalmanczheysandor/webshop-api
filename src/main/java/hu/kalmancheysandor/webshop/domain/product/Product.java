@@ -31,10 +31,6 @@ public class Product {
     @Column(name = "is_active")
     private Boolean active;
 
-    @ManyToOne
-    @JoinColumn(name="category_id")
-    private ProductCategory category;
-
     @OneToMany(mappedBy = "product")
     private List<OrderItem> orderItems;
 }

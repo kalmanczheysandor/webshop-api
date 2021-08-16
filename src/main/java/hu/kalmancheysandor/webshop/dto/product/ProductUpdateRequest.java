@@ -13,5 +13,4 @@ public class ProductUpdateRequest {
     private Float priceVat;
     private String description;
     private Boolean active;
-    private Integer categoryId;
 }

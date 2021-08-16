@@ -15,5 +15,4 @@ public class ProductCreateRequest {
     private Float priceVat;
     private String description;
     private Boolean active;
-    private Integer categoryId;
 }

@@ -12,5 +12,4 @@ public class ProductResponse {
     private Float priceVat;
     private String description;
     private Boolean active;
-    private ProductCategoryResponse category;
 }
