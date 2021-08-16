@@ -77,7 +77,7 @@ public class OrderController {
     @GetMapping("/{orderId}/items/{orderItemId}")
     @ResponseStatus(HttpStatus.OK)
     public OrderItemResponse findOrderItemById(@PathVariable("orderId") int orderId,@PathVariable("orderItemId") int orderItemId) {
-        return null;
+        return orderService.findOrderItem(orderId,orderItemId);
     }
 
     @DeleteMapping("/{orderId}/items/{orderItemId}")
