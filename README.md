@@ -1,31 +1,50 @@
-# Vizsgaremek
+# Webshop Admin 1.0
 
-A feladatod egy backend API projekt elkészítése, általad választott témában.  
-A témákhoz összeszedtünk néhány ötletet, kérlek írd be magad ahhoz a témához, amit te választanál. Érdemes mindenkinek egyedi alkalmazást készíteni, próbáljatok meg osztozkodni a témákon.  
-Nem csak ezek közül a témák közül lehet választani, ha saját ötleted van, akkor nyugodtan írd hozzá a listához.
 
-[témaötletek](https://docs.google.com/document/d/1F30RkobWaX8L44ikgZ3GXKc0w7bEcgfUXIGEzSGSwHM/edit?usp=sharing)
+## A projekt célkitűzése
+Olyan webes technológiára épülő alkalmazás megvalósítása, amely a jelen kor
+ipari és piaci igényeit figyelembe véve hoz létre
 
-## Követelmények
+## Az alkalmazás célja
+### Mi a webshop
+- Az online térben történő kereskedés alapvető komponensei a webshopok.
+- Ezek olyan weblapok, amelyeken az adott vállalkozás által forgalmazott termékek vásárolhatóak meg.
+- A teljes üzleti működtetéshez nem csak a vásárlási felületre van szükség, hanem az adatok kezelését biztosító adminisztrációhoz felületre is.
 
-* Maven projekt
-* Spring Boot alkalmazás
-* REST API, Swagger, OpenAPI dokumentáció
-* SQL backend (pl. MySQL, MariaDB)
-* Flyway sémamigráció, SQL táblalétrehozás, adatbetöltés
-* Hibakezelés
-* Spring Data JPA repository
-* Integrációs tesztek
-* Konténerizált alkalmazás
+### Mi a "Webshop Admin 1.0"
+- Az elkészült szoftver egy adminisztrációs felületet biztosít az adott webshopban levő
+  termékek, ügyfelek és a megrendelések adminisztrálására.
+- Az admin alkalmazást a webshopot üzemeltető cég erre feljogosított alkalmazottai használják.
+- Az alkalmazás RESTful technológiára lett kialakítva, vagyis az adatmanipulációkkal kapcsolatos kérések és válaszok JSON formátumban történnek.
+- Az alkalmazott RESTful technológiából adódóan a szoftver újrafelhasználható, mert nem szabja meg az adminisztrációs felület vizuális megjelenését.
 
-## Feladat nagysága
+## Az alkalmazás bemutatása
+### Végezhető műveletek
+- Termékek
+	- létrehozás
+	- törlés
+	- módosítás
+	- listázás
+	- elérés
 
-* Legalább két 1-n kapcsolatban lévő tábla
-* Legalább két SQL migráció
-* Legalább két entitás
-* Legalább két controller
-* Minden bemenő paraméter validálása
-* Legalább egy property beolvasása
-* Minden HTTP metódusra legalább egy végpont (`GET`, `POST`, `PUT`, `DELETE`)
-* Legalább 60%-os tesztlefedettség, amely tartalmaz egység és integrációs teszteket is
-* Egy `Dockerfile`
+- ügyfelek
+	- létrehozás
+	- törlés
+	- módosítás
+	- listázás
+	- elérés
+
+- Megrendelések
+	- létrehozás (tartalmazza a megvásárolt tételeket is)
+	- törlés
+	- módosítás
+	- listázás
+	- elérés
+	- Megrendelési tételek
+		- hozzáadása adott vásárláshoz
+		- törlése adott vásárlásból
+		- módosítása
+		- listázása (csak az adott vásárláshoz tartozóakat)
+		- elérés
+   
+   

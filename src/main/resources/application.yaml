@@ -2,13 +2,13 @@ server:
   port : 8080
 spring:
   datasource:
-    # In normal case
+    # Case-1: No container in use
     #url: jdbc:mysql://127.0.0.1:3306/webshop?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
 
-    # Only database is in container
+    # Case-2: Only database is in container
     #url: jdbc:mysql://127.0.0.1:3310/webshop?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
 
-    # In containers are in use
+    # Case-3: containers are in use
     url: jdbc:mysql://webshop_db_container/webshop?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
     username: root
     password: AbC12347
