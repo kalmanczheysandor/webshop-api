@@ -1,6 +1,15 @@
+server:
+  port : 8080
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/webshop?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
+    # In normal case
+    #url: jdbc:mysql://127.0.0.1:3306/webshop?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
+
+    # Only database is in container
+    #url: jdbc:mysql://127.0.0.1:3310/webshop?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
+
+    # In containers are in use
+    url: jdbc:mysql://webshop_db_container/webshop?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
     username: root
     password: AbC12347
   jpa:
