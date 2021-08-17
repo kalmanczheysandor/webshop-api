@@ -33,7 +33,7 @@
 - Megrendelések
 	- létrehozás (tartalmazza a megvásárolt tételeket is)
 	- törlés
-	- módosítás
+	- módosítás (Kiszállítási státusz)
 	- listázás
 	- elérés
 	- Megrendelési tételek
