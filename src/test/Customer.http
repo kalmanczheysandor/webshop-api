@@ -1,15 +1,15 @@
 
-GET http://localhost:8080/api/admin/customer/
+GET http://localhost:8080/api/admin/customers/
 Accept: application/json
 
 ###
 
-GET http://localhost:8080/api/admin/customer/28
+GET http://localhost:8080/api/admin/customers/1
 Accept: application/json
 
 ###
 
-POST http://localhost:8080/api/admin/customer/
+POST http://localhost:8080/api/admin/customers/
 Content-Type: application/json
 Accept: application/json
 
@@ -32,29 +32,29 @@ Accept: application/json
 ###
 
 
-PUT http://localhost:8080/api/admin/customer/28
+PUT http://localhost:8080/api/admin/customers/4
 Content-Type: application/json
 Accept: application/json
 
 {
   "identifier": "Berni",
-  "password": "Verinika889",
-  "firstname": "Veronika",
-  "lastname": "Horváth",
-  "phone": "656565656",
-  "email": "dasdasd@gmail.com",
+  "password": "bernus558899",
+  "firstname": "Bernadett",
+  "lastname": "Szegedi",
+  "phone": "0620558899",
+  "email": "berni@gmail.com",
   "address": {
-    "country": "Bukarest",
-    "city": "string",
-    "street": "string",
-    "postcode": "string"
+    "country": "magyarország",
+    "city": "Szeged",
+    "street": "Petőfi utca 25",
+    "postcode": "2568"
   },
   "active": false
 }
 
 ###
 
-DELETE http://localhost:8080/api/admin/customer/28
+DELETE http://localhost:8080/api/admin/customers/4
 Accept: application/json
 
 ###

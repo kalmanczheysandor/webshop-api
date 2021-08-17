@@ -123,6 +123,6 @@ public class OrderController {
                                 @Parameter(description = "Tétel id", example = "9")
                                 @PathVariable("orderItemId") int orderItemId) {
         log.info("Http request; Method type:DELETE; URL:/api/admin/orders/" + orderId + "/items/" + orderItemId + "/");
-        orderService.findOrderItem(orderId, orderItemId);
+        orderService.deleteOrderItem(orderId, orderItemId);
     }
 }

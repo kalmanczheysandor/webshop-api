@@ -1,60 +1,78 @@
 
-GET http://localhost:8080/api/admin/product/
+GET http://localhost:8080/api/admin/products/
 Accept: application/json
 
 ###
 
-GET http://localhost:8080/api/admin/product/28
+GET http://localhost:8080/api/admin/products/4
+Accept: application/json
+
+
+### When does not exist
+GET http://localhost:8080/api/admin/products/4444
 Accept: application/json
 
 ###
 
-POST http://localhost:8080/api/admin/product/
+POST http://localhost:8080/api/admin/products/
 Content-Type: application/json
 Accept: application/json
 
 {
-  "identifier": "Veronika",
-  "password": "Verinika889",
-  "firstname": "Veronika",
-  "lastname": "Horváth",
-  "phone": "656565656",
-  "email": "dasdasd@gmail.com",
-  "address": {
-    "country": "Hungary",
-    "city": "string",
-    "street": "string",
-    "postcode": "string"
-  },
-  "active": true
-}
-
-###
-
-
-PUT http://localhost:8080/api/admin/product/28
-Content-Type: application/json
-Accept: application/json
-
-{
-  "identifier": "Berni",
-  "password": "Verinika889",
-  "firstname": "Veronika",
-  "lastname": "Horváth",
-  "phone": "656565656",
-  "email": "dasdasd@gmail.com",
-  "address": {
-    "country": "Bukarest",
-    "city": "string",
-    "street": "string",
-    "postcode": "string"
-  },
+  "name": "Laptop",
+  "priceNet": 130000,
+  "priceVat": 25,
+  "description": "",
   "active": false
 }
 
+
+### Validation error
+
+POST http://localhost:8080/api/admin/products/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Laptop",
+  "priceNet": -50,
+  "priceVat": 125,
+  "description": "",
+  "active": null
+}
+
+
 ###
 
-DELETE http://localhost:8080/api/admin/product/28
+
+PUT http://localhost:8080/api/admin/products/5
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Konzerv",
+  "priceNet": 20,
+  "priceVat": 25,
+  "description": "konzerv",
+  "active": true
+}
+
+### Validation error
+PUT http://localhost:8080/api/admin/products/5
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "adddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddadddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "priceNet": -50,
+  "priceVat": 255,
+  "active": null
+}
+
+
+###
+
+DELETE http://localhost:8080/api/admin/products/6
 Accept: application/json
 
 ###

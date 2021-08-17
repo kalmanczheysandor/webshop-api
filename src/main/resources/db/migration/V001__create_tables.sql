@@ -42,7 +42,7 @@ id INT AUTO_INCREMENT,
 price_total_net FLOAT NOT NULL DEFAULT 0.0,
 price_total_gross FLOAT NOT NULL DEFAULT 0.0,
 delivery_status VARCHAR(255) NOT NULL,
-customer_id INT NOT NULL,
+customer_id INT,
 PRIMARY KEY (id),
 FOREIGN KEY (customer_id) REFERENCES t_customer(id)
 );
