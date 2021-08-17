@@ -1,10 +1,6 @@
 # Webshop Admin 1.0
 
 
-## A projekt célkitűzése
-Olyan webes technológiára épülő alkalmazás megvalósítása, amely a jelen kor
-ipari és piaci igényeit figyelembe véve hoz létre
-
 ## Az alkalmazás célja
 ### Mi a webshop
 - Az online térben történő kereskedés alapvető komponensei a webshopok.
