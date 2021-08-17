@@ -23,7 +23,7 @@
 	- listázás
 	- elérés
 
-- ügyfelek
+- Ügyfelek
 	- létrehozás
 	- törlés
 	- módosítás
