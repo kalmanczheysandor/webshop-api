@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 public class ProductResponse {
     private Integer id;
     private String name;
-    private Integer priceNet;
-    private Float priceVat;
+    private Float priceNet;
+    private Integer priceVat;
     private String description;
     private Boolean active;
 }

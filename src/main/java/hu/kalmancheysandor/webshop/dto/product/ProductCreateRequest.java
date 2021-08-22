@@ -23,7 +23,6 @@ public class ProductCreateRequest {
     @Schema(description="A termék nettó ára", example = "3655")
     private Float priceNet;
 
-    //@PositiveOrZero(message="Field must not be negative")
     @NotNull(message = "Field must not be null")
     @Max(value = 100,message = "Field must not be greater than 100")
     @Min(value = 0,message = "Field must not be less than 0")

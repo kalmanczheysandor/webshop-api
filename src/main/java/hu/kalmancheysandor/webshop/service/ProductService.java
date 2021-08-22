@@ -38,7 +38,6 @@ public class ProductService {
         return modelMapper.map(productSaved, ProductResponse.class);
     }
 
-
     public ProductResponse updateProduct(int productId, ProductUpdateRequest command) {
         try {
 
@@ -64,8 +63,6 @@ public class ProductService {
                 .map(item -> modelMapper.map(item, ProductResponse.class))
                 .collect(Collectors.toList());
     }
-
-
 
     public ProductResponse findProductById(int productId) {
         try {
