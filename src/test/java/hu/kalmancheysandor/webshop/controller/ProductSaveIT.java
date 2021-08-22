@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class ProductControllerIT {
+public class ProductSaveIT {
 
     @Autowired
     MockMvc mockMvc;
@@ -92,25 +92,6 @@ public class ProductControllerIT {
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must not be blank")));
     }
 
-//    @Test
-//    void test_save_nameField_whenTooShort() throws Exception {
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \"\",\n" +
-//                "  \"priceNet\": 3655,\n" +
-//                "  \"priceVat\": 25,\n" +
-//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(post("/api/admin/products/")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("name")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field length must be between 0 and 255")));
-//    }
 
     @Test
     void test_save_nameField_whenTooLong() throws Exception {
