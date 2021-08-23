@@ -42,5 +42,19 @@
 		- módosítása
 		- listázása (csak az adott vásárláshoz tartozóakat)
 		- elérés
+
+## Üzembe helyezés
+### Docker image létrehozása
+docker build -t webshop_api_image .
+
+### Konténer hálózat létrehozása
+docker network create webshop_network
+
+### Az adatbázis indítása docker konténerben
+docker run --name webshop_db_container --network webshop_network -e MYSQL_ROOT_PASSWORD=AbC12347 -e MYSQL_DATABASE=webshop -d -p 3310:3306 mysql:latest
+
+### Az alkalmazás indítása docker konténerben
+docker run --name webshop_api_container --network webshop_network -p 8080:8080 -d webshop_api_image
+	
    
    

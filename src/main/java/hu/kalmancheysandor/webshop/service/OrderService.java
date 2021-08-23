@@ -158,22 +158,10 @@ public class OrderService {
     public OrderItemResponse addOrderItemToOrder(int orderId, OrderItemCreateRequest command) {
 
         // Find order
-        Order parentOrder;
-        try {
-            parentOrder = orderRepository.findOrderById(orderId);
-        } catch (RecordNotFoundByIdException e) {
-            throw new OrderNotFoundException(e.getId());
-        }
+        Order parentOrder = retrieveOrderAtId(orderId);
 
         // Find product
-        Product product;
-        try {
-            Integer productId = command.getProductId();
-            //TODO csak 1x lehet az orderben az adott termék
-            product = productRepository.findProductById(productId);
-        } catch (RecordNotFoundByIdException e) {
-            throw new ProductNotFoundException(e.getId());
-        }
+        Product product = retrieveProductAtId(command.getProductId());
 
         // Calculating prices
         float totalNet = product.getPriceNet() * command.getQuantity();
@@ -204,35 +192,18 @@ public class OrderService {
     public OrderItemResponse updateOrderItem(int orderId, int orderItemId, OrderItemUpdateRequest command) {
 
         // Find order
-        Order parentOrder;
-        try {
-            parentOrder = orderRepository.findOrderById(orderId);
-        } catch (RecordNotFoundByIdException e) {
-            throw new OrderNotFoundException(e.getId());
-        }
+        Order parentOrder = retrieveOrderAtId(orderId);
 
         // Find order item
-        OrderItem orderItem;
-        try {
-            orderItem = orderRepository.findOrderItemById(orderItemId);
+        OrderItem orderItem = retrieveOrderItemAtId(orderItemId);
 
-            // OrderItem must be child of the specified order otherwise item not counted as "Found"
-            if (!parentOrder.equals(orderItem.getOrder())) {
-                throw new OrderItemNotFoundException(orderItemId);
-            }
-        } catch (RecordNotFoundByIdException e) {
-            throw new OrderItemNotFoundException(e.getId());
+        // OrderItem must be child of the specified order otherwise item not counted as "Found"
+        if (!parentOrder.equals(orderItem.getOrder())) {
+            throw new OrderItemNotFoundException(orderItemId);
         }
 
         // Find product
-        Product product;
-        try {
-            Integer productId = command.getProductId();
-            //TODO csak 1x lehet az orderben az adott termék
-            product = productRepository.findProductById(productId);
-        } catch (RecordNotFoundByIdException e) {
-            throw new ProductNotFoundException(e.getId());
-        }
+        Product product = retrieveProductAtId(command.getProductId());
 
         // Calculating prices
         float previousTotalNet = orderItem.getTotalNetPrice();
@@ -267,24 +238,14 @@ public class OrderService {
 
     public OrderItemResponse findOrderItem(int orderId, int orderItemId) {
         // Find order
-        Order parentOrder;
-        try {
-            parentOrder = orderRepository.findOrderById(orderId);
-        } catch (RecordNotFoundByIdException e) {
-            throw new OrderNotFoundException(e.getId());
-        }
+        Order parentOrder = retrieveOrderAtId(orderId);
 
-        //Find order item
-        OrderItem orderItem;
-        try {
-            orderItem = orderRepository.findOrderItemById(orderItemId);
+        // Find order item
+        OrderItem orderItem = retrieveOrderItemAtId(orderItemId);
 
-            // OrderItem must be child of the specified order otherwise item not counted as "Found"
-            if (!parentOrder.equals(orderItem.getOrder())) {
-                throw new OrderItemNotFoundException(orderItemId);
-            }
-        } catch (RecordNotFoundByIdException e) {
-            throw new OrderItemNotFoundException(e.getId());
+        // OrderItem must be child of the specified order otherwise item not counted as "Found"
+        if (!parentOrder.equals(orderItem.getOrder())) {
+            throw new OrderItemNotFoundException(orderItemId);
         }
 
         return modelMapper.map(orderItem, OrderItemResponse.class);
@@ -292,26 +253,17 @@ public class OrderService {
 
     public void deleteOrderItem(int orderId, int orderItemId) {
         // Find order
-        Order parentOrder;
-        try {
-            parentOrder = orderRepository.findOrderById(orderId);
-        } catch (RecordNotFoundByIdException e) {
-            throw new OrderNotFoundException(e.getId());
-        }
+        Order parentOrder = retrieveOrderAtId(orderId);
 
         // Find order item
-        OrderItem orderItem;
-        try {
-            orderItem = orderRepository.findOrderItemById(orderItemId);
+        OrderItem orderItem = retrieveOrderItemAtId(orderItemId);
 
-            // OrderItem must be child of the specified order otherwise item not counted as "Found"
-            if (!parentOrder.equals(orderItem.getOrder())) {
-                throw new OrderItemNotFoundException(orderItemId);
-            }
-        } catch (RecordNotFoundByIdException e) {
-            throw new OrderItemNotFoundException(e.getId());
+        // OrderItem must be child of the specified order otherwise item not counted as "Found"
+        if (!parentOrder.equals(orderItem.getOrder())) {
+            throw new OrderItemNotFoundException(orderItemId);
         }
 
+        // At least one item must  be
         if (parentOrder.getOrderItems().size() == 1) {
             throw new OrderMustNotBeEmptyException(orderId);
         }
@@ -322,4 +274,28 @@ public class OrderService {
         orderRepository.deleteOrderItem(orderItem);
     }
 
+
+    private Order retrieveOrderAtId(int orderId) {
+        try {
+            return orderRepository.findOrderById(orderId);
+        } catch (RecordNotFoundByIdException e) {
+            throw new OrderNotFoundException(e.getId());
+        }
+    }
+
+    private Product retrieveProductAtId(int productId) {
+        try {
+            return productRepository.findProductById(productId);
+        } catch (RecordNotFoundByIdException e) {
+            throw new ProductNotFoundException(e.getId());
+        }
+    }
+
+    private OrderItem retrieveOrderItemAtId(int orderItemId) {
+        try {
+            return orderRepository.findOrderItemById(orderItemId);
+        } catch (RecordNotFoundByIdException e) {
+            throw new OrderItemNotFoundException(e.getId());
+        }
+    }
 }

@@ -89,7 +89,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "productId": 3,
+  "productId": 4,
   "quantity": 10
 }
 
