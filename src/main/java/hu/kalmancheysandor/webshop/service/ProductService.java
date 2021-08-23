@@ -47,7 +47,7 @@ public class ProductService {
 
 
             modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
-            modelMapper.map(productNewState, productCurrentState);
+            //modelMapper.map(productNewState, productCurrentState);
 
             Product modifiedProduct = productRepository.updateProduct(productCurrentState);
 

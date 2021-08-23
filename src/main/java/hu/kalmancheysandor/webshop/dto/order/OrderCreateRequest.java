@@ -16,12 +16,12 @@ public class OrderCreateRequest {
     private Integer customerId;
 
     @NotEmpty(message = "Field must not be empty")
-    private List<OrderItem> items;
+    private List<Item> items;
 
     @Data
     @NoArgsConstructor
     @Validated
-    public static class OrderItem {
+    public static class Item {
         private Integer productId;
         private Integer quantity;
     }

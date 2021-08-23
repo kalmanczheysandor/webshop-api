@@ -1,6 +1,7 @@
 package hu.kalmancheysandor.webshop.dto.customer;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +22,7 @@ public class CustomerUpdateRequest {
     @Data
     @NoArgsConstructor
     @Validated
+    @Tag(name = "Ügyfél címe a korábbi regisztráció módosításához.")
     public static class Address {
         private String country;
         private String city;

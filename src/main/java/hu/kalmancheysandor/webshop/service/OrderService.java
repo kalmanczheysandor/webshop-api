@@ -3,6 +3,7 @@ package hu.kalmancheysandor.webshop.service;
 import hu.kalmancheysandor.webshop.domain.customer.Customer;
 import hu.kalmancheysandor.webshop.domain.order.DeliveryStatus;
 import hu.kalmancheysandor.webshop.domain.order.Order;
+import hu.kalmancheysandor.webshop.domain.order.OrderItem;
 import hu.kalmancheysandor.webshop.domain.product.Product;
 import hu.kalmancheysandor.webshop.dto.order.*;
 import hu.kalmancheysandor.webshop.respository.CustomerRepository;
@@ -16,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,9 +72,9 @@ public class OrderService {
         float sumTotalNet = 0;
         float sumTotalGross = 0;
         List<Integer> usedProductIdList = new ArrayList<>();
-        List<OrderCreateRequest.OrderItem> items = command.getItems();
-        for (OrderCreateRequest.OrderItem item : items) {
-            hu.kalmancheysandor.webshop.domain.order.OrderItem orderItemToSave = modelMapper.map(item, hu.kalmancheysandor.webshop.domain.order.OrderItem.class);
+        List<OrderCreateRequest.Item> items = command.getItems();
+        for (OrderCreateRequest.Item item : items) {
+            OrderItem orderItemToSave = modelMapper.map(item, OrderItem.class);
             orderItemToSave.setId(null);
             orderItemToSave.setOrder(null);
             orderItemToSave.setProduct(null);
@@ -183,7 +187,7 @@ public class OrderService {
         float totalNet = product.getPriceNet() * command.getQuantity();
         float totalGross = totalNet + (totalNet * (product.getPriceVat() / 100));
 
-        hu.kalmancheysandor.webshop.domain.order.OrderItem itemToSave = new hu.kalmancheysandor.webshop.domain.order.OrderItem();
+        OrderItem itemToSave = new OrderItem();
         itemToSave.setTotalNetPrice(totalNet);
         itemToSave.setTotalGrossPrice(totalGross);
         itemToSave.setQuantity(command.getQuantity());
@@ -207,7 +211,7 @@ public class OrderService {
             throw new OrderNotFoundException(e.getId());
         }
 
-        hu.kalmancheysandor.webshop.domain.order.OrderItem orderItem;
+        OrderItem orderItem;
         try {
             orderItem = orderRepository.findOrderItemById(orderItemId);
 
@@ -251,7 +255,7 @@ public class OrderService {
 
     public List<OrderItemResponse> listAllOrderItemByOrderId(int orderId) {
         try {
-            List<hu.kalmancheysandor.webshop.domain.order.OrderItem> orderItems = orderRepository.listAllOrderItemByOrderId(orderId);
+            List<OrderItem> orderItems = orderRepository.listAllOrderItemByOrderId(orderId);
             return orderItems.stream()
                     .map(orderItem -> modelMapper.map(orderItem, OrderItemResponse.class))
                     .collect(Collectors.toList());
@@ -268,7 +272,7 @@ public class OrderService {
             throw new OrderNotFoundException(e.getId());
         }
 
-        hu.kalmancheysandor.webshop.domain.order.OrderItem orderItem;
+        OrderItem orderItem;
         try {
             orderItem = orderRepository.findOrderItemById(orderItemId);
 
@@ -291,7 +295,7 @@ public class OrderService {
             throw new OrderNotFoundException(e.getId());
         }
 
-        hu.kalmancheysandor.webshop.domain.order.OrderItem orderItem;
+        OrderItem orderItem;
         try {
             orderItem = orderRepository.findOrderItemById(orderItemId);
 

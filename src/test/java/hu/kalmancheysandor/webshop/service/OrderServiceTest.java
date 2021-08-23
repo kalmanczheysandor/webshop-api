@@ -2,6 +2,7 @@ package hu.kalmancheysandor.webshop.service;
 
 import hu.kalmancheysandor.webshop.domain.order.DeliveryStatus;
 import hu.kalmancheysandor.webshop.domain.order.Order;
+import hu.kalmancheysandor.webshop.domain.order.OrderItem;
 import hu.kalmancheysandor.webshop.dto.order.OrderCreateRequest;
 import hu.kalmancheysandor.webshop.dto.order.OrderResponse;
 import hu.kalmancheysandor.webshop.dto.order.OrderUpdateRequest;
@@ -35,15 +36,15 @@ class OrderServiceTest {
     OrderService orderService;
 
     OrderCreateRequest orderCreateRequest01, orderCreateRequest02;
-    OrderCreateRequest.OrderItem orderCreateRequestItem01, orderCreateRequestItem02;
+    OrderCreateRequest.Item orderCreateRequestItem01, orderCreateRequestItem02;
 
     OrderUpdateRequest orderUpdateRequest01;
     //OrderUpdateRequest.Item orderUpdateRequestAddress01;
 
     Order orderEntity01, orderEntity02;
     Order orderEntity01Updated;
-    hu.kalmancheysandor.webshop.domain.order.OrderItem itemEntity01, itemEntity02;
-    hu.kalmancheysandor.webshop.domain.order.OrderItem itemEntity01Updated;
+    OrderItem itemEntity01, itemEntity02;
+    OrderItem itemEntity01Updated;
 
     OrderResponse orderResponse01, orderResponse02;
     OrderResponse orderResponse01Updated;
@@ -53,11 +54,11 @@ class OrderServiceTest {
 
     @BeforeEach
     void init() {
-        orderCreateRequestItem01 = new OrderCreateRequest.OrderItem();
+        orderCreateRequestItem01 = new OrderCreateRequest.Item();
         orderCreateRequestItem01.setProductId(1);
         orderCreateRequestItem01.setQuantity(1);
 
-        orderCreateRequestItem02 = new OrderCreateRequest.OrderItem();
+        orderCreateRequestItem02 = new OrderCreateRequest.Item();
         orderCreateRequestItem01.setProductId(1);
         orderCreateRequestItem01.setQuantity(2);
 
@@ -90,21 +91,21 @@ class OrderServiceTest {
 
 
         // Generation of entities
-        itemEntity01 = new hu.kalmancheysandor.webshop.domain.order.OrderItem();
+        itemEntity01 = new OrderItem();
         itemEntity01.setTotalNetPrice(100f);
         itemEntity01.setTotalGrossPrice(110f);
         itemEntity01.setQuantity(1);
         //itemEntity01.setOrder;
         //itemEntity01.setProduct;
 
-        itemEntity02 = new hu.kalmancheysandor.webshop.domain.order.OrderItem();
+        itemEntity02 = new OrderItem();
         itemEntity02.setTotalNetPrice(200f);
         itemEntity02.setTotalGrossPrice(220f);
         itemEntity02.setQuantity(2);
         //itemEntity01.setOrder;
         //itemEntity01.setProduct;
 
-        itemEntity01Updated = new hu.kalmancheysandor.webshop.domain.order.OrderItem();
+        itemEntity01Updated = new OrderItem();
         itemEntity01Updated.setTotalNetPrice(300f);
         itemEntity01Updated.setTotalGrossPrice(330f);
         itemEntity01Updated.setQuantity(3);

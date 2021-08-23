@@ -77,7 +77,7 @@ public class CustomerService {
             addressNewState.setCustomer(null);
 
             // The overwrite-act when all field value copied into the persisted object fields. However 'null' values are ignored to be copied!
-            modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+            //!!!!modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
             modelMapper.map(customerNewState, customerCurrentState);
             modelMapper.map(addressNewState, addressCurrentState);
 
