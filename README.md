@@ -45,6 +45,7 @@
 
 ## Üzembe helyezés
 ### Docker image létrehozása
+mvn clean package
 docker build -t webshop_api_image .
 
 ### Konténer hálózat létrehozása
