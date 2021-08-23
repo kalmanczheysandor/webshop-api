@@ -203,23 +203,6 @@ class OrderServiceTest {
         orderResponse01Updated.setItems(List.of(orderUpdateResponseItem01));
     }
 
-    @Test
-    void test_saveOrder() {
-        // Mocking of repository method(s)
-        when(orderRepository.saveOrder(orderEntity01)).thenReturn(orderEntity01);
-
-        // Mocking from request to entity
-        when(modelMapper.map(orderCreateRequest01, Order.class)).thenReturn(orderEntity01);
-
-        // Mocking from entity to response
-        when(modelMapper.map(orderEntity01, OrderResponse.class)).thenReturn(orderResponse01);
-
-        // Statement(s)
-        assertThat(orderService.saveOrder(orderCreateRequest01))
-                .isEqualTo(orderResponse01);
-        verify(orderRepository, times(1)).saveOrder(orderEntity01);
-        verifyNoMoreInteractions(orderRepository);
-    }
 
     @Test
     void test_updateOrder_whenItemIsNotFound() {
