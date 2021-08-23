@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Data
@@ -26,12 +27,12 @@ public class CustomerCreateRequest {
 
     @NotBlank(message = "Field must not be blank")
     @Size(max=255,message="Field length must be between 1 and 255")
-    @Schema(description="Az ügyfél keresztneve", example = "János")
+    @Schema(description="Az ügyfél keresztneve", example = "John")
     private String firstname;
 
     @NotBlank(message = "Field must not be blank")
     @Size(max=255,message="Field length must be between 1 and 255")
-    @Schema(description="Az ügyfél vezetékneve", example = "Tóth")
+    @Schema(description="Az ügyfél vezetékneve", example = "Berger")
     private String lastname;
 
     @NotNull(message = "Field must not be null")
@@ -42,11 +43,12 @@ public class CustomerCreateRequest {
 
     @NotNull(message = "Field must not be null")
     @Email(message="Field must be a in e-mail format")
-    @Schema(description="Az ügyfél e-mailcíme.", example = "janos.toth@gmail.com")
+    @Schema(description="Az ügyfél e-mailcíme.", example = "john.berger@gmail.com")
     private String email;
 
+    @Valid
     @NotNull(message = "Field must not be null")
-    private Address address;
+    private CustomerCreateRequest.CreateRequestAddress address;
 
     @NotNull(message = "Field must not be null")
     @Schema(description="Az ügyfél használhatja-e a fiókját.", example = "true")
@@ -56,26 +58,25 @@ public class CustomerCreateRequest {
     @NoArgsConstructor
     @Validated
     @Tag(name = "Ügyfél címe a regisztrációhoz.")
-    //@ApiModel()
-    public static class Address {
-        @NotNull(message = "Field must not be null")
+    public static class CreateRequestAddress {
+        @NotBlank(message = "Field must not be blank")
         @Size(max=255,message="Field length must be between 1 and 255")
-        @Schema(description="Az ügyfél lakhelyének országrésze", example = "4245")
+        @Schema(description="Az ügyfél lakhelyének ország része", example = "United Kingdom")
         private String country;
 
-        @NotNull(message = "Field must not be null")
+        @NotBlank(message = "Field must not be blank")
         @Size(max=255,message="Field length must be between 1 and 255")
-        @Schema(description="Az ügyfél lakhelyének országrésze", example = "4245")
+        @Schema(description="Az ügyfél lakhelyének város része", example = "Manchester")
         private String city;
 
-        @NotNull(message = "Field must not be null")
+        @NotBlank(message = "Field must not be blank")
         @Size(max=255,message="Field length must be between 1 and 255")
-        @Schema(description="Az ügyfél lakhelyénak irányítószáma", example = "4245")
+        @Schema(description="Az ügyfél lakhelyének utca része", example = "Queen Street 15")
         private String street;
 
-        @NotNull(message = "Field must not be null")
+        @NotBlank(message = "Field must not be blank")
         @Size(max=255,message="Field length must be between 1 and 255")
-        @Schema(description="Az ügyfél lakhelyénak irányítószáma", example = "4245")
+        @Schema(description="Az ügyfél lakhelyének irányítószám része", example = "M24 LU4")
         private String postcode;
     }
 }

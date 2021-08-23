@@ -2,9 +2,11 @@ package hu.kalmancheysandor.webshop.service;
 
 import hu.kalmancheysandor.webshop.domain.customer.Customer;
 import hu.kalmancheysandor.webshop.domain.customer.CustomerAddress;
+import hu.kalmancheysandor.webshop.domain.product.Product;
 import hu.kalmancheysandor.webshop.dto.customer.CustomerCreateRequest;
 import hu.kalmancheysandor.webshop.dto.customer.CustomerResponse;
 import hu.kalmancheysandor.webshop.dto.customer.CustomerUpdateRequest;
+import hu.kalmancheysandor.webshop.dto.product.ProductResponse;
 import hu.kalmancheysandor.webshop.respository.CustomerAddressRepository;
 import hu.kalmancheysandor.webshop.respository.CustomerRepository;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
@@ -40,10 +42,10 @@ class CustomerServiceTest {
     CustomerService customerService;
 
     CustomerCreateRequest customerCreateRequest01, customerCreateRequest02;
-    CustomerCreateRequest.Address customerCreateRequestAddress01, customerCreateRequestAddress02;
+    CustomerCreateRequest.CreateRequestAddress customerCreateRequestCreateRequestAddress01, customerCreateRequestAddress02;
 
     CustomerUpdateRequest customerUpdateRequest01;
-    CustomerUpdateRequest.Address customerUpdateRequestAddress01;
+    CustomerUpdateRequest.UpdateRequestAddress customerUpdateRequestAddress01;
 
     Customer customerEntity01, customerEntity02;
     Customer customerEntity01Updated;
@@ -53,18 +55,18 @@ class CustomerServiceTest {
     CustomerResponse customerResponse01, customerResponse02;
     CustomerResponse customerResponse01Updated;
     
-    CustomerResponse.Address customerResponseAddress01,customerResponseAddress02;
-    CustomerResponse.Address customerUpdateResponseAddress01;
+    CustomerResponse.ResponseAddress customerResponseAddress01,customerResponseAddress02;
+    CustomerResponse.ResponseAddress customerUpdateResponseAddress01;
 
     @BeforeEach
     void init() {
-        customerCreateRequestAddress01  = new CustomerCreateRequest.Address();
-        customerCreateRequestAddress01.setCountry("United Kingdom");
-        customerCreateRequestAddress01.setCity("Manchester");
-        customerCreateRequestAddress01.setStreet("Joe street 28");
-        customerCreateRequestAddress01.setPostcode("MA45 25LY");
+        customerCreateRequestCreateRequestAddress01 = new CustomerCreateRequest.CreateRequestAddress();
+        customerCreateRequestCreateRequestAddress01.setCountry("United Kingdom");
+        customerCreateRequestCreateRequestAddress01.setCity("Manchester");
+        customerCreateRequestCreateRequestAddress01.setStreet("Joe street 28");
+        customerCreateRequestCreateRequestAddress01.setPostcode("MA45 25LY");
 
-        customerCreateRequestAddress02  = new CustomerCreateRequest.Address();
+        customerCreateRequestAddress02  = new CustomerCreateRequest.CreateRequestAddress();
         customerCreateRequestAddress02.setCountry("Sweden");
         customerCreateRequestAddress02.setCity("Oslo");
         customerCreateRequestAddress02.setStreet("Mary street 23");
@@ -82,7 +84,7 @@ class CustomerServiceTest {
         customerCreateRequest01.setLastname("Lastname01");
         customerCreateRequest01.setEmail("myemail01@mail.com");
         customerCreateRequest01.setPhone("00361231212");
-        customerCreateRequest01.setAddress(customerCreateRequestAddress01);
+        customerCreateRequest01.setAddress(customerCreateRequestCreateRequestAddress01);
         customerCreateRequest01.setActive(false);
 
         customerCreateRequest02 = new CustomerCreateRequest();
@@ -97,7 +99,7 @@ class CustomerServiceTest {
 
         // Generation update requests
 
-        customerUpdateRequestAddress01  = new CustomerUpdateRequest.Address();
+        customerUpdateRequestAddress01  = new CustomerUpdateRequest.UpdateRequestAddress();
         customerUpdateRequestAddress01.setCountry("United Kingdom");
         customerUpdateRequestAddress01.setCity("Manchester");
         customerUpdateRequestAddress01.setStreet("Joe street 28");
@@ -184,21 +186,21 @@ class CustomerServiceTest {
 
 
         // Generation of responses
-        customerResponseAddress01  = new CustomerResponse.Address();
+        customerResponseAddress01  = new CustomerResponse.ResponseAddress();
         customerResponseAddress01.setId(1);
         customerResponseAddress01.setCountry("United Kingdom");
         customerResponseAddress01.setCity("Manchester");
         customerResponseAddress01.setStreet("Joe street 28");
         customerResponseAddress01.setPostcode("MA45 25LY");
 
-        customerResponseAddress02  = new CustomerResponse.Address();
+        customerResponseAddress02  = new CustomerResponse.ResponseAddress();
         customerResponseAddress02.setId(2);
         customerResponseAddress02.setCountry("Sweden");
         customerResponseAddress02.setCity("Oslo");
         customerResponseAddress02.setStreet("Mary street 23");
         customerResponseAddress02.setPostcode("LU-28-GH155");
 
-        customerUpdateResponseAddress01  = new CustomerResponse.Address();
+        customerUpdateResponseAddress01  = new CustomerResponse.ResponseAddress();
         customerUpdateResponseAddress01.setId(1);
         customerUpdateResponseAddress01.setCountry("United Kingdom");
         customerUpdateResponseAddress01.setCity("Manchester");
@@ -259,7 +261,7 @@ class CustomerServiceTest {
 
         // Mocking from request to entity
         when(modelMapper.map(customerCreateRequest01, Customer.class)).thenReturn(customerEntity01);
-        when(modelMapper.map(customerCreateRequestAddress01, CustomerAddress.class)).thenReturn(addressEntity01);
+        when(modelMapper.map(customerCreateRequestCreateRequestAddress01, CustomerAddress.class)).thenReturn(addressEntity01);
 
         // Mocking from entity to response
         when(modelMapper.map(customerEntity01, CustomerResponse.class)).thenReturn(customerResponse01);
@@ -272,8 +274,36 @@ class CustomerServiceTest {
         verifyNoMoreInteractions(customerRepository);
     }
 
+
     @Test
-    void test_updateCustomer_whenItemIsNotFound() {
+    void test_updateCustomer_whenCustomerIsFound() {
+
+        // Mocking of repository method(s)
+        when(customerRepository.findCustomerById(1)).thenReturn(customerEntity01);
+        when(customerRepository.updateCustomer(customerEntity01)).thenReturn(customerEntity01Updated);
+        when(addressRepository.updateAddress(addressEntity01)).thenReturn(addressEntity01Updated);
+
+        // Mocking from request to entity
+        when(modelMapper.map(customerUpdateRequest01, Customer.class)).thenReturn(customerEntity02);
+        when(modelMapper.map(customerUpdateRequest01.getAddress(), CustomerAddress.class)).thenReturn(addressEntity02);
+        doNothing().when(modelMapper).map(customerEntity02,customerEntity01);
+        doNothing().when(modelMapper).map(addressEntity02,addressEntity01);
+
+        // Mocking from entity to response
+        when(modelMapper.map(customerEntity01Updated, CustomerResponse.class)).thenReturn(customerResponse01Updated);
+
+        //Operation(s)
+        CustomerResponse response = customerService.updateCustomer(1,customerUpdateRequest01);
+
+        // Statement(s)
+        assertEquals(customerResponse01Updated,response);
+        verify(customerRepository, times(1)).findCustomerById(1);
+        verify(customerRepository, times(1)).updateCustomer(customerEntity01);
+        verifyNoMoreInteractions(customerRepository);
+    }
+
+    @Test
+    void test_updateCustomer_whenCustomerIsNotFound() {
 
         // Mocking of repository method(s)
         when(customerRepository.findCustomerById(1)).thenThrow(new RecordNotFoundByIdException(1));
@@ -305,7 +335,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    void test_findCustomerById_whenItemIsFound() {
+    void test_findCustomerById_whenCustomerIsFound() {
         // Mocking of repository method(s)
         when(customerRepository.findCustomerById(1)).thenReturn(customerEntity01);
 
@@ -320,7 +350,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    void test_findCustomerById_whenItemNotFound() {
+    void test_findCustomerById_whenCustomerNotFound() {
         // Mocking of repository method(s)
         when(customerRepository.findCustomerById(1)).thenThrow(new RecordNotFoundByIdException(1));
 
@@ -335,7 +365,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    void test_deleteCustomerById_whenItemNotFound() {
+    void test_deleteCustomerById_whenCustomerNotFound() {
 
         // Mocking of repository method(s)
         doThrow(new RecordNotFoundByIdException(1))
@@ -349,7 +379,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    void test_deleteCustomerById_whenItemStillInUse() {
+    void test_deleteCustomerById_whenCustomerStillInUse() {
 
         // Mocking of repository method(s)
         doThrow(new RecordStillInUseException(1))

@@ -46,8 +46,8 @@ public class ProductService {
             productNewState.setId(null);
 
 
-            modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
-            //modelMapper.map(productNewState, productCurrentState);
+            //modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+            modelMapper.map(productNewState, productCurrentState);
 
             Product modifiedProduct = productRepository.updateProduct(productCurrentState);
 

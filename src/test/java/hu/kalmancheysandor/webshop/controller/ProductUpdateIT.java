@@ -11,8 +11,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -109,6 +108,27 @@ public class ProductUpdateIT {
                 .andExpect(jsonPath("$.description", is("Ez egy jó fogkefe")))
                 .andExpect(jsonPath("$.active", is(true)));
     }
+
+    @Test
+    void test_update_whenIdNotFound() throws Exception {
+        // Creating request text in form of json
+        String requestText = "{\n" +
+                "  \"name\": \"Fogkefe\",\n" +
+                "  \"priceNet\": 3655,\n" +
+                "  \"priceVat\": 25,\n" +
+                "  \"description\": \"Ez egy jó fogkefe\",\n" +
+                "  \"active\": true\n" +
+                "}";
+
+        // Statement(s) of response: deleting is successful
+        mockMvc.perform(put("/api/admin/products/25")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestText))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$[0].field", is("productId")))
+                .andExpect(jsonPath("$[0].errorMessage", is("Product at id 25 is not found")));
+    }
+
 
 
 
@@ -278,12 +298,6 @@ public class ProductUpdateIT {
     }
 
 
-
-
-
-
-
-
     @Test
     void test_update_descriptionField_whenMissing() throws Exception {
         // Creating request text in form of json
@@ -302,9 +316,6 @@ public class ProductUpdateIT {
                 .andExpect(jsonPath("$[0].field", is("description")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must not be null")));
     }
-
-
-
 
     @Test
     void test_update_descriptionField_whenTooLong() throws Exception {
@@ -345,44 +356,4 @@ public class ProductUpdateIT {
                 .andExpect(jsonPath("$[0].field", is("active")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must not be null")));
     }
-
-
-//    @Test
-//    void test_update_priceNetField_whenMissing() throws Exception {
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \"Fogkefe\",\n" +
-//                "  \"priceNet\": 3655,\n" +
-//                "  \"priceVat\": 25,\n" +
-//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(put("/api/admin/products/2")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("priceNet")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be blank")));
-//    }
-
-
-
-//    @Test
-//
-//    void testSave_whenNotValid_allFields() throws Exception {
-//        ProductCreateRequest request = new ProductCreateRequest();
-//        request.setName(null);
-//        request.setPriceNet(null);
-//        request.setPriceVat(null);
-//        request.setDescription(null);
-//        request.setActive(null);
-//
-//        mockMvc.perform(put("/api/admin/products/2")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(request)))
-//                .andExpect(status().isBadRequest());
-//
-//    }
 }

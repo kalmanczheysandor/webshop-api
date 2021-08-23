@@ -142,7 +142,31 @@ class ProductServiceTest {
     }
 
     @Test
-    void test_updateProduct_whenItemIsNotFound() {
+    void test_updateProduct_whenProductIsFound() {
+
+        // Mocking of repository method(s)
+        when(productRepository.findProductById(1)).thenReturn(productEntity01);
+        when(productRepository.updateProduct(productEntity01)).thenReturn(productEntity01Updated);
+
+        // Mocking from request to entity
+        when(modelMapper.map(productUpdateRequest01, Product.class)).thenReturn(productEntity02);
+        doNothing().when(modelMapper).map(productEntity02,productEntity01);
+
+        // Mocking from entity to response
+        when(modelMapper.map(productEntity01Updated,ProductResponse.class)).thenReturn(productResponse01Updated);
+
+        //Operation(s)
+        ProductResponse response = productService.updateProduct(1,productUpdateRequest01);
+
+        // Statement(s)
+        assertEquals(productResponse01Updated,response);
+        verify(productRepository, times(1)).findProductById(1);
+        verify(productRepository, times(1)).updateProduct(productEntity01);
+        verifyNoMoreInteractions(productRepository);
+    }
+
+    @Test
+    void test_updateProduct_whenProductIsNotFound() {
 
         // Mocking of repository method(s)
         when(productRepository.findProductById(1)).thenThrow(new RecordNotFoundByIdException(1));
@@ -174,7 +198,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void test_findProductById_whenItemIsFound() {
+    void test_findProductById_whenProductIsFound() {
         // Mocking of repository method(s)
         when(productRepository.findProductById(1)).thenReturn(productEntity01);
 
@@ -189,7 +213,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void test_findProductById_whenItemNotFound() {
+    void test_findProductById_whenProductNotFound() {
         // Mocking of repository method(s)
         when(productRepository.findProductById(1)).thenThrow(new RecordNotFoundByIdException(1));
 
@@ -204,7 +228,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void test_deleteProductById_whenItemNotFound() {
+    void test_deleteProductById_whenProductNotFound() {
 
         // Mocking of repository method(s)
         doThrow(new RecordNotFoundByIdException(1))
@@ -218,7 +242,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void test_deleteProductById_whenItemStillInUse() {
+    void test_deleteProductById_whenProductStillInUse() {
 
         // Mocking of repository method(s)
         doThrow(new RecordStillInUseException(1))

@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
                 .map(fieldError -> new FieldError(fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
 
+        // Send all error to logger
         for (FieldError fieldError : fieldErrors) {
             logAFieldError(fieldError);
         }
@@ -30,7 +31,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<List<FieldError>> handleProductNotFoundException(ProductNotFoundException exception) {
         FieldError fieldError = new FieldError("productId", "Product at id " + exception.getProductId() + " is not found");
+
+        // Send error to logger
         logAFieldError(fieldError);
+
         return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
     }
 

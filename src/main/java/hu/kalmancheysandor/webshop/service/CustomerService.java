@@ -11,10 +11,8 @@ import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdExcep
 import hu.kalmancheysandor.webshop.respository.exception.RecordStillInUseException;
 import hu.kalmancheysandor.webshop.service.exception.CustomerNotFoundException;
 import hu.kalmancheysandor.webshop.service.exception.CustomerStillInUseException;
-import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,7 +64,7 @@ public class CustomerService {
             Customer customerCurrentState = customerRepository.findCustomerById(customerId);
             CustomerAddress addressCurrentState = customerCurrentState.getAddress();
 
-            // Creating overwriting objects
+            // Creating and overwriting objects
             Customer customerNewState = modelMapper.map(command, Customer.class);
             CustomerAddress addressNewState = modelMapper.map(command.getAddress(), CustomerAddress.class);
 

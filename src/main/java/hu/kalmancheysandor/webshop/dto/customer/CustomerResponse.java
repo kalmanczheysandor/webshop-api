@@ -13,12 +13,12 @@ public class CustomerResponse {
     private String lastname;
     private String phone;
     private String email;
-    private Address address;
+    private ResponseAddress address;
     private Boolean active;
 
     @Data
     @NoArgsConstructor
-    public static class Address {
+    public static class ResponseAddress {
         private Integer id;
         private String country;
         private String city;

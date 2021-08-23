@@ -51,7 +51,7 @@ public class OrderService {
     public OrderResponse saveOrder(OrderCreateRequest command) {
 
         // Convert parent dto object to entity
-        modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+        //modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
         Order orderToSave = modelMapper.map(command, Order.class);
         orderToSave.setId(null);
         orderToSave.getOrderItems().clear();

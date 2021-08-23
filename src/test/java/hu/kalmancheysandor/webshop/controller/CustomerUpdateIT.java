@@ -1,6 +1,7 @@
 package hu.kalmancheysandor.webshop.controller;
 
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,19 +12,130 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class CustomerSaveIT {
+public class CustomerUpdateIT {
 
     @Autowired
     MockMvc mockMvc;
 
+    @BeforeEach
+    void init() throws Exception {
+        // Creating request text in form of json
+        String requestText01 = "{\n" +
+                "  \"identifier\": \"customer_user\",\n" +
+                "  \"password\": \"12121212\",\n" +
+                "  \"firstname\": \"Mary\",\n" +
+                "  \"lastname\": \"Doe\",\n" +
+                "  \"phone\": \"0036999999\",\n" +
+                "  \"email\": \"mary.doe@gmail.com\",\n" +
+                "  \"address\": {\n" +
+                "    \"country\": \"United Kingdom\",\n" +
+                "    \"city\": \"Bury\",\n" +
+                "    \"street\": \"Virgins Drive 2\",\n" +
+                "    \"postcode\": \"B12 2UA\"\n" +
+                "  },\n" +
+                "  \"active\": true\n" +
+                "}";
+
+
+
+        String requestText02 = "{\n" +
+                "  \"identifier\": \"user02\",\n" +
+                "  \"password\": \"1111111111\",\n" +
+                "  \"firstname\": \"Melissa\",\n" +
+                "  \"lastname\": \"Griffin\",\n" +
+                "  \"phone\": \"0036123456\",\n" +
+                "  \"email\": \"melissa.griffin@gmail.com\",\n" +
+                "  \"address\": {\n" +
+                "    \"country\": \"USA\",\n" +
+                "    \"city\": \"Texas\",\n" +
+                "    \"street\": \"Murderers Road 1356\",\n" +
+                "    \"postcode\": \"TXA-HUJ-556\"\n" +
+                "  },\n" +
+                "  \"active\": true\n" +
+                "}";
+
+        String requestText03 = "{\n" +
+                "  \"identifier\": \"user03\",\n" +
+                "  \"password\": \"222222222\",\n" +
+                "  \"firstname\": \"Peter\",\n" +
+                "  \"lastname\": \"Parker\",\n" +
+                "  \"phone\": \"005244444444\",\n" +
+                "  \"email\": \"peter.parker@gmail.com\",\n" +
+                "  \"address\": {\n" +
+                "    \"country\": \"USA\",\n" +
+                "    \"city\": \"Dallas\",\n" +
+                "    \"street\": \"President Avenue 3B\",\n" +
+                "    \"postcode\": \"DA-LX-9\"\n" +
+                "  },\n" +
+                "  \"active\": false\n" +
+                "}";
+
+
+
+        // Statement(s) of response
+        mockMvc.perform(post("/api/admin/customers/")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestText01))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.identifier", is("customer_user")))
+                .andExpect(jsonPath("$.password", is("12121212")))
+                .andExpect(jsonPath("$.firstname", is("Mary")))
+                .andExpect(jsonPath("$.lastname", is("Doe")))
+                .andExpect(jsonPath("$.phone", is("0036999999")))
+                .andExpect(jsonPath("$.email", is("mary.doe@gmail.com")))
+                .andExpect(jsonPath("$.address.country", is("United Kingdom")))
+                .andExpect(jsonPath("$.address.city", is("Bury")))
+                .andExpect(jsonPath("$.address.street", is("Virgins Drive 2")))
+                .andExpect(jsonPath("$.address.postcode", is("B12 2UA")))
+                .andExpect(jsonPath("$.active", is(true)));
+
+        mockMvc.perform(post("/api/admin/customers/")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestText02))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(2)))
+                .andExpect(jsonPath("$.identifier", is("user02")))
+                .andExpect(jsonPath("$.password", is("1111111111")))
+                .andExpect(jsonPath("$.firstname", is("Melissa")))
+                .andExpect(jsonPath("$.lastname", is("Griffin")))
+                .andExpect(jsonPath("$.phone", is("0036123456")))
+                .andExpect(jsonPath("$.email", is("melissa.griffin@gmail.com")))
+                .andExpect(jsonPath("$.address.country", is("USA")))
+                .andExpect(jsonPath("$.address.city", is("Texas")))
+                .andExpect(jsonPath("$.address.street", is("Murderers Road 1356")))
+                .andExpect(jsonPath("$.address.postcode", is("TXA-HUJ-556")))
+                .andExpect(jsonPath("$.active", is(true)));
+
+        mockMvc.perform(post("/api/admin/customers/")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestText03))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(3)))
+                .andExpect(jsonPath("$.identifier", is("user03")))
+                .andExpect(jsonPath("$.password", is("222222222")))
+                .andExpect(jsonPath("$.firstname", is("Peter")))
+                .andExpect(jsonPath("$.lastname", is("Parker")))
+                .andExpect(jsonPath("$.phone", is("005244444444")))
+                .andExpect(jsonPath("$.email", is("peter.parker@gmail.com")))
+                .andExpect(jsonPath("$.address.country", is("USA")))
+                .andExpect(jsonPath("$.address.city", is("Dallas")))
+                .andExpect(jsonPath("$.address.street", is("President Avenue 3B")))
+                .andExpect(jsonPath("$.address.postcode", is("DA-LX-9")))
+                .andExpect(jsonPath("$.active", is(false)));
+    }
+    
+
     @Test
-    void test_save_whenSuccessful() throws Exception {
+    void test_update_whenSuccessful() throws Exception {
+
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -42,10 +154,10 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.identifier", is("user01")))
                 .andExpect(jsonPath("$.password", is("123456")))
@@ -59,8 +171,39 @@ public class CustomerSaveIT {
                 .andExpect(jsonPath("$.active", is(true)));
     }
 
+
     @Test
-    void test_save_identifierField_whenMissing() throws Exception {
+    void test_update_whenIdNotFound() throws Exception {
+        // Creating request text in form of json
+        String requestText = "{\n" +
+                "  \"identifier\": \"user01\",\n" +
+                "  \"password\": \"123456\",\n" +
+                "  \"firstname\": \"John\",\n" +
+                "  \"lastname\": \"Doe\",\n" +
+                "  \"phone\": \"0036123456\",\n" +
+                "  \"email\": \"johndoe@gmail.com\",\n" +
+                "  \"address\": {\n" +
+                "    \"country\": \"United Kingdom\",\n" +
+                "    \"city\": \"Manchester\",\n" +
+                "    \"street\": \"Castlerigg Drive 25\",\n" +
+                "    \"postcode\": \"M24 4LW\"\n" +
+                "  },\n" +
+                "  \"active\": true\n" +
+                "}";
+
+        // Statement(s) of response: deleting is successful
+        mockMvc.perform(put("/api/admin/customers/25")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestText))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$[0].field", is("customerId")))
+                .andExpect(jsonPath("$[0].errorMessage", is("Customer at id 25 is not found")));
+    }
+
+
+
+    @Test
+    void test_update_identifierField_whenMissing() throws Exception {
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"password\": \"123456\",\n" +
@@ -78,7 +221,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -87,7 +230,7 @@ public class CustomerSaveIT {
     }
 
     @Test
-    void test_save_identifierField_whenTooShort() throws Exception {
+    void test_update_identifierField_whenTooShort() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -108,7 +251,7 @@ public class CustomerSaveIT {
 
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -117,7 +260,7 @@ public class CustomerSaveIT {
     }
 
     @Test
-    void test_save_identifierField_whenTooLong() throws Exception {
+    void test_update_identifierField_whenTooLong() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -138,7 +281,7 @@ public class CustomerSaveIT {
 
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -148,7 +291,7 @@ public class CustomerSaveIT {
 
 
     @Test
-    void test_save_passwordField_whenMissing() throws Exception {
+    void test_update_passwordField_whenMissing() throws Exception {
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -166,7 +309,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -175,7 +318,7 @@ public class CustomerSaveIT {
     }
 
     @Test
-    void test_save_passwordField_whenTooShort() throws Exception {
+    void test_update_passwordField_whenTooShort() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -196,7 +339,7 @@ public class CustomerSaveIT {
 
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -205,7 +348,7 @@ public class CustomerSaveIT {
     }
 
     @Test
-    void test_save_passwordField_whenTooLong() throws Exception {
+    void test_update_passwordField_whenTooLong() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -226,7 +369,7 @@ public class CustomerSaveIT {
 
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -236,7 +379,7 @@ public class CustomerSaveIT {
 
 
     @Test
-    void test_save_firstnameField_whenMissing() throws Exception {
+    void test_update_firstnameField_whenMissing() throws Exception {
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -254,7 +397,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -263,7 +406,7 @@ public class CustomerSaveIT {
     }
 
     @Test
-    void test_save_firstnameField_whenTooLong() throws Exception {
+    void test_update_firstnameField_whenTooLong() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -283,7 +426,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -293,7 +436,7 @@ public class CustomerSaveIT {
 
 
     @Test
-    void test_save_lastnameField_whenMissing() throws Exception {
+    void test_update_lastnameField_whenMissing() throws Exception {
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -311,7 +454,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -320,7 +463,7 @@ public class CustomerSaveIT {
     }
 
     @Test
-    void test_save_lastnameField_whenTooLong() throws Exception {
+    void test_update_lastnameField_whenTooLong() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -340,7 +483,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -352,7 +495,7 @@ public class CustomerSaveIT {
 
 
     @Test
-    void test_save_phoneField_whenMissing() throws Exception {
+    void test_update_phoneField_whenMissing() throws Exception {
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -370,7 +513,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -379,7 +522,7 @@ public class CustomerSaveIT {
     }
 
     @Test
-    void test_save_phoneField_whenTooShort() throws Exception {
+    void test_update_phoneField_whenTooShort() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -400,7 +543,7 @@ public class CustomerSaveIT {
 
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -409,7 +552,7 @@ public class CustomerSaveIT {
     }
 
     @Test
-    void test_save_phoneField_whenTooLong() throws Exception {
+    void test_update_phoneField_whenTooLong() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -430,7 +573,7 @@ public class CustomerSaveIT {
 
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -439,7 +582,7 @@ public class CustomerSaveIT {
     }
 
     @Test
-    void test_save_phoneField_whenWrongFormat() throws Exception {
+    void test_update_phoneField_whenWrongFormat() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -459,7 +602,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -476,7 +619,7 @@ public class CustomerSaveIT {
 
 
     @Test
-    void test_save_emailField_whenMissing() throws Exception {
+    void test_update_emailField_whenMissing() throws Exception {
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -494,7 +637,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -504,7 +647,7 @@ public class CustomerSaveIT {
 
 
     @Test
-    void test_save_emailField_whenWrongFormat() throws Exception {
+    void test_update_emailField_whenWrongFormat() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -524,7 +667,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -536,7 +679,7 @@ public class CustomerSaveIT {
 
 
     @Test
-    void test_save_activeField_whenMissing() throws Exception {
+    void test_update_activeField_whenMissing() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -555,7 +698,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -569,7 +712,7 @@ public class CustomerSaveIT {
 
 
     @Test
-    void test_save_addressField_whenMissing() throws Exception {
+    void test_update_addressField_whenMissing() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -583,7 +726,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -593,7 +736,7 @@ public class CustomerSaveIT {
 
 
     @Test
-    void test_save_address_countryField_whenMissing() throws Exception {
+    void test_update_address_countryField_whenMissing() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -612,7 +755,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -620,7 +763,7 @@ public class CustomerSaveIT {
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must not be blank")));
     }
     @Test
-    void test_save_address_countryField_whenTooLong() throws Exception {
+    void test_update_address_countryField_whenTooLong() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -640,7 +783,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -650,7 +793,7 @@ public class CustomerSaveIT {
 
 
     @Test
-    void test_save_address_cityField_whenMissing() throws Exception {
+    void test_update_address_cityField_whenMissing() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -669,7 +812,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -678,7 +821,7 @@ public class CustomerSaveIT {
     }
 
     @Test
-    void test_save_address_cityField_whenTooLong() throws Exception {
+    void test_update_address_cityField_whenTooLong() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -698,7 +841,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -708,7 +851,7 @@ public class CustomerSaveIT {
 
 
     @Test
-    void test_save_address_streetField_whenMissing() throws Exception {
+    void test_update_address_streetField_whenMissing() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -727,7 +870,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -736,7 +879,7 @@ public class CustomerSaveIT {
     }
 
     @Test
-    void test_save_address_streetField_whenTooLong() throws Exception {
+    void test_update_address_streetField_whenTooLong() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -756,7 +899,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -765,7 +908,7 @@ public class CustomerSaveIT {
     }
 
     @Test
-    void test_save_address_postcodeField_whenMissing() throws Exception {
+    void test_update_address_postcodeField_whenMissing() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -784,7 +927,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -793,7 +936,7 @@ public class CustomerSaveIT {
     }
 
     @Test
-    void test_save_address_postcodeField_whenTooLong() throws Exception {
+    void test_update_address_postcodeField_whenTooLong() throws Exception {
 
         // Creating request text in form of json
         String requestText = "{\n" +
@@ -813,7 +956,7 @@ public class CustomerSaveIT {
                 "}";
 
         // Statement(s) of response
-        mockMvc.perform(post("/api/admin/customers/")
+        mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText))
                 .andExpect(status().isBadRequest())
@@ -832,8 +975,106 @@ public class CustomerSaveIT {
 
 
 
+
+
+
+
+
+
+
+
+
 //    @Test
-//    void test_save_priceNetField_whenMissing() throws Exception {
+//    void test_update_whenSuccessful() throws Exception {
+//        // Creating request text in form of json
+//        String requestText = "{\n" +
+//                "  \"name\": \"Fogkefe\",\n" +
+//                "  \"priceNet\": 3655,\n" +
+//                "  \"priceVat\": 25,\n" +
+//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
+//                "  \"active\": true\n" +
+//                "}";
+//
+//        // Statement(s) of response
+//        mockMvc.perform(put("/api/admin/products/2")
+//                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+//                    .content(requestText))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.id", is(2)))
+//                .andExpect(jsonPath("$.name", is("Fogkefe")))
+//                .andExpect(jsonPath("$.priceNet", is(3655.0)))
+//                .andExpect(jsonPath("$.priceVat", is(25)))
+//                .andExpect(jsonPath("$.description", is("Ez egy jó fogkefe")))
+//                .andExpect(jsonPath("$.active", is(true)));
+//    }
+//
+//
+//
+//    @Test
+//    void test_update_nameField_whenMissing() throws Exception {
+//        // Creating request text in form of json
+//        String requestText = "{\n" +
+//                "  \"priceNet\": 3655,\n" +
+//                "  \"priceVat\": 25,\n" +
+//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
+//                "  \"active\": true\n" +
+//                "}";
+//
+//        // Statement(s) of response
+//        mockMvc.perform(put("/api/admin/products/2")
+//                .contentType(MediaType.APPLICATION_JSON_VALUE)
+//                .content(requestText))
+//                .andExpect(status().isBadRequest())
+//                .andExpect(jsonPath("$[0].field", is("name")))
+//                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be blank")));
+//    }
+//
+//    @Test
+//    void test_update_nameField_whenEmpty() throws Exception {
+//        // Creating request text in form of json
+//        String requestText = "{\n" +
+//                "  \"name\": \"\",\n" +
+//                "  \"priceNet\": 3655,\n" +
+//                "  \"priceVat\": 25,\n" +
+//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
+//                "  \"active\": true\n" +
+//                "}";
+//
+//        // Statement(s) of response
+//        mockMvc.perform(put("/api/admin/products/2")
+//                .contentType(MediaType.APPLICATION_JSON_VALUE)
+//                .content(requestText))
+//                .andExpect(status().isBadRequest())
+//                .andExpect(jsonPath("$[0].field", is("name")))
+//                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be blank")));
+//    }
+//
+//
+//    @Test
+//    void test_update_nameField_whenTooLong() throws Exception {
+//
+//        // Creating request text in form of json
+//        String requestText = "{\n" +
+//                "  \"name\": \""+"a".repeat(256)+"\",\n" +
+//                "  \"priceNet\": 3655,\n" +
+//                "  \"priceVat\": 25,\n" +
+//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
+//                "  \"active\": true\n" +
+//                "}";
+//
+//        // Statement(s) of response
+//        mockMvc.perform(put("/api/admin/products/2")
+//                .contentType(MediaType.APPLICATION_JSON_VALUE)
+//                .content(requestText))
+//                .andExpect(status().isBadRequest())
+//                .andExpect(jsonPath("$[0].field", is("name")))
+//                .andExpect(jsonPath("$[0].errorMessage", is("Field length must be between 0 and 255")));
+//    }
+//
+//
+//
+//    @Test
+//    void test_update_priceNetField_whenMissing() throws Exception {
 //        // Creating request text in form of json
 //        String requestText = "{\n" +
 //                "  \"name\": \"Fogkefe\",\n" +
@@ -843,7 +1084,7 @@ public class CustomerSaveIT {
 //                "}";
 //
 //        // Statement(s) of response
-//        mockMvc.perform(post("/api/admin/customers/")
+//        mockMvc.perform(put("/api/admin/products/2")
 //                .contentType(MediaType.APPLICATION_JSON_VALUE)
 //                .content(requestText))
 //                .andExpect(status().isBadRequest())
@@ -852,7 +1093,7 @@ public class CustomerSaveIT {
 //    }
 //
 //    @Test
-//    void test_save_priceNetField_whenNotPositiveOrZero() throws Exception {
+//    void test_update_priceNetField_whenNotPositiveOrZero() throws Exception {
 //        // Creating request text in form of json
 //        String requestText = "{\n" +
 //                "  \"name\": \"Fogkefe\",\n" +
@@ -863,7 +1104,7 @@ public class CustomerSaveIT {
 //                "}";
 //
 //        // Statement(s) of response
-//        mockMvc.perform(post("/api/admin/customers/")
+//        mockMvc.perform(put("/api/admin/products/2")
 //                .contentType(MediaType.APPLICATION_JSON_VALUE)
 //                .content(requestText))
 //                .andExpect(status().isBadRequest())
@@ -876,7 +1117,7 @@ public class CustomerSaveIT {
 //
 //
 //    @Test
-//    void test_save_priceVatField_whenMissing() throws Exception {
+//    void test_update_priceVatField_whenMissing() throws Exception {
 //        // Creating request text in form of json
 //        String requestText = "{\n" +
 //                "  \"name\": \"Fogkefe\",\n" +
@@ -886,7 +1127,7 @@ public class CustomerSaveIT {
 //                "}";
 //
 //        // Statement(s) of response
-//        mockMvc.perform(post("/api/admin/customers/")
+//        mockMvc.perform(put("/api/admin/products/2")
 //                .contentType(MediaType.APPLICATION_JSON_VALUE)
 //                .content(requestText))
 //                .andExpect(status().isBadRequest())
@@ -895,7 +1136,7 @@ public class CustomerSaveIT {
 //    }
 //
 //    @Test
-//    void test_save_priceVatField_whenOutOfMinimumValue() throws Exception {
+//    void test_update_priceVatField_whenOutOfMinimumValue() throws Exception {
 //        // Creating request text in form of json
 //        String requestText = "{\n" +
 //                "  \"name\": \"Fogkefe\",\n" +
@@ -906,7 +1147,7 @@ public class CustomerSaveIT {
 //                "}";
 //
 //        // Statement(s) of response
-//        mockMvc.perform(post("/api/admin/customers/")
+//        mockMvc.perform(put("/api/admin/products/2")
 //                .contentType(MediaType.APPLICATION_JSON_VALUE)
 //                .content(requestText))
 //                .andExpect(status().isBadRequest())
@@ -915,7 +1156,7 @@ public class CustomerSaveIT {
 //    }
 //
 //    @Test
-//    void test_save_priceVatField_whenOutOfMaximumValue100() throws Exception {
+//    void test_update_priceVatField_whenOutOfMaximumValue100() throws Exception {
 //        // Creating request text in form of json
 //        String requestText = "{\n" +
 //                "  \"name\": \"Fogkefe\",\n" +
@@ -926,7 +1167,7 @@ public class CustomerSaveIT {
 //                "}";
 //
 //        // Statement(s) of response
-//        mockMvc.perform(post("/api/admin/customers/")
+//        mockMvc.perform(put("/api/admin/products/2")
 //                .contentType(MediaType.APPLICATION_JSON_VALUE)
 //                .content(requestText))
 //                .andExpect(status().isBadRequest())
@@ -942,7 +1183,7 @@ public class CustomerSaveIT {
 //
 //
 //    @Test
-//    void test_save_descriptionField_whenMissing() throws Exception {
+//    void test_update_descriptionField_whenMissing() throws Exception {
 //        // Creating request text in form of json
 //        String requestText = "{\n" +
 //                "  \"name\": \"Fogkefe\",\n" +
@@ -952,7 +1193,7 @@ public class CustomerSaveIT {
 //                "}";
 //
 //        // Statement(s) of response
-//        mockMvc.perform(post("/api/admin/customers/")
+//        mockMvc.perform(put("/api/admin/products/2")
 //                .contentType(MediaType.APPLICATION_JSON_VALUE)
 //                .content(requestText))
 //                .andExpect(status().isBadRequest())
@@ -964,7 +1205,7 @@ public class CustomerSaveIT {
 //
 //
 //    @Test
-//    void test_save_descriptionField_whenTooLong() throws Exception {
+//    void test_update_descriptionField_whenTooLong() throws Exception {
 //
 //        // Creating request text in form of json
 //        String requestText = "{\n" +
@@ -976,7 +1217,7 @@ public class CustomerSaveIT {
 //                "}";
 //
 //        // Statement(s) of response
-//        mockMvc.perform(post("/api/admin/customers/")
+//        mockMvc.perform(put("/api/admin/products/2")
 //                .contentType(MediaType.APPLICATION_JSON_VALUE)
 //                .content(requestText))
 //                .andExpect(status().isBadRequest())
@@ -985,7 +1226,7 @@ public class CustomerSaveIT {
 //    }
 //
 //    @Test
-//    void test_save_activeField_whenMissing() throws Exception {
+//    void test_update_activeField_whenMissing() throws Exception {
 //        // Creating request text in form of json
 //        String requestText = "{\n" +
 //                "  \"name\": \"Fogkefe\",\n" +
@@ -995,13 +1236,51 @@ public class CustomerSaveIT {
 //                "}";
 //
 //        // Statement(s) of response
-//        mockMvc.perform(post("/api/admin/customers/")
+//        mockMvc.perform(put("/api/admin/products/2")
 //                .contentType(MediaType.APPLICATION_JSON_VALUE)
 //                .content(requestText))
 //                .andExpect(status().isBadRequest())
 //                .andExpect(jsonPath("$[0].field", is("active")))
 //                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be null")));
 //    }
-
-
+//
+//
+////    @Test
+////    void test_update_priceNetField_whenMissing() throws Exception {
+////        // Creating request text in form of json
+////        String requestText = "{\n" +
+////                "  \"name\": \"Fogkefe\",\n" +
+////                "  \"priceNet\": 3655,\n" +
+////                "  \"priceVat\": 25,\n" +
+////                "  \"description\": \"Ez egy jó fogkefe\",\n" +
+////                "  \"active\": true\n" +
+////                "}";
+////
+////        // Statement(s) of response
+////        mockMvc.perform(put("/api/admin/products/2")
+////                .contentType(MediaType.APPLICATION_JSON_VALUE)
+////                .content(requestText))
+////                .andExpect(status().isBadRequest())
+////                .andExpect(jsonPath("$[0].field", is("priceNet")))
+////                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be blank")));
+////    }
+//
+//
+//
+////    @Test
+////
+////    void testSave_whenNotValid_allFields() throws Exception {
+////        ProductCreateRequest request = new ProductCreateRequest();
+////        request.setName(null);
+////        request.setPriceNet(null);
+////        request.setPriceVat(null);
+////        request.setDescription(null);
+////        request.setActive(null);
+////
+////        mockMvc.perform(put("/api/admin/products/2")
+////                .contentType(MediaType.APPLICATION_JSON_VALUE)
+////                .content(objectMapper.writeValueAsString(request)))
+////                .andExpect(status().isBadRequest());
+////
+////    }
 }

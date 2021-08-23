@@ -1,8 +1,11 @@
 package hu.kalmancheysandor.webshop.service;
 
+import hu.kalmancheysandor.webshop.domain.customer.Customer;
+import hu.kalmancheysandor.webshop.domain.customer.CustomerAddress;
 import hu.kalmancheysandor.webshop.domain.order.DeliveryStatus;
 import hu.kalmancheysandor.webshop.domain.order.Order;
 import hu.kalmancheysandor.webshop.domain.order.OrderItem;
+import hu.kalmancheysandor.webshop.dto.customer.CustomerResponse;
 import hu.kalmancheysandor.webshop.dto.order.OrderCreateRequest;
 import hu.kalmancheysandor.webshop.dto.order.OrderResponse;
 import hu.kalmancheysandor.webshop.dto.order.OrderUpdateRequest;
@@ -78,15 +81,8 @@ class OrderServiceTest {
 //        orderUpdateRequestAddress01.setQuantity(2);
 //
 //
-//        orderUpdateRequest01 = new OrderUpdateRequest();
-//        orderUpdateRequest01.setIdentifier("User01b");
-//        orderUpdateRequest01.setPassword("Password01b");
-//        orderUpdateRequest01.setFirstname("Firstname01b");
-//        orderUpdateRequest01.setLastname("Lastname01b");
-//        orderUpdateRequest01.setEmail("myemail01@mail.com");
-//        orderUpdateRequest01.setPhone("00361231212");
-//        orderUpdateRequest01.setAddress(orderUpdateRequestAddress01);
-//        orderUpdateRequest01.setActive(false);
+        orderUpdateRequest01 = new OrderUpdateRequest();
+        orderUpdateRequest01.setDeliveryStatus(DeliveryStatus.DELIVERED);
 
 
 
@@ -205,6 +201,26 @@ class OrderServiceTest {
 
 
     @Test
+    void test_updateOrder_whenOrderIsFound() {
+
+        // Mocking of repository method(s)
+        when(orderRepository.findOrderById(1)).thenReturn(orderEntity01);
+        when(orderRepository.updateOrder(orderEntity01)).thenReturn(orderEntity01Updated);
+
+        // Mocking from entity to response
+        when(modelMapper.map(orderEntity01Updated,OrderResponse.class)).thenReturn(orderResponse01Updated);
+
+        //Operation(s)
+        OrderResponse response = orderService.updateOrder(1,orderUpdateRequest01);
+
+        // Statement(s)
+        assertEquals(orderResponse01Updated,response);
+        verify(orderRepository, times(1)).findOrderById(1);
+        verify(orderRepository, times(1)).updateOrder(orderEntity01);
+        verifyNoMoreInteractions(orderRepository);
+    }
+
+    @Test
     void test_updateOrder_whenOrderIsNotFound() {
 
         // Mocking of repository method(s)
@@ -279,18 +295,4 @@ class OrderServiceTest {
         verify(orderRepository, times(1)).deleteOrderById(1);
         //verifyNoMoreInteractions(orderRepository);
     }
-
-//    @Test
-//    void test_deleteOrderById_whenItemStillInUse() {
-//
-//        // Mocking of repository method(s)
-//        doThrow(new RecordStillInUseException(1))
-//                .when(orderRepository)
-//                .deleteOrderById(1);
-//
-//        // Statement(s)
-//        assertThrows(OrderStillInUseException.class, () -> orderService.deleteOrderById(1));
-//        verify(orderRepository, times(1)).deleteOrderById(1);
-//        verifyNoMoreInteractions(orderRepository);
-//    }
 }
