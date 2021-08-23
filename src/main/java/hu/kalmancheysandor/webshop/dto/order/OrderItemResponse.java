@@ -4,23 +4,21 @@ package hu.kalmancheysandor.webshop.dto.order;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 public class OrderItemResponse {
     private Integer id;
-    private OrderItemResponse.Product product;
-    private float totalNetPrice;
-    private float totalGrossPrice;
+    private ItemResponseProduct product;
+    private Float totalNetPrice;
+    private Float totalGrossPrice;
     private Integer quantity;
 
     @Data
     @NoArgsConstructor
-    public static class Product {
+    public static class ItemResponseProduct {
         private Integer id;
         private String name;
-        private Integer priceNet;
-        private Float priceVat;
+        private Float priceNet;
+        private Integer priceVat;
     }
 }

@@ -1,28 +1,47 @@
 package hu.kalmancheysandor.webshop.dto.order;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 
 @Data
 @NoArgsConstructor
 @Validated
+@Tag(name = "A megrendelés kosara és kísérő adatai")
 public class OrderCreateRequest {
 
+    @NotNull(message = "Field must not be null")
+    @PositiveOrZero(message="Field must not be negative")
+    @Schema(description="Már mentet ügyfél elsődleges kulcsa", example = "1")
     private Integer customerId;
 
+    @Valid
     @NotEmpty(message = "Field must not be empty")
-    private List<Item> items;
+    private List<CreateRequestItem> items;
 
     @Data
     @NoArgsConstructor
     @Validated
-    public static class Item {
+    @Tag(name = "A megrendelési kosár tételei")
+    public static class CreateRequestItem {
+
+        @NotNull(message = "Field must not be null")
+        @PositiveOrZero(message="Field must not be negative")
+        @Schema(description="Már mentet termék elsődleges kulcsa", example = "1")
         private Integer productId;
+
+        @NotNull(message = "Field must not be null")
+        @PositiveOrZero(message="Field must not be negative")
+        @Schema(description="A termékből vásárolt mennyiség", example = "3")
         private Integer quantity;
     }
 }

@@ -13,6 +13,7 @@ import javax.validation.constraints.*;
 @Data
 @NoArgsConstructor
 @Validated
+@Tag(name = "Ügyfél regisztrációs kérés objektuma")
 public class CustomerCreateRequest {
 
     @NotNull(message = "Field must not be null")
@@ -48,6 +49,7 @@ public class CustomerCreateRequest {
 
     @Valid
     @NotNull(message = "Field must not be null")
+    @Schema(description="Az ügyfél címe")
     private CustomerCreateRequest.CreateRequestAddress address;
 
     @NotNull(message = "Field must not be null")

@@ -11,15 +11,11 @@ import hu.kalmancheysandor.webshop.respository.OrderRepository;
 import hu.kalmancheysandor.webshop.respository.ProductRepository;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
 import hu.kalmancheysandor.webshop.service.exception.*;
-import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,8 +68,8 @@ public class OrderService {
         float sumTotalNet = 0;
         float sumTotalGross = 0;
         List<Integer> usedProductIdList = new ArrayList<>();
-        List<OrderCreateRequest.Item> items = command.getItems();
-        for (OrderCreateRequest.Item item : items) {
+        List<OrderCreateRequest.CreateRequestItem> items = command.getItems();
+        for (OrderCreateRequest.CreateRequestItem item : items) {
             OrderItem orderItemToSave = modelMapper.map(item, OrderItem.class);
             orderItemToSave.setId(null);
             orderItemToSave.setOrder(null);

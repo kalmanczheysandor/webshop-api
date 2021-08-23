@@ -1,11 +1,8 @@
 package hu.kalmancheysandor.webshop.service;
 
-import hu.kalmancheysandor.webshop.domain.customer.Customer;
-import hu.kalmancheysandor.webshop.domain.customer.CustomerAddress;
 import hu.kalmancheysandor.webshop.domain.order.DeliveryStatus;
 import hu.kalmancheysandor.webshop.domain.order.Order;
 import hu.kalmancheysandor.webshop.domain.order.OrderItem;
-import hu.kalmancheysandor.webshop.dto.customer.CustomerResponse;
 import hu.kalmancheysandor.webshop.dto.order.OrderCreateRequest;
 import hu.kalmancheysandor.webshop.dto.order.OrderResponse;
 import hu.kalmancheysandor.webshop.dto.order.OrderUpdateRequest;
@@ -39,7 +36,7 @@ class OrderServiceTest {
     OrderService orderService;
 
     OrderCreateRequest orderCreateRequest01, orderCreateRequest02;
-    OrderCreateRequest.Item orderCreateRequestItem01, orderCreateRequestItem02;
+    OrderCreateRequest.CreateRequestItem orderCreateRequestItem01, orderCreateRequestItem02;
 
     OrderUpdateRequest orderUpdateRequest01;
     //OrderUpdateRequest.Item orderUpdateRequestAddress01;
@@ -52,16 +49,16 @@ class OrderServiceTest {
     OrderResponse orderResponse01, orderResponse02;
     OrderResponse orderResponse01Updated;
 
-    OrderResponse.Item orderResponseItem01, orderResponseItem02;
-    OrderResponse.Item orderUpdateResponseItem01;
+    OrderResponse.ResponseItem orderResponseItem01, orderResponseItem02;
+    OrderResponse.ResponseItem orderUpdateResponseItem01;
 
     @BeforeEach
     void init() {
-        orderCreateRequestItem01 = new OrderCreateRequest.Item();
+        orderCreateRequestItem01 = new OrderCreateRequest.CreateRequestItem();
         orderCreateRequestItem01.setProductId(1);
         orderCreateRequestItem01.setQuantity(1);
 
-        orderCreateRequestItem02 = new OrderCreateRequest.Item();
+        orderCreateRequestItem02 = new OrderCreateRequest.CreateRequestItem();
         orderCreateRequestItem01.setProductId(1);
         orderCreateRequestItem01.setQuantity(2);
 
@@ -152,21 +149,21 @@ class OrderServiceTest {
 
 
         // Generation of responses
-        orderResponseItem01 = new OrderResponse.Item();
+        orderResponseItem01 = new OrderResponse.ResponseItem();
         orderResponseItem01.setId(1);
         orderResponseItem01.setTotalNetPrice(100f);
         orderResponseItem01.setTotalGrossPrice(110f);
         //orderResponseItem01.setProduct(null);
         orderResponseItem01.setQuantity(1);
 
-        orderResponseItem02 = new OrderResponse.Item();
+        orderResponseItem02 = new OrderResponse.ResponseItem();
         orderResponseItem02.setId(2);
         orderResponseItem02.setTotalNetPrice(200f);
         orderResponseItem02.setTotalGrossPrice(220f);
         orderResponseItem02.setProduct(null);
         orderResponseItem02.setQuantity(2);
 
-        orderUpdateResponseItem01 = new OrderResponse.Item();
+        orderUpdateResponseItem01 = new OrderResponse.ResponseItem();
         orderUpdateResponseItem01.setId(1);
         orderUpdateResponseItem01.setTotalNetPrice(300f);
         orderUpdateResponseItem01.setTotalGrossPrice(330f);

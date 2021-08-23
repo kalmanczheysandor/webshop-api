@@ -1,6 +1,7 @@
 package hu.kalmancheysandor.webshop.dto.product;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -10,6 +11,7 @@ import javax.validation.constraints.*;
 @Data
 @NoArgsConstructor
 @Validated
+@Tag(name = "Termék módosítási kérés objektuma")
 public class ProductUpdateRequest {
     @NotBlank(message = "Field must not be blank")
     @Size(max=255,message="Field length must be between 0 and 255")

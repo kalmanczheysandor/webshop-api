@@ -13,16 +13,8 @@ import javax.validation.constraints.*;
 @Data
 @NoArgsConstructor
 @Validated
+@Tag(name = "Ügyfél regisztráció módosítási kérés objektuma")
 public class CustomerUpdateRequest {
-   /*private String identifier;
-    private String password;
-    private String firstname;
-    private String lastname;
-    private String phone;
-    private String email;
-    private UpdateRequestAddress updateRequestAddress;
-    private Boolean active;*/
-
 
     @NotNull(message = "Field must not be null")
     @Size(min=5, max=20,message="Field length must be between 5 and 20")
@@ -57,6 +49,7 @@ public class CustomerUpdateRequest {
 
     @Valid
     @NotNull(message = "Field must not be null")
+    @Schema(description="Az ügyfél címe")
     private CustomerUpdateRequest.UpdateRequestAddress address;
 
     @NotNull(message = "Field must not be null")
