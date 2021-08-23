@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class ProductRepositoryTest {
+class ProductRepositoryIT {
 
     Product product01;
     Product product02;
@@ -42,7 +42,7 @@ class ProductRepositoryTest {
 
     @Test
     @Transactional
-    void testSaveProduct_oneItem() {
+    void test_saveProduct_oneItem() {
         // Initial assertion(s)
         assertThat(repository.listAllProduct()).isEmpty();
 
@@ -50,12 +50,12 @@ class ProductRepositoryTest {
         Product saved = repository.saveProduct(product01);
 
         // Final assertion(s)
-        assertEquals(product01.getId(), saved.getId());
-        assertEquals(product01.getName(), saved.getName());
-        assertEquals(product01.getPriceVat(), saved.getPriceVat());
-        assertEquals(product01.getPriceNet(), saved.getPriceNet());
-        assertEquals(product01.getDescription(), saved.getDescription());
-        assertEquals(product01.getActive(), saved.getActive());
+        assertEquals(1, saved.getId());
+        assertEquals("Product01", saved.getName());
+        assertEquals(25, saved.getPriceVat());
+        assertEquals(150f, saved.getPriceNet());
+        assertEquals("My description", saved.getDescription());
+        assertEquals(true, saved.getActive());
         assertThat(repository.listAllProduct())
                 .hasSize(1)
                 .containsExactly(saved);
@@ -63,7 +63,7 @@ class ProductRepositoryTest {
 
     @Test
     @Transactional
-    void testSaveProduct_twoItem() {
+    void test_saveProduct_twoItem() {
         // Initial assertion(s)
         assertThat(repository.listAllProduct()).isEmpty();
 
@@ -81,7 +81,7 @@ class ProductRepositoryTest {
 
     @Test
     @Transactional
-    void testFindProductById_foundSuccessfully() {
+    void test_findProductById_foundSuccessfully() {
         // Initial assertion(s)
         assertThat(repository.listAllProduct()).isEmpty();
 
@@ -96,7 +96,7 @@ class ProductRepositoryTest {
 
     @Test
     @Transactional
-    void testFindProductById_notFound() {
+    void test_findProductById_notFound() {
         // Initial assertion(s)
         assertThat(repository.listAllProduct()).isEmpty();
 
@@ -111,7 +111,7 @@ class ProductRepositoryTest {
 
     @Test
     @Transactional
-    void testUpdateProduct_updatedSuccessfully() {
+    void test_updateProduct_updatedSuccessfully() {
         // Initial assertion(s)
         assertThat(repository.listAllProduct()).isEmpty();
 
@@ -137,7 +137,7 @@ class ProductRepositoryTest {
 
     @Test
     @Transactional
-    void testUpdateProduct_insertInsteadOfUpdate() {
+    void test_updateProduct_insertInsteadOfUpdate() {
         // Initial assertion(s)
         assertThat(repository.listAllProduct()).isEmpty();
 
@@ -158,7 +158,7 @@ class ProductRepositoryTest {
 
     @Test
     @Transactional
-    void testDeleteProduct_deletedSuccessfully() {
+    void test_deleteProduct_deletedSuccessfully() {
         // Initial assertion(s)
         assertThat(repository.listAllProduct()).isEmpty();
 
@@ -181,7 +181,7 @@ class ProductRepositoryTest {
 
     @Test
     @Transactional
-    void testDeleteProduct_deletedUnsuccessfully_idNotExist() {
+    void test_deleteProduct_deletedUnsuccessfully_idNotExist() {
         // Initial assertion(s)
         assertThat(repository.listAllProduct()).isEmpty();
 

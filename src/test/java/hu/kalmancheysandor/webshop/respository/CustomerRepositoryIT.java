@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class CustomerRepositoryTest {
+class CustomerRepositoryIT {
 
     Customer customer01;
     Customer customer02;
@@ -67,7 +67,7 @@ class CustomerRepositoryTest {
 
     @Test
     @Transactional
-    void testSaveCustomer_oneItem() {
+    void test_saveCustomer_oneItem() {
         // Initial assertion(s)
         assertThat(customerRepository.listAllCustomer()).isEmpty();
         assertThat(addressRepository.listAllAddress()).isEmpty();
@@ -77,19 +77,19 @@ class CustomerRepositoryTest {
         CustomerAddress savedAddress = addressRepository.saveAddress(customer01.getAddress());
 
         // Final assertion(s)
-        assertEquals(customer01.getId(), savedCustomer.getId());
-        assertEquals(customer01.getIdentifier(), savedCustomer.getIdentifier());
-        assertEquals(customer01.getPassword(), savedCustomer.getPassword());
-        assertEquals(customer01.getEmail(), savedCustomer.getEmail());
-        assertEquals(customer01.getFirstname(), savedCustomer.getFirstname());
-        assertEquals(customer01.getLastname(), savedCustomer.getLastname());
-        assertEquals(customer01.getPhone(), savedCustomer.getPhone());
-        assertEquals(customer01.getActive(), savedCustomer.getActive());
+        assertEquals(1, savedCustomer.getId());
+        assertEquals("PaulJackson", savedCustomer.getIdentifier());
+        assertEquals("123456", savedCustomer.getPassword());
+        assertEquals("paul_jackson@mymail.com", savedCustomer.getEmail());
+        assertEquals("Paul", savedCustomer.getFirstname());
+        assertEquals("Jackson", savedCustomer.getLastname());
+        assertEquals("0044545656565", savedCustomer.getPhone());
+        assertEquals(true, savedCustomer.getActive());
 
-        assertEquals(address01.getCountry(), savedCustomer.getAddress().getCountry());
-        assertEquals(address01.getCity(), savedCustomer.getAddress().getCity());
-        assertEquals(address01.getStreet(), savedCustomer.getAddress().getStreet());
-        assertEquals(address01.getPostcode(), savedCustomer.getAddress().getPostcode());
+        assertEquals("Hungary", savedCustomer.getAddress().getCountry());
+        assertEquals("Budapest", savedCustomer.getAddress().getCity());
+        assertEquals("Dózsa Street 25", savedCustomer.getAddress().getStreet());
+        assertEquals("1125", savedCustomer.getAddress().getPostcode());
 
         assertThat(customerRepository.listAllCustomer())
                 .hasSize(1)
@@ -102,7 +102,7 @@ class CustomerRepositoryTest {
 
     @Test
     @Transactional
-    void testSaveCustomer_twoItem() {
+    void test_saveCustomer_twoItem() {
         // Initial assertion(s)
         assertThat(customerRepository.listAllCustomer()).isEmpty();
         assertThat(addressRepository.listAllAddress()).isEmpty();
@@ -132,7 +132,7 @@ class CustomerRepositoryTest {
 
     @Test
     @Transactional
-    void testFindCustomerById_foundSuccessfully() {
+    void test_findCustomerById_foundSuccessfully() {
         // Initial assertion(s)
         assertThat(customerRepository.listAllCustomer()).isEmpty();
         assertThat(addressRepository.listAllAddress()).isEmpty();
@@ -148,10 +148,9 @@ class CustomerRepositoryTest {
         assertEquals(customerFound, savedCustomer2);
     }
 
-
     @Test
     @Transactional
-    void testFindCustomerById_notFound() {
+    void test_findCustomerById_notFound() {
         // Initial assertion(s)
         assertThat(customerRepository.listAllCustomer()).isEmpty();
         assertThat(addressRepository.listAllAddress()).isEmpty();
@@ -169,7 +168,7 @@ class CustomerRepositoryTest {
 
     @Test
     @Transactional
-    void testFindCustomerAddressById_foundSuccessfully() {
+    void test_findCustomerAddressById_foundSuccessfully() {
         // Initial assertion(s)
         assertThat(customerRepository.listAllCustomer()).isEmpty();
         assertThat(addressRepository.listAllAddress()).isEmpty();
@@ -187,7 +186,7 @@ class CustomerRepositoryTest {
 
     @Test
     @Transactional
-    void testFindCustomerAddressById_notFound() {
+    void test_findCustomerAddressById_notFound() {
         // Initial assertion(s)
         assertThat(customerRepository.listAllCustomer()).isEmpty();
         assertThat(addressRepository.listAllAddress()).isEmpty();
@@ -205,7 +204,7 @@ class CustomerRepositoryTest {
 
     @Test
     @Transactional
-    void testUpdateCustomer_updatedSuccessfully() {
+    void test_updateCustomer_updatedSuccessfully() {
         // Initial assertion(s)
         assertThat(customerRepository.listAllCustomer()).isEmpty();
         assertThat(addressRepository.listAllAddress()).isEmpty();
@@ -234,7 +233,7 @@ class CustomerRepositoryTest {
 
     @Test
     @Transactional
-    void testUpdateCustomerAddress_updatedSuccessfully() {
+    void test_updateCustomerAddress_updatedSuccessfully() {
         // Initial assertion(s)
         assertThat(customerRepository.listAllCustomer()).isEmpty();
         assertThat(addressRepository.listAllAddress()).isEmpty();
@@ -261,12 +260,9 @@ class CustomerRepositoryTest {
                 .containsExactly(savedAddress1, savedAddress2);
     }
 
-
-
-
     @Test
     @Transactional
-    void testDeleteCustomer_deletedSuccessfully() {
+    void test_deleteCustomer_deletedSuccessfully() {
         // Initial assertion(s)
         assertThat(customerRepository.listAllCustomer()).isEmpty();
         assertThat(addressRepository.listAllAddress()).isEmpty();
@@ -301,7 +297,7 @@ class CustomerRepositoryTest {
 
     @Test
     @Transactional
-    void testDeleteCustomer_deletedUnsuccessfully_idNotExist() {
+    void test_deleteCustomer_deletedUnsuccessfully_idNotExist() {
         // Initial assertion(s)
         assertThat(customerRepository.listAllCustomer()).isEmpty();
         assertThat(addressRepository.listAllAddress()).isEmpty();
@@ -325,7 +321,7 @@ class CustomerRepositoryTest {
 
     @Test
     @Transactional
-    void testDeleteCustomerAddress_deletedUnsuccessfully_idNotExist() {
+    void test_deleteCustomerAddress_deletedUnsuccessfully_idNotExist() {
         // Initial assertion(s)
         assertThat(customerRepository.listAllCustomer()).isEmpty();
         assertThat(addressRepository.listAllAddress()).isEmpty();
