@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+
 import static org.springframework.util.StringUtils.capitalize;
 
 @Repository
@@ -20,7 +21,7 @@ public class CustomerAddressRepository {
     private boolean useUppercaseCorrection;
 
     public CustomerAddress saveAddress(CustomerAddress customerAddress) {
-        if(useUppercaseCorrection) {
+        if (useUppercaseCorrection) {
             customerAddress.setCountry(capitalize(customerAddress.getCountry()));
             customerAddress.setCity(capitalize(customerAddress.getCity()));
         }
@@ -41,7 +42,7 @@ public class CustomerAddressRepository {
     }
 
     public CustomerAddress updateAddress(CustomerAddress customerAddress) {
-        if(useUppercaseCorrection) {
+        if (useUppercaseCorrection) {
             customerAddress.setCountry(capitalize(customerAddress.getCountry()));
             customerAddress.setCity(capitalize(customerAddress.getCity()));
         }
@@ -69,6 +70,4 @@ public class CustomerAddressRepository {
     private void deleteAddress(CustomerAddress customerAddress) {
         entityManager.remove(customerAddress);
     }
-
-
 }

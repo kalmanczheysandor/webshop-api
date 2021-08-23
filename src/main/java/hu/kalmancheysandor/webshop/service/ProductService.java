@@ -41,14 +41,15 @@ public class ProductService {
     public ProductResponse updateProduct(int productId, ProductUpdateRequest command) {
         try {
 
+            // Setting up current and new state
             Product productCurrentState = productRepository.findProductById(productId);
             Product productNewState = modelMapper.map(command, Product.class);
             productNewState.setId(null);
 
-
-            //modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+            // Creating and overwriting objects
             modelMapper.map(productNewState, productCurrentState);
 
+            // Providing persistence update
             Product modifiedProduct = productRepository.updateProduct(productCurrentState);
 
             return modelMapper.map(modifiedProduct, ProductResponse.class);

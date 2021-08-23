@@ -18,15 +18,13 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    //@Formula("product_id.")
-    //@Formula("product_id.")
-    @Column(name="price_total_net")
+    @Column(name="price_total_net", nullable = false)
     private float totalNetPrice;
 
-    @Column(name="price_total_gross")
+    @Column(name="price_total_gross", nullable = false)
     private float totalGrossPrice;
 
-    @Column(name = "quantity")
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
     @ManyToOne
@@ -46,8 +44,6 @@ public class OrderItem {
                 ", quantity=" + quantity +
                 '}';
     }
-
-
 
     @Override
     public int hashCode() {

@@ -72,7 +72,7 @@ Accept: application/json
 
 ###
 
-DELETE http://localhost:8080/api/admin/products/6
+DELETE http://localhost:8080/api/admin/products/5
 Accept: application/json
 
 ###

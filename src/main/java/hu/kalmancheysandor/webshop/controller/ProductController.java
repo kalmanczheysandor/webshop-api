@@ -31,7 +31,8 @@ public class ProductController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Mentés", description = "Új termék felvétele.")
+    @Operation(summary = "Mentés",
+            description = "Új termék felvétele.")
     public ProductResponse saveProduct(@Valid @RequestBody ProductCreateRequest command) {
         log.info("Http request; Method type:POST; URL:/api/admin/products/; Body:" + command.toString());
         return productService.saveProduct(command);
@@ -40,7 +41,8 @@ public class ProductController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Módosítás", description = "Korábban mentett termék id általi elérése és mezőinek felülírása.")
+    @Operation(summary = "Módosítás",
+            description = "Korábban mentett termék id általi elérése és mezőinek felülírása.")
     public ProductResponse updateProduct(@Parameter(description = "Termék id", example = "3")
                                          @PathVariable("id") int productId,
                                          @Valid @RequestBody ProductUpdateRequest command) {
@@ -51,7 +53,8 @@ public class ProductController {
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Listázás", description = "Kilistázza az összes mentett terméket.")
+    @Operation(summary = "Listázás",
+            description = "Kilistázza az összes mentett terméket.")
     public List<ProductResponse> listAllProduct() {
         log.info("Http request; Method type:GET; URL:/api/admin/products/");
         List<ProductResponse> products = productService.listAllProduct();
@@ -60,7 +63,8 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Lekérés", description = "Korábban mentett termék id általi lekérése.")
+    @Operation(summary = "Lekérés",
+            description = "Korábban mentett termék id általi lekérése.")
     public ProductResponse findProductById(@Parameter(description = "Termék id", example = "3")
                                            @PathVariable("id") int productId) {
         log.info("Http request; Method type:GET; URL:/api/admin/products/" + productId + "/");
@@ -69,7 +73,8 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Törlés", description = "Korábban mentett termék id általi törlése.")
+    @Operation(summary = "Törlés",
+            description = "Korábban mentett termék id általi törlése.")
     public void deleteProductById(@Parameter(description = "Termék id", example = "3")
                                   @PathVariable("id") int productId) {
         log.info("Http request; Method type:DELETE; URL:/api/admin/products/" + productId + "/");

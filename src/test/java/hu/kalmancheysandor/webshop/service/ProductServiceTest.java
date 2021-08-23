@@ -16,7 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+
 import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -40,7 +42,6 @@ class ProductServiceTest {
     Product productEntity01Updated;
     ProductResponse productResponse01, productResponse02;
     ProductResponse productResponse01Updated;
-
 
     @BeforeEach
     void init() {
@@ -68,7 +69,6 @@ class ProductServiceTest {
         productUpdateRequest01.setDescription("Valami");
         productUpdateRequest01.setActive(false);
 
-
         // Generation of entities
         productEntity01 = new Product();
         productEntity01.setId(1);
@@ -93,7 +93,6 @@ class ProductServiceTest {
         productEntity01Updated.setPriceVat(15);
         productEntity01Updated.setDescription("Valami");
         productEntity01Updated.setActive(false);
-
 
         // Generation of responses
         productResponse01 = new ProductResponse();
@@ -120,7 +119,6 @@ class ProductServiceTest {
         productResponse01Updated.setDescription("Valami");
         productResponse01Updated.setActive(false);
 
-
     }
 
     @Test
@@ -143,23 +141,22 @@ class ProductServiceTest {
 
     @Test
     void test_updateProduct_whenProductIsFound() {
-
         // Mocking of repository method(s)
         when(productRepository.findProductById(1)).thenReturn(productEntity01);
         when(productRepository.updateProduct(productEntity01)).thenReturn(productEntity01Updated);
 
         // Mocking from request to entity
         when(modelMapper.map(productUpdateRequest01, Product.class)).thenReturn(productEntity02);
-        doNothing().when(modelMapper).map(productEntity02,productEntity01);
+        doNothing().when(modelMapper).map(productEntity02, productEntity01);
 
         // Mocking from entity to response
-        when(modelMapper.map(productEntity01Updated,ProductResponse.class)).thenReturn(productResponse01Updated);
+        when(modelMapper.map(productEntity01Updated, ProductResponse.class)).thenReturn(productResponse01Updated);
 
         //Operation(s)
-        ProductResponse response = productService.updateProduct(1,productUpdateRequest01);
+        ProductResponse response = productService.updateProduct(1, productUpdateRequest01);
 
         // Statement(s)
-        assertEquals(productResponse01Updated,response);
+        assertEquals(productResponse01Updated, response);
         verify(productRepository, times(1)).findProductById(1);
         verify(productRepository, times(1)).updateProduct(productEntity01);
         verifyNoMoreInteractions(productRepository);
@@ -167,12 +164,8 @@ class ProductServiceTest {
 
     @Test
     void test_updateProduct_whenProductIsNotFound() {
-
         // Mocking of repository method(s)
         when(productRepository.findProductById(1)).thenThrow(new RecordNotFoundByIdException(1));
-
-        // Mocking from entity to response
-        //when(modelMapper.map(productEntity01, ProductResponse.class)).thenReturn(productResponse01);
 
         // Statement(s)
         assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(1, productUpdateRequest01));
@@ -217,9 +210,6 @@ class ProductServiceTest {
         // Mocking of repository method(s)
         when(productRepository.findProductById(1)).thenThrow(new RecordNotFoundByIdException(1));
 
-        // Mocking from entity to response
-        //when(modelMapper.map(productEntity01, ProductResponse.class)).thenReturn(productResponse01);
-
         // Statement(s)
         assertThrows(ProductNotFoundException.class, () -> productService.findProductById(1));
 
@@ -229,7 +219,6 @@ class ProductServiceTest {
 
     @Test
     void test_deleteProductById_whenProductNotFound() {
-
         // Mocking of repository method(s)
         doThrow(new RecordNotFoundByIdException(1))
                 .when(productRepository)
@@ -243,7 +232,6 @@ class ProductServiceTest {
 
     @Test
     void test_deleteProductById_whenProductStillInUse() {
-
         // Mocking of repository method(s)
         doThrow(new RecordStillInUseException(1))
                 .when(productRepository)

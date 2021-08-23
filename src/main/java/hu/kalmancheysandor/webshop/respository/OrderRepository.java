@@ -28,7 +28,7 @@ public class OrderRepository {
 
     public Order findOrderById(int orderId) {
         Order order = entityManager.find(Order.class, orderId);
-        if( order==null) {
+        if (order == null) {
             throw new RecordNotFoundByIdException(orderId);
         }
         return order;
@@ -36,7 +36,7 @@ public class OrderRepository {
 
     public OrderItem findOrderItemById(int orderItemId) {
         OrderItem orderItem = entityManager.find(OrderItem.class, orderItemId);
-        if( orderItem==null) {
+        if (orderItem == null) {
             throw new RecordNotFoundByIdException(orderItemId);
         }
         return orderItem;
@@ -52,14 +52,14 @@ public class OrderRepository {
 
     public List<OrderItem> listAllOrderItemByOrderId(int orderId) {
         Order order = entityManager.find(Order.class, orderId);
-        if( order==null) {
+        if (order == null) {
             throw new RecordNotFoundByIdException(orderId);
         }
 
         return entityManager.createQuery("SELECT i FROM OrderItem i " +
                 "JOIN i.order o " +
                 "WHERE o.id=:paramOrderId", OrderItem.class)
-                .setParameter("paramOrderId",orderId)
+                .setParameter("paramOrderId", orderId)
                 .getResultList();
     }
 
@@ -83,12 +83,12 @@ public class OrderRepository {
 
     public void deleteAllOrderItemByOrderId(int orderId) {
         Order order = entityManager.find(Order.class, orderId);
-        if( order==null) {
+        if (order == null) {
             throw new RecordNotFoundByIdException(orderId);
         }
 
         List<OrderItem> orderItems = listAllOrderItemByOrderId(orderId);
-        for(OrderItem orderItem:orderItems) {
+        for (OrderItem orderItem : orderItems) {
             deleteOrderItem(orderItem);
         }
     }
@@ -96,14 +96,9 @@ public class OrderRepository {
     private void deleteOrder(Order order) {
         entityManager.remove(order);
     }
+
     public void deleteOrderItem(OrderItem orderItem) {
         entityManager.remove(orderItem);
     }
-
-
-
-
-
-
 
 }

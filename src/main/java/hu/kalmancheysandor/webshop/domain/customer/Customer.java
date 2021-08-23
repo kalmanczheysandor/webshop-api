@@ -22,24 +22,27 @@ public class Customer {
 
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "firstname")
+
+    @Column(name = "firstname", nullable = false)
     private String firstname;
-    @Column(name = "lastname")
+
+    @Column(name = "lastname", nullable = false)
     private String lastname;
-    @Column(name = "phone")
+
+    @Column(name = "phone", nullable = false)
     private String phone;
-    @Column(name = "email")
+
+    @Column(name = "email", nullable = false)
     private String email;
-    @Column(name = "is_active")
+
+    @Column(name = "is_active", nullable = false)
     private Boolean active;
 
-    //@OneToOne(mappedBy = "customer",cascade = CascadeType.PERSIST)
     @OneToOne(mappedBy = "customer")
     private CustomerAddress address;
 
     @OneToMany(mappedBy = "customer")
     private List<Order> orders;
-
 
     @Override
     public String toString() {
@@ -51,7 +54,6 @@ public class Customer {
                 ", lastname='" + lastname + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                (address==null?", address='null' ":", address='YYYYY' ")+
                 ", active=" + active +
                 '}';
     }

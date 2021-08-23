@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -39,7 +40,6 @@ class OrderServiceTest {
     OrderCreateRequest.CreateRequestItem orderCreateRequestItem01, orderCreateRequestItem02;
 
     OrderUpdateRequest orderUpdateRequest01;
-    //OrderUpdateRequest.Item orderUpdateRequestAddress01;
 
     Order orderEntity01, orderEntity02;
     Order orderEntity01Updated;
@@ -54,6 +54,7 @@ class OrderServiceTest {
 
     @BeforeEach
     void init() {
+        // Generation create requests
         orderCreateRequestItem01 = new OrderCreateRequest.CreateRequestItem();
         orderCreateRequestItem01.setProductId(1);
         orderCreateRequestItem01.setQuantity(1);
@@ -73,14 +74,8 @@ class OrderServiceTest {
         orderCreateRequest02.setItems(List.of(orderCreateRequestItem02));
 
         // Generation update requests
-//        orderUpdateRequestAddress01  = new OrderUpdateRequest.Item();
-//        orderUpdateRequestAddress01.setProductId(1);
-//        orderUpdateRequestAddress01.setQuantity(2);
-//
-//
         orderUpdateRequest01 = new OrderUpdateRequest();
         orderUpdateRequest01.setDeliveryStatus(DeliveryStatus.DELIVERED);
-
 
 
         // Generation of entities
@@ -88,39 +83,28 @@ class OrderServiceTest {
         itemEntity01.setTotalNetPrice(100f);
         itemEntity01.setTotalGrossPrice(110f);
         itemEntity01.setQuantity(1);
-        //itemEntity01.setOrder;
-        //itemEntity01.setProduct;
 
         itemEntity02 = new OrderItem();
         itemEntity02.setTotalNetPrice(200f);
         itemEntity02.setTotalGrossPrice(220f);
         itemEntity02.setQuantity(2);
-        //itemEntity01.setOrder;
-        //itemEntity01.setProduct;
 
         itemEntity01Updated = new OrderItem();
         itemEntity01Updated.setTotalNetPrice(300f);
         itemEntity01Updated.setTotalGrossPrice(330f);
         itemEntity01Updated.setQuantity(3);
 
-
-
-
-
         orderEntity01 = new Order();
         orderEntity01.setId(1);
         orderEntity01.setTotalNetPrice(100.0f);
         orderEntity01.setTotalGrossPrice(110f);
-        //orderEntity01.setCustomer(null);
         orderEntity01.setOrderItems(List.of(itemEntity01));
         orderEntity01.setDeliveryStatus(DeliveryStatus.PURCHASED);
-
 
         orderEntity02 = new Order();
         orderEntity02.setId(2);
         orderEntity02.setTotalNetPrice(200.0f);
         orderEntity02.setTotalGrossPrice(220f);
-        //orderEntity02.setCustomer(null);
         orderEntity02.setOrderItems(List.of(itemEntity02));
         orderEntity02.setDeliveryStatus(DeliveryStatus.PURCHASED);
 
@@ -128,24 +112,12 @@ class OrderServiceTest {
         orderEntity01Updated.setId(1);
         orderEntity01Updated.setTotalNetPrice(300.0f);
         orderEntity01Updated.setTotalGrossPrice(330f);
-        //orderEntity01Updated.setCustomer(null);
         orderEntity01Updated.setOrderItems(List.of(itemEntity01Updated));
         orderEntity01Updated.setDeliveryStatus(DeliveryStatus.DELIVERED);
-
 
         itemEntity01.setOrder(orderEntity01);
         itemEntity02.setOrder(orderEntity02);
         itemEntity01Updated.setOrder(orderEntity01Updated);
-
-
-
-
-
-
-
-
-
-
 
 
         // Generation of responses
@@ -153,7 +125,6 @@ class OrderServiceTest {
         orderResponseItem01.setId(1);
         orderResponseItem01.setTotalNetPrice(100f);
         orderResponseItem01.setTotalGrossPrice(110f);
-        //orderResponseItem01.setProduct(null);
         orderResponseItem01.setQuantity(1);
 
         orderResponseItem02 = new OrderResponse.ResponseItem();
@@ -167,11 +138,7 @@ class OrderServiceTest {
         orderUpdateResponseItem01.setId(1);
         orderUpdateResponseItem01.setTotalNetPrice(300f);
         orderUpdateResponseItem01.setTotalGrossPrice(330f);
-        //orderUpdateResponseItem01.setProduct(null);
         orderUpdateResponseItem01.setQuantity(3);
-
-
-
 
 
         orderResponse01 = new OrderResponse();
@@ -196,22 +163,20 @@ class OrderServiceTest {
         orderResponse01Updated.setItems(List.of(orderUpdateResponseItem01));
     }
 
-
     @Test
     void test_updateOrder_whenOrderIsFound() {
-
         // Mocking of repository method(s)
         when(orderRepository.findOrderById(1)).thenReturn(orderEntity01);
         when(orderRepository.updateOrder(orderEntity01)).thenReturn(orderEntity01Updated);
 
         // Mocking from entity to response
-        when(modelMapper.map(orderEntity01Updated,OrderResponse.class)).thenReturn(orderResponse01Updated);
+        when(modelMapper.map(orderEntity01Updated, OrderResponse.class)).thenReturn(orderResponse01Updated);
 
         //Operation(s)
-        OrderResponse response = orderService.updateOrder(1,orderUpdateRequest01);
+        OrderResponse response = orderService.updateOrder(1, orderUpdateRequest01);
 
         // Statement(s)
-        assertEquals(orderResponse01Updated,response);
+        assertEquals(orderResponse01Updated, response);
         verify(orderRepository, times(1)).findOrderById(1);
         verify(orderRepository, times(1)).updateOrder(orderEntity01);
         verifyNoMoreInteractions(orderRepository);
@@ -219,12 +184,8 @@ class OrderServiceTest {
 
     @Test
     void test_updateOrder_whenOrderIsNotFound() {
-
         // Mocking of repository method(s)
         when(orderRepository.findOrderById(1)).thenThrow(new RecordNotFoundByIdException(1));
-
-        // Mocking from entity to response
-        //when(modelMapper.map(orderEntity01, OrderResponse.class)).thenReturn(orderResponse01);
 
         // Statement(s)
         assertThrows(OrderNotFoundException.class, () -> orderService.updateOrder(1, orderUpdateRequest01));
@@ -269,9 +230,6 @@ class OrderServiceTest {
         // Mocking of repository method(s)
         when(orderRepository.findOrderById(1)).thenThrow(new RecordNotFoundByIdException(1));
 
-        // Mocking from entity to response
-        //when(modelMapper.map(orderEntity01, OrderResponse.class)).thenReturn(orderResponse01);
-
         // Statement(s)
         assertThrows(OrderNotFoundException.class, () -> orderService.findOrderById(1));
 
@@ -281,7 +239,6 @@ class OrderServiceTest {
 
     @Test
     void test_deleteOrderById_whenOrderNotFound() {
-
         // Mocking of repository method(s)
         doThrow(new RecordNotFoundByIdException(1))
                 .when(orderRepository)
@@ -290,6 +247,5 @@ class OrderServiceTest {
         // Statement(s)
         assertThrows(OrderNotFoundException.class, () -> orderService.deleteOrderById(1));
         verify(orderRepository, times(1)).deleteOrderById(1);
-        //verifyNoMoreInteractions(orderRepository);
     }
 }

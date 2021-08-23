@@ -14,15 +14,21 @@ public class CustomerAddress {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "country", nullable = false)
     private String country;
+
+    @Column(name = "city", nullable = false)
     private String city;
+
+    @Column(name = "street", nullable = false)
     private String street;
+
+    @Column(name = "postcode", nullable = false)
     private String postcode;
 
     @OneToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
 
     @Override
     public String toString() {
@@ -31,10 +37,8 @@ public class CustomerAddress {
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
                 ", street='" + street + '\'' +
-                (customer==null?", customer='null' ":", customer='XXXXXXX' ")+
                 ", postcode='" + postcode + '\'' +
 
                 '}';
-//        return ((Object)this).toString();
     }
 }

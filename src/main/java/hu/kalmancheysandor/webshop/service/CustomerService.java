@@ -29,8 +29,6 @@ public class CustomerService {
     @Autowired
     private CustomerAddressRepository customerAddressRepository;
 
-
-
     @Autowired
     private ModelMapper modelMapper;
 
@@ -75,7 +73,6 @@ public class CustomerService {
             addressNewState.setCustomer(null);
 
             // The overwrite-act when all field value copied into the persisted object fields. However 'null' values are ignored to be copied!
-            //!!!!modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
             modelMapper.map(customerNewState, customerCurrentState);
             modelMapper.map(addressNewState, addressCurrentState);
 
@@ -89,15 +86,12 @@ public class CustomerService {
         }
     }
 
-
-
     public List<CustomerResponse> listAllCustomer() {
         List<Customer> customers = customerRepository.listAllCustomer();
         return customers.stream()
                 .map(item -> modelMapper.map(item, CustomerResponse.class))
                 .collect(Collectors.toList());
     }
-
 
     public CustomerResponse findCustomerById(int customerId) {
         try {
@@ -114,8 +108,7 @@ public class CustomerService {
             customerRepository.deleteCustomerById(customerId);
         } catch (RecordNotFoundByIdException e) {
             throw new CustomerNotFoundException(e.getId());
-        }
-        catch (RecordStillInUseException e){
+        } catch (RecordStillInUseException e) {
             throw new CustomerStillInUseException(e.getId());
         }
     }

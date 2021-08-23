@@ -30,6 +30,8 @@ class CustomerRepositoryIT {
 
     @BeforeEach
     void init() {
+
+        // Setting up address entities
         address01   = new CustomerAddress();
         address01.setCountry("Hungary");
         address01.setCity("Budapest");
@@ -42,6 +44,7 @@ class CustomerRepositoryIT {
         address02.setStreet("Castlerigg Drive 28");
         address02.setPostcode("M24 4LW");
 
+        // Setting up customer entities
         customer01 = new Customer();
         customer01.setIdentifier("PaulJackson");
         customer01.setPassword("123456");

@@ -84,9 +84,6 @@ public class OrderSaveIT {
                 .andExpect(jsonPath("$.description", is("")))
                 .andExpect(jsonPath("$.active", is(false)));
 
-
-
-
         // Creating request text in form of json
         String customerRequestText01 = "{\n" +
                 "  \"identifier\": \"customer_user\",\n" +
@@ -103,8 +100,6 @@ public class OrderSaveIT {
                 "  },\n" +
                 "  \"active\": true\n" +
                 "}";
-
-
 
         String customerRequestText02 = "{\n" +
                 "  \"identifier\": \"user02\",\n" +
@@ -137,8 +132,6 @@ public class OrderSaveIT {
                 "  },\n" +
                 "  \"active\": false\n" +
                 "}";
-
-
 
         // Statement(s) of response
         mockMvc.perform(post("/api/admin/customers/")
@@ -355,7 +348,6 @@ public class OrderSaveIT {
                 "    }\n" +
                 "  ]\n" +
                 "}";
-
 
         // Statement(s) of response
         mockMvc.perform(post("/api/admin/orders/")

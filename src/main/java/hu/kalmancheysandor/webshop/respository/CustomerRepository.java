@@ -23,10 +23,9 @@ public class CustomerRepository {
         return customer;
     }
 
-
     public Customer findCustomerById(int customerId) {
         Customer customer = entityManager.find(Customer.class, customerId);
-        if( customer==null) {
+        if (customer == null) {
             throw new RecordNotFoundByIdException(customerId);
         }
         return customer;
@@ -46,7 +45,7 @@ public class CustomerRepository {
     }
 
     private void deleteCustomer(Customer customer) {
-        if(isCustomerStillInUse(customer)) {
+        if (isCustomerStillInUse(customer)) {
             throw new RecordStillInUseException(customer.getId());
         }
         entityManager.remove(customer);
@@ -55,12 +54,12 @@ public class CustomerRepository {
     private boolean isCustomerStillInUse(Customer customer) {
         List<Object> list = entityManager.createQuery("SELECT o FROM Order o " +
                 "WHERE o.customer=:paramCustomer")
-                .setParameter("paramCustomer",customer)
+                .setParameter("paramCustomer", customer)
                 .setMaxResults(1)
                 .getResultList();
 
-        // Some older JPA implementations returns null instead of empty list
-        if(list==null) {
+        // Because of some older JPA implementations returns null instead of empty list
+        if (list == null) {
             return false;
         }
         return !list.isEmpty();

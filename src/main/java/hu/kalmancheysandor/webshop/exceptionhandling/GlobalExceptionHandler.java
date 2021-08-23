@@ -31,10 +31,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<List<FieldError>> handleProductNotFoundException(ProductNotFoundException exception) {
         FieldError fieldError = new FieldError("productId", "Product at id " + exception.getProductId() + " is not found");
-
-        // Send error to logger
         logAFieldError(fieldError);
-
         return new ResponseEntity<>(List.of(fieldError), HttpStatus.BAD_REQUEST);
     }
 

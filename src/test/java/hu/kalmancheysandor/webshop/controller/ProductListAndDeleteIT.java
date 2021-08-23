@@ -50,7 +50,7 @@ public class ProductListAndDeleteIT {
                 "  \"active\": false\n" +
                 "}";
 
-
+        // Statement(s) of response
         mockMvc.perform(post("/api/admin/products/")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText01));
@@ -61,7 +61,6 @@ public class ProductListAndDeleteIT {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText03));
     }
-
 
     @Test
     void test_list_whenSuccessful() throws Exception {

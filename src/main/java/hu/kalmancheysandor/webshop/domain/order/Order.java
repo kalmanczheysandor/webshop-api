@@ -17,10 +17,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "price_total_net")
+    @Column(name = "price_total_net", nullable = false)
     private float totalNetPrice;
 
-    @Column(name = "price_total_gross")
+    @Column(name = "price_total_gross", nullable = false)
     private float totalGrossPrice;
 
     @ManyToOne
@@ -30,7 +30,7 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
 
-    @Column(name = "delivery_status")
+    @Column(name = "delivery_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
 
@@ -41,7 +41,6 @@ public class Order {
         }
         return null;
     }
-
 
     @Override
     public String toString() {

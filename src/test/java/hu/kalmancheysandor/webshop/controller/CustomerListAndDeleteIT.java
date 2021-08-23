@@ -42,8 +42,6 @@ public class CustomerListAndDeleteIT {
                 "  \"active\": true\n" +
                 "}";
 
-
-
         String requestText02 = "{\n" +
                 "  \"identifier\": \"user02\",\n" +
                 "  \"password\": \"1111111111\",\n" +
@@ -75,7 +73,7 @@ public class CustomerListAndDeleteIT {
                 "  },\n" +
                 "  \"active\": false\n" +
                 "}";
-
+        // Statement(s) of response
         mockMvc.perform(post("/api/admin/customers/")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText01));
@@ -86,7 +84,6 @@ public class CustomerListAndDeleteIT {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(requestText03));
     }
-
 
     @Test
     void test_list_whenSuccessful() throws Exception {
@@ -184,5 +181,4 @@ public class CustomerListAndDeleteIT {
                 .andExpect(jsonPath("$[0].field", is("customerId")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Customer at id 25 is not found")));
     }
-
 }

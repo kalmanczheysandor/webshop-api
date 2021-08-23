@@ -19,6 +19,7 @@ public class OrderItemUpdateRequest {
     @PositiveOrZero(message="Field must not be negative")
     @Schema(description="Már mentet termék elsődleges kulcsa", example = "1")
     private Integer productId;
+
     @NotNull(message = "Field must not be null")
     @PositiveOrZero(message="Field must not be negative")
     @Schema(description="A termékből vásárolt mennyiség", example = "3")

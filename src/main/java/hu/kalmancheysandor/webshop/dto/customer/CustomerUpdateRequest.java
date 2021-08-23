@@ -56,7 +56,6 @@ public class CustomerUpdateRequest {
     @Schema(description="Az ügyfél használhatja-e a fiókját.", example = "true")
     private Boolean active;
 
-
     @Data
     @NoArgsConstructor
     @Validated

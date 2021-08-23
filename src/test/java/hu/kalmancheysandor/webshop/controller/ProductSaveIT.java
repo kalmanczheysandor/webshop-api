@@ -40,8 +40,8 @@ public class ProductSaveIT {
 
         // Statement(s) of response
         mockMvc.perform(post("/api/admin/products/")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .content(requestText))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestText))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is("Fogkefe")))
@@ -50,8 +50,6 @@ public class ProductSaveIT {
                 .andExpect(jsonPath("$.description", is("Ez egy jó fogkefe")))
                 .andExpect(jsonPath("$.active", is(true)));
     }
-
-
 
     @Test
     void test_save_nameField_whenMissing() throws Exception {
@@ -92,13 +90,11 @@ public class ProductSaveIT {
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must not be blank")));
     }
 
-
     @Test
     void test_save_nameField_whenTooLong() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
-                "  \"name\": \""+"a".repeat(256)+"\",\n" +
+                "  \"name\": \"" + "a".repeat(256) + "\",\n" +
                 "  \"priceNet\": 3655,\n" +
                 "  \"priceVat\": 25,\n" +
                 "  \"description\": \"Ez egy jó fogkefe\",\n" +
@@ -113,8 +109,6 @@ public class ProductSaveIT {
                 .andExpect(jsonPath("$[0].field", is("name")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Field length must be between 0 and 255")));
     }
-
-
 
     @Test
     void test_save_priceNetField_whenMissing() throws Exception {
@@ -154,10 +148,6 @@ public class ProductSaveIT {
                 .andExpect(jsonPath("$[0].field", is("priceNet")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must not be negative")));
     }
-
-
-
-
 
     @Test
     void test_save_priceVatField_whenMissing() throws Exception {
@@ -218,13 +208,6 @@ public class ProductSaveIT {
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must not be greater than 100")));
     }
 
-
-
-
-
-
-
-
     @Test
     void test_save_descriptionField_whenMissing() throws Exception {
         // Creating request text in form of json
@@ -244,18 +227,14 @@ public class ProductSaveIT {
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must not be null")));
     }
 
-
-
-
     @Test
     void test_save_descriptionField_whenTooLong() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"name\": \"Fogkefe\",\n" +
                 "  \"priceNet\": 3655,\n" +
                 "  \"priceVat\": 25,\n" +
-                "  \"description\": \""+"a".repeat(2001)+"\",\n" +
+                "  \"description\": \"" + "a".repeat(2001) + "\",\n" +
                 "  \"active\": true\n" +
                 "}";
 
@@ -286,44 +265,4 @@ public class ProductSaveIT {
                 .andExpect(jsonPath("$[0].field", is("active")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must not be null")));
     }
-
-
-//    @Test
-//    void test_save_priceNetField_whenMissing() throws Exception {
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \"Fogkefe\",\n" +
-//                "  \"priceNet\": 3655,\n" +
-//                "  \"priceVat\": 25,\n" +
-//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(post("/api/admin/products/")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("priceNet")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be blank")));
-//    }
-
-
-
-//    @Test
-//
-//    void testSave_whenNotValid_allFields() throws Exception {
-//        ProductCreateRequest request = new ProductCreateRequest();
-//        request.setName(null);
-//        request.setPriceNet(null);
-//        request.setPriceVat(null);
-//        request.setDescription(null);
-//        request.setActive(null);
-//
-//        mockMvc.perform(post("/api/admin/products/")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(request)))
-//                .andExpect(status().isBadRequest());
-//
-//    }
 }

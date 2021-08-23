@@ -31,7 +31,8 @@ public class CustomerController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Mentés", description = "Új ügyfél felvétele.")
+    @Operation(summary = "Mentés",
+            description = "Új ügyfél felvétele.")
     public CustomerResponse saveCustomer(@Valid @RequestBody CustomerCreateRequest command) {
         log.info("Http request; Method type:POST; URL:/api/admin/customers/; Body:" + command.toString());
         return customerService.saveCustomer(command);
@@ -39,7 +40,8 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Módosítás", description = "Korábban mentett ügyfél id általi elérése és mezőinek felülírása.")
+    @Operation(summary = "Módosítás",
+            description = "Korábban mentett ügyfél id általi elérése és mezőinek felülírása.")
     public CustomerResponse updateCustomer(@Parameter(description = "Ügyfél id", example = "2")
                                            @PathVariable("id") int customerId,
                                            @Valid @RequestBody CustomerUpdateRequest command) {
@@ -49,16 +51,17 @@ public class CustomerController {
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Listázás", description = "Kilistázza az összes mentett ügyfélt.")
+    @Operation(summary = "Listázás",
+            description = "Kilistázza az összes mentett ügyfélt.")
     public List<CustomerResponse> listAllCustomer() {
         log.info("Http request; Method type:GET; URL:/api/admin/customers/");
-        List<CustomerResponse> customers = customerService.listAllCustomer();
-        return customers;
+        return customerService.listAllCustomer();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Lekérés", description = "Korábban mentett ügyfél id általi lekérése.")
+    @Operation(summary = "Lekérés",
+            description = "Korábban mentett ügyfél id általi lekérése.")
     public CustomerResponse findCustomerById(@Parameter(description = "Ügyfél id", example = "2")
                                              @PathVariable("id") int customerId) {
         log.info("Http request; Method type:GET; URL:/api/admin/customers/" + customerId + "/");
@@ -67,12 +70,11 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "Törlés", description = "Korábban mentett ügyfél id általi törlése.")
+    @Operation(summary = "Törlés",
+            description = "Korábban mentett ügyfél id általi törlése.")
     public void deleteCustomerById(@Parameter(description = "Ügyfél id", example = "2")
                                    @PathVariable("id") int customerId) {
         log.info("Http request; Method type:DELETE; URL:/api/admin/customers/" + customerId + "/");
         customerService.deleteCustomerById(customerId);
     }
-
-
 }

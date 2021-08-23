@@ -24,6 +24,7 @@ class ProductRepositoryIT {
 
     @BeforeEach
     void init() {
+        // Setting up product entities
         product01 = new Product();
         product01.setName("Product01");
         product01.setPriceVat(25);

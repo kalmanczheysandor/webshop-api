@@ -85,9 +85,6 @@ public class OrderUpdateIT {
                 .andExpect(jsonPath("$.description", is("")))
                 .andExpect(jsonPath("$.active", is(false)));
 
-
-
-
         // Creating request text in form of json
         String customerRequestText01 = "{\n" +
                 "  \"identifier\": \"customer_user\",\n" +
@@ -104,8 +101,6 @@ public class OrderUpdateIT {
                 "  },\n" +
                 "  \"active\": true\n" +
                 "}";
-
-
 
         String customerRequestText02 = "{\n" +
                 "  \"identifier\": \"user02\",\n" +
@@ -138,8 +133,6 @@ public class OrderUpdateIT {
                 "  },\n" +
                 "  \"active\": false\n" +
                 "}";
-
-
 
         // Statement(s) of response
         mockMvc.perform(post("/api/admin/customers/")
@@ -193,8 +186,6 @@ public class OrderUpdateIT {
                 .andExpect(jsonPath("$.address.postcode", is("DA-LX-9")))
                 .andExpect(jsonPath("$.active", is(false)));
 
-
-
         // Creating request text in form of json
         String orderRequestText01 = "{\n" +
                 "  \"customerId\": 1,\n" +
@@ -234,7 +225,6 @@ public class OrderUpdateIT {
                 "  ]\n" +
                 "}";
 
-
         // Statement(s) of response
         mockMvc.perform(post("/api/admin/orders/")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -264,8 +254,8 @@ public class OrderUpdateIT {
 
         // Statement(s) of response
         mockMvc.perform(put("/api/admin/orders/1")
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .content(requestText))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestText))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.totalNetPrice", is(300.0)))
@@ -279,8 +269,6 @@ public class OrderUpdateIT {
                 .andExpect(jsonPath("$.items[0].quantity", is(1)))
                 .andExpect(jsonPath("$.deliveryStatus", is("DELIVERING")));
     }
-
-
 
     @Test
     void test_update_whenIdNotFound() throws Exception {
@@ -298,7 +286,6 @@ public class OrderUpdateIT {
                 .andExpect(jsonPath("$[0].errorMessage", is("Order at id 25 is not found")));
     }
 
-
     @Test
     void test_update_deliveryStatusField_whenMissing() throws Exception {
         // Creating request text in form of json
@@ -312,9 +299,4 @@ public class OrderUpdateIT {
                 .andExpect(jsonPath("$[0].field", is("deliveryStatus")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must not be null")));
     }
-
-
-
-
-
 }

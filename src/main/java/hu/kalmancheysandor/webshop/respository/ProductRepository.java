@@ -1,7 +1,5 @@
 package hu.kalmancheysandor.webshop.respository;
 
-import hu.kalmancheysandor.webshop.domain.order.Order;
-import hu.kalmancheysandor.webshop.domain.order.OrderItem;
 import hu.kalmancheysandor.webshop.domain.product.Product;
 import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
 import hu.kalmancheysandor.webshop.respository.exception.RecordStillInUseException;
@@ -23,7 +21,7 @@ public class ProductRepository {
 
     public Product findProductById(int productId) {
         Product product = entityManager.find(Product.class, productId);
-        if( product==null) {
+        if (product == null) {
             throw new RecordNotFoundByIdException(productId);
         }
         return product;
@@ -43,7 +41,7 @@ public class ProductRepository {
     }
 
     private void deleteProduct(Product product) {
-        if(isProductStillInUse(product)) {
+        if (isProductStillInUse(product)) {
             throw new RecordStillInUseException(product.getId());
         }
         entityManager.remove(product);
@@ -52,19 +50,16 @@ public class ProductRepository {
     private boolean isProductStillInUse(Product product) {
         List<Object> list = entityManager.createQuery("SELECT i FROM OrderItem i " +
                 "WHERE i.product=:paramProduct")
-                .setParameter("paramProduct",product)
+                .setParameter("paramProduct", product)
                 .setMaxResults(1)
                 .getResultList();
 
-        // Some older JPA implementations returns null instead of empty list
-        if(list==null) {
+        // Because of some older JPA implementations returns null instead of empty list
+        if (list == null) {
             return false;
         }
         return !list.isEmpty();
     }
-
-
-
 
 
 }

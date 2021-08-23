@@ -43,8 +43,6 @@ public class CustomerUpdateIT {
                 "  \"active\": true\n" +
                 "}";
 
-
-
         String requestText02 = "{\n" +
                 "  \"identifier\": \"user02\",\n" +
                 "  \"password\": \"1111111111\",\n" +
@@ -76,8 +74,6 @@ public class CustomerUpdateIT {
                 "  },\n" +
                 "  \"active\": false\n" +
                 "}";
-
-
 
         // Statement(s) of response
         mockMvc.perform(post("/api/admin/customers/")
@@ -131,11 +127,9 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$.address.postcode", is("DA-LX-9")))
                 .andExpect(jsonPath("$.active", is(false)));
     }
-    
 
     @Test
     void test_update_whenSuccessful() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -171,7 +165,6 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$.active", is(true)));
     }
 
-
     @Test
     void test_update_whenIdNotFound() throws Exception {
         // Creating request text in form of json
@@ -199,8 +192,6 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$[0].field", is("customerId")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Customer at id 25 is not found")));
     }
-
-
 
     @Test
     void test_update_identifierField_whenMissing() throws Exception {
@@ -231,7 +222,6 @@ public class CustomerUpdateIT {
 
     @Test
     void test_update_identifierField_whenTooShort() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"" + "a".repeat(4) + "\",\n" +
@@ -249,7 +239,6 @@ public class CustomerUpdateIT {
                 "  \"active\": true\n" +
                 "}";
 
-
         // Statement(s) of response
         mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -261,7 +250,6 @@ public class CustomerUpdateIT {
 
     @Test
     void test_update_identifierField_whenTooLong() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"" + "a".repeat(21) + "\",\n" +
@@ -279,7 +267,6 @@ public class CustomerUpdateIT {
                 "  \"active\": true\n" +
                 "}";
 
-
         // Statement(s) of response
         mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -288,7 +275,6 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$[0].field", is("identifier")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Field length must be between 5 and 20")));
     }
-
 
     @Test
     void test_update_passwordField_whenMissing() throws Exception {
@@ -319,7 +305,6 @@ public class CustomerUpdateIT {
 
     @Test
     void test_update_passwordField_whenTooShort() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -337,7 +322,6 @@ public class CustomerUpdateIT {
                 "  \"active\": true\n" +
                 "}";
 
-
         // Statement(s) of response
         mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -349,7 +333,6 @@ public class CustomerUpdateIT {
 
     @Test
     void test_update_passwordField_whenTooLong() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -376,7 +359,6 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$[0].field", is("password")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Field length must be between 5 and 50")));
     }
-
 
     @Test
     void test_update_firstnameField_whenMissing() throws Exception {
@@ -407,7 +389,6 @@ public class CustomerUpdateIT {
 
     @Test
     void test_update_firstnameField_whenTooLong() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -433,7 +414,6 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$[0].field", is("firstname")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Field length must be between 1 and 255")));
     }
-
 
     @Test
     void test_update_lastnameField_whenMissing() throws Exception {
@@ -464,7 +444,6 @@ public class CustomerUpdateIT {
 
     @Test
     void test_update_lastnameField_whenTooLong() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -490,9 +469,6 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$[0].field", is("lastname")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Field length must be between 1 and 255")));
     }
-
-
-
 
     @Test
     void test_update_phoneField_whenMissing() throws Exception {
@@ -523,7 +499,6 @@ public class CustomerUpdateIT {
 
     @Test
     void test_update_phoneField_whenTooShort() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -553,7 +528,6 @@ public class CustomerUpdateIT {
 
     @Test
     void test_update_phoneField_whenTooLong() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -571,7 +545,6 @@ public class CustomerUpdateIT {
                 "  \"active\": true\n" +
                 "}";
 
-
         // Statement(s) of response
         mockMvc.perform(put("/api/admin/customers/1")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -583,7 +556,6 @@ public class CustomerUpdateIT {
 
     @Test
     void test_update_phoneField_whenWrongFormat() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -609,14 +581,6 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$[0].field", is("phone")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must contain only digits")));
     }
-
-
-
-
-
-
-
-
 
     @Test
     void test_update_emailField_whenMissing() throws Exception {
@@ -645,10 +609,8 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must not be null")));
     }
 
-
     @Test
     void test_update_emailField_whenWrongFormat() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -675,12 +637,8 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must be a in e-mail format")));
     }
 
-
-
-
     @Test
     void test_update_activeField_whenMissing() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -706,14 +664,8 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must not be null")));
     }
 
-
-
-
-
-
     @Test
     void test_update_addressField_whenMissing() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -734,10 +686,8 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$[0].errorMessage", is("Field must not be null")));
     }
 
-
     @Test
     void test_update_address_countryField_whenMissing() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -764,7 +714,6 @@ public class CustomerUpdateIT {
     }
     @Test
     void test_update_address_countryField_whenTooLong() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -791,10 +740,8 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$[0].errorMessage", is("Field length must be between 1 and 255")));
     }
 
-
     @Test
     void test_update_address_cityField_whenMissing() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -822,7 +769,6 @@ public class CustomerUpdateIT {
 
     @Test
     void test_update_address_cityField_whenTooLong() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -849,10 +795,8 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$[0].errorMessage", is("Field length must be between 1 and 255")));
     }
 
-
     @Test
     void test_update_address_streetField_whenMissing() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -880,7 +824,6 @@ public class CustomerUpdateIT {
 
     @Test
     void test_update_address_streetField_whenTooLong() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -909,7 +852,6 @@ public class CustomerUpdateIT {
 
     @Test
     void test_update_address_postcodeField_whenMissing() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -937,7 +879,6 @@ public class CustomerUpdateIT {
 
     @Test
     void test_update_address_postcodeField_whenTooLong() throws Exception {
-
         // Creating request text in form of json
         String requestText = "{\n" +
                 "  \"identifier\": \"user01\",\n" +
@@ -963,324 +904,4 @@ public class CustomerUpdateIT {
                 .andExpect(jsonPath("$[0].field", is("address.postcode")))
                 .andExpect(jsonPath("$[0].errorMessage", is("Field length must be between 1 and 255")));
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    @Test
-//    void test_update_whenSuccessful() throws Exception {
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \"Fogkefe\",\n" +
-//                "  \"priceNet\": 3655,\n" +
-//                "  \"priceVat\": 25,\n" +
-//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(put("/api/admin/products/2")
-//                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                    .content(requestText))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id", is(2)))
-//                .andExpect(jsonPath("$.name", is("Fogkefe")))
-//                .andExpect(jsonPath("$.priceNet", is(3655.0)))
-//                .andExpect(jsonPath("$.priceVat", is(25)))
-//                .andExpect(jsonPath("$.description", is("Ez egy jó fogkefe")))
-//                .andExpect(jsonPath("$.active", is(true)));
-//    }
-//
-//
-//
-//    @Test
-//    void test_update_nameField_whenMissing() throws Exception {
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"priceNet\": 3655,\n" +
-//                "  \"priceVat\": 25,\n" +
-//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(put("/api/admin/products/2")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("name")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be blank")));
-//    }
-//
-//    @Test
-//    void test_update_nameField_whenEmpty() throws Exception {
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \"\",\n" +
-//                "  \"priceNet\": 3655,\n" +
-//                "  \"priceVat\": 25,\n" +
-//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(put("/api/admin/products/2")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("name")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be blank")));
-//    }
-//
-//
-//    @Test
-//    void test_update_nameField_whenTooLong() throws Exception {
-//
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \""+"a".repeat(256)+"\",\n" +
-//                "  \"priceNet\": 3655,\n" +
-//                "  \"priceVat\": 25,\n" +
-//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(put("/api/admin/products/2")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("name")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field length must be between 0 and 255")));
-//    }
-//
-//
-//
-//    @Test
-//    void test_update_priceNetField_whenMissing() throws Exception {
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \"Fogkefe\",\n" +
-//                "  \"priceVat\": 25,\n" +
-//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(put("/api/admin/products/2")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("priceNet")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be null")));
-//    }
-//
-//    @Test
-//    void test_update_priceNetField_whenNotPositiveOrZero() throws Exception {
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \"Fogkefe\",\n" +
-//                "  \"priceNet\": -1,\n" +
-//                "  \"priceVat\": 25,\n" +
-//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(put("/api/admin/products/2")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("priceNet")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be negative")));
-//    }
-//
-//
-//
-//
-//
-//    @Test
-//    void test_update_priceVatField_whenMissing() throws Exception {
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \"Fogkefe\",\n" +
-//                "  \"priceNet\": 3655,\n" +
-//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(put("/api/admin/products/2")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("priceVat")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be null")));
-//    }
-//
-//    @Test
-//    void test_update_priceVatField_whenOutOfMinimumValue() throws Exception {
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \"Fogkefe\",\n" +
-//                "  \"priceNet\": 3655,\n" +
-//                "  \"priceVat\": -1,\n" +
-//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(put("/api/admin/products/2")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("priceVat")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be less than 0")));
-//    }
-//
-//    @Test
-//    void test_update_priceVatField_whenOutOfMaximumValue100() throws Exception {
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \"Fogkefe\",\n" +
-//                "  \"priceNet\": 3655,\n" +
-//                "  \"priceVat\": 101,\n" +
-//                "  \"description\": \"Ez egy jó fogkefe\",\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(put("/api/admin/products/2")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("priceVat")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be greater than 100")));
-//    }
-//
-//
-//
-//
-//
-//
-//
-//
-//    @Test
-//    void test_update_descriptionField_whenMissing() throws Exception {
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \"Fogkefe\",\n" +
-//                "  \"priceNet\": 3655,\n" +
-//                "  \"priceVat\": 25,\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(put("/api/admin/products/2")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("description")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be null")));
-//    }
-//
-//
-//
-//
-//    @Test
-//    void test_update_descriptionField_whenTooLong() throws Exception {
-//
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \"Fogkefe\",\n" +
-//                "  \"priceNet\": 3655,\n" +
-//                "  \"priceVat\": 25,\n" +
-//                "  \"description\": \""+"a".repeat(2001)+"\",\n" +
-//                "  \"active\": true\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(put("/api/admin/products/2")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("description")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field length must be between 0 and 2000")));
-//    }
-//
-//    @Test
-//    void test_update_activeField_whenMissing() throws Exception {
-//        // Creating request text in form of json
-//        String requestText = "{\n" +
-//                "  \"name\": \"Fogkefe\",\n" +
-//                "  \"priceNet\": 3655,\n" +
-//                "  \"priceVat\": 25,\n" +
-//                "  \"description\": \"Ez egy jó fogkefe\"\n" +
-//                "}";
-//
-//        // Statement(s) of response
-//        mockMvc.perform(put("/api/admin/products/2")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(requestText))
-//                .andExpect(status().isBadRequest())
-//                .andExpect(jsonPath("$[0].field", is("active")))
-//                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be null")));
-//    }
-//
-//
-////    @Test
-////    void test_update_priceNetField_whenMissing() throws Exception {
-////        // Creating request text in form of json
-////        String requestText = "{\n" +
-////                "  \"name\": \"Fogkefe\",\n" +
-////                "  \"priceNet\": 3655,\n" +
-////                "  \"priceVat\": 25,\n" +
-////                "  \"description\": \"Ez egy jó fogkefe\",\n" +
-////                "  \"active\": true\n" +
-////                "}";
-////
-////        // Statement(s) of response
-////        mockMvc.perform(put("/api/admin/products/2")
-////                .contentType(MediaType.APPLICATION_JSON_VALUE)
-////                .content(requestText))
-////                .andExpect(status().isBadRequest())
-////                .andExpect(jsonPath("$[0].field", is("priceNet")))
-////                .andExpect(jsonPath("$[0].errorMessage", is("Field must not be blank")));
-////    }
-//
-//
-//
-////    @Test
-////
-////    void testSave_whenNotValid_allFields() throws Exception {
-////        ProductCreateRequest request = new ProductCreateRequest();
-////        request.setName(null);
-////        request.setPriceNet(null);
-////        request.setPriceVat(null);
-////        request.setDescription(null);
-////        request.setActive(null);
-////
-////        mockMvc.perform(put("/api/admin/products/2")
-////                .contentType(MediaType.APPLICATION_JSON_VALUE)
-////                .content(objectMapper.writeValueAsString(request)))
-////                .andExpect(status().isBadRequest());
-////
-////    }
 }

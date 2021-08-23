@@ -18,18 +18,18 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "product_name")
+    @Column(name = "product_name", nullable = false)
     private String name;
-    @Column(name = "price_net")
+    @Column(name = "price_net", nullable = false)
     private Float priceNet;
 
-    @Column(name = "price_vat")
+    @Column(name = "price_vat", nullable = false)
     private Integer priceVat;
 
-    @Column(name = "description")
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "is_active")
+    @Column(name = "is_active", nullable = false)
     private Boolean active;
 
     @OneToMany(mappedBy = "product")

@@ -45,14 +45,12 @@ class OrderRepositoryIT {
 
     @BeforeEach
     void init() {
-
-
-        address01   = new CustomerAddress();
+        // Setting up customer and address entities
+        address01 = new CustomerAddress();
         address01.setCountry("Hungary");
         address01.setCity("Budapest");
         address01.setStreet("Dózsa Street 25");
         address01.setPostcode("1125");
-
 
         customer01 = new Customer();
         customer01.setIdentifier("PaulJackson");
@@ -65,12 +63,11 @@ class OrderRepositoryIT {
         customer01.setAddress(address01);
         address01.setCustomer(customer01);
 
+        // Save customer
         customerRepository.saveCustomer(customer01);
         customerAddressRepository.saveAddress(address01);
 
-
-
-
+        // Setting up product entities
         product01 = new Product();
         product01.setName("Product01");
         product01.setPriceVat(10);
@@ -78,9 +75,10 @@ class OrderRepositoryIT {
         product01.setDescription("My description");
         product01.setActive(true);
 
+        // Save product
         productRepository.saveProduct(product01);
 
-
+        // Setting up order item entities
         item01 = new OrderItem();
         item01.setTotalNetPrice(100f);
         item01.setTotalGrossPrice(110f);
@@ -93,8 +91,9 @@ class OrderRepositoryIT {
         item02.setQuantity(2);
         item01.setProduct(product01);
 
-        product01.setOrderItems(List.of(item01,item02));
+        product01.setOrderItems(List.of(item01, item02));
 
+        // Setting up order entities
         order01 = new Order();
         order01.setTotalNetPrice(100f);
         order01.setTotalGrossPrice(110f);
@@ -144,7 +143,7 @@ class OrderRepositoryIT {
         // Operations
         Order savedOrder = orderRepository.saveOrder(order01);
 
-        for(OrderItem itemToSave:order01.getOrderItems()) {
+        for (OrderItem itemToSave : order01.getOrderItems()) {
             OrderItem savedItem = orderRepository.saveOrderItem(itemToSave);
         }
 
@@ -166,7 +165,6 @@ class OrderRepositoryIT {
                 .hasSize(1)
                 .containsExactly(item01);
     }
-
 
     @Test
     @Transactional
@@ -203,7 +201,6 @@ class OrderRepositoryIT {
         assertEquals(orderFound, savedOrder2);
     }
 
-
     @Test
     @Transactional
     void test_findOrderById_notFound() {
@@ -219,8 +216,6 @@ class OrderRepositoryIT {
 
     }
 
-
-
     @Test
     @Transactional
     void test_findOrderItemById_foundSuccessfully() {
@@ -230,11 +225,11 @@ class OrderRepositoryIT {
 
         // Operations
         Order savedOrder1 = orderRepository.saveOrder(order01);
-        for(OrderItem itemToSave:savedOrder1.getOrderItems()) {
+        for (OrderItem itemToSave : savedOrder1.getOrderItems()) {
             orderRepository.saveOrderItem(itemToSave);
         }
         Order savedOrder2 = orderRepository.saveOrder(order02);
-        for(OrderItem itemToSave:savedOrder2.getOrderItems()) {
+        for (OrderItem itemToSave : savedOrder2.getOrderItems()) {
             orderRepository.saveOrderItem(itemToSave);
         }
 
@@ -243,7 +238,6 @@ class OrderRepositoryIT {
         // Final assertion(s)
         assertEquals(orderItemFound, item02);
     }
-
 
 
     @Test
@@ -255,239 +249,15 @@ class OrderRepositoryIT {
 
         // Operations
         Order savedOrder1 = orderRepository.saveOrder(order01);
-        for(OrderItem itemToSave:savedOrder1.getOrderItems()) {
+        for (OrderItem itemToSave : savedOrder1.getOrderItems()) {
             orderRepository.saveOrderItem(itemToSave);
         }
         Order savedOrder2 = orderRepository.saveOrder(order02);
-        for(OrderItem itemToSave:savedOrder2.getOrderItems()) {
+        for (OrderItem itemToSave : savedOrder2.getOrderItems()) {
             orderRepository.saveOrderItem(itemToSave);
         }
 
         // Final assertion(s)
         assertThrows(RecordNotFoundByIdException.class, () -> orderRepository.findOrderItemById(66));
-
     }
-
-
-//    @Test
-//    @Transactional
-//    void test_updateOrder_updatedSuccessfully() {
-//        init();
-//        // Initial assertion(s)
-//        assertThat(orderRepository.listAllOrder()).isEmpty();
-//        assertThat(orderRepository.listAllOrderItem()).isEmpty();
-//
-//        // Operations
-//        order01.setDeliveryStatus(DeliveryStatus.PURCHASED);
-//        Order savedOrder1 = orderRepository.saveOrder(order01);
-//        for(OrderItem itemToSave:savedOrder1.getOrderItems()) {
-//            orderRepository.saveOrderItem(itemToSave);
-//        }
-//
-//
-//        // Inside assertion(s)
-//        assertEquals(DeliveryStatus.PURCHASED, savedOrder1.getDeliveryStatus());
-//        assertThat(orderRepository.listAllOrder())
-//                .hasSize(1)
-//                .containsExactly(savedOrder1);
-//
-//        // Operations
-//        Order order = orderRepository.findOrderById(1);
-//
-//        savedOrder1.setDeliveryStatus(DeliveryStatus.DELIVERING);
-//        for(OrderItem itemToSave:savedOrder1.getOrderItems()) {
-//            orderRepository.updateOrderItem(itemToSave);
-//        }
-//        orderRepository.updateOrder(savedOrder1);
-////
-////        // Final assertion(s)
-////        assertEquals(DeliveryStatus.DELIVERING, savedOrder2.getDeliveryStatus());
-////        assertThat(orderRepository.listAllOrder())
-////                .hasSize(2)
-////                .containsExactly(savedOrder1, savedOrder2);
-//    }
-//
-//
-
-
-
-//    @Test
-//    @Transactional
-//    void test_updateOrderAddress_updatedSuccessfully() {
-//        // Initial assertion(s)
-//        assertThat(orderRepository.listAllOrder()).isEmpty();
-//        assertThat(addressRepository.listAllAddress()).isEmpty();
-//
-//        // Operations
-//        order02.getAddress().setCountry("Berlin");
-//        Order savedOrder1 = orderRepository.saveOrder(order01);
-//        Order savedOrder2 = orderRepository.saveOrder(order02);
-//        OrderAddress savedAddress1 = addressRepository.saveAddress(order01.getAddress());
-//        OrderAddress savedAddress2 = addressRepository.saveAddress(order02.getAddress());
-//
-//        assertEquals("Berlin", savedOrder2.getAddress().getCountry());
-//        assertThat(addressRepository.listAllAddress())
-//                .hasSize(2)
-//                .containsExactly(savedAddress1, savedAddress2);
-//
-//        savedAddress2.setCountry("Germany");
-//        addressRepository.updateAddress(savedAddress2);
-//
-//        // Final assertion(s)
-//        assertEquals("Germany", savedOrder2.getAddress().getCountry());
-//        assertThat(addressRepository.listAllAddress())
-//                .hasSize(2)
-//                .containsExactly(savedAddress1, savedAddress2);
-//    }
-
-
-
-
-
-
-
-
-
-
-//
-//    @Test
-//    @Transactional
-//    void test_updateOrder_updatedSuccessfully() {
-//        // Initial assertion(s)
-//        assertThat(orderRepository.listAllOrder()).isEmpty();
-//        assertThat(addressRepository.listAllAddress()).isEmpty();
-//
-//        // Operations
-//        order02.setActive(true);
-//        Order savedOrder1 = orderRepository.saveOrder(order01);
-//        Order savedOrder2 = orderRepository.saveOrder(order02);
-//        OrderAddress savedAddress1 = addressRepository.saveAddress(order01.getAddress());
-//        OrderAddress savedAddress2 = addressRepository.saveAddress(order02.getAddress());
-//
-//        assertEquals(true, savedOrder2.getActive());
-//        assertThat(orderRepository.listAllOrder())
-//                .hasSize(2)
-//                .containsExactly(savedOrder1, savedOrder2);
-//
-//        savedOrder2.setActive(false);
-//        orderRepository.updateOrder(savedOrder2);
-//
-//        // Final assertion(s)
-//        assertEquals(false, savedOrder2.getActive());
-//        assertThat(orderRepository.listAllOrder())
-//                .hasSize(2)
-//                .containsExactly(savedOrder1, savedOrder2);
-//    }
-//
-//    @Test
-//    @Transactional
-//    void test_updateOrderAddress_updatedSuccessfully() {
-//        // Initial assertion(s)
-//        assertThat(orderRepository.listAllOrder()).isEmpty();
-//        assertThat(addressRepository.listAllAddress()).isEmpty();
-//
-//        // Operations
-//        order02.getAddress().setCountry("Berlin");
-//        Order savedOrder1 = orderRepository.saveOrder(order01);
-//        Order savedOrder2 = orderRepository.saveOrder(order02);
-//        OrderAddress savedAddress1 = addressRepository.saveAddress(order01.getAddress());
-//        OrderAddress savedAddress2 = addressRepository.saveAddress(order02.getAddress());
-//
-//        assertEquals("Berlin", savedOrder2.getAddress().getCountry());
-//        assertThat(addressRepository.listAllAddress())
-//                .hasSize(2)
-//                .containsExactly(savedAddress1, savedAddress2);
-//
-//        savedAddress2.setCountry("Germany");
-//        addressRepository.updateAddress(savedAddress2);
-//
-//        // Final assertion(s)
-//        assertEquals("Germany", savedOrder2.getAddress().getCountry());
-//        assertThat(addressRepository.listAllAddress())
-//                .hasSize(2)
-//                .containsExactly(savedAddress1, savedAddress2);
-//    }
-//
-//    @Test
-//    @Transactional
-//    void test_deleteOrder_deletedSuccessfully() {
-//        // Initial assertion(s)
-//        assertThat(orderRepository.listAllOrder()).isEmpty();
-//        assertThat(addressRepository.listAllAddress()).isEmpty();
-//
-//        // Operations
-//        Order savedOrder1 = orderRepository.saveOrder(order01);
-//        Order savedOrder2 = orderRepository.saveOrder(order02);
-//        OrderAddress savedAddress1 = addressRepository.saveAddress(order01.getAddress());
-//        OrderAddress savedAddress2 = addressRepository.saveAddress(order02.getAddress());
-//
-//        assertThat(orderRepository.listAllOrder())
-//                .hasSize(2)
-//                .containsExactly(savedOrder1, savedOrder2);
-//
-//        assertThat(addressRepository.listAllAddress())
-//                .hasSize(2)
-//                .containsExactly(savedAddress1, savedAddress2);
-//
-//        // Operations
-//        addressRepository.deleteAllAddressByOrderId(2);
-//        orderRepository.deleteOrderById(2);
-//
-//        // Final assertion(s)
-//        assertThat(orderRepository.listAllOrder())
-//                .hasSize(1)
-//                .containsExactly(savedOrder1);
-//
-//        assertThat(addressRepository.listAllAddress())
-//                .hasSize(1)
-//                .containsExactly(savedAddress1);
-//    }
-//
-//    @Test
-//    @Transactional
-//    void test_deleteOrder_deletedUnsuccessfully_idNotExist() {
-//        // Initial assertion(s)
-//        assertThat(orderRepository.listAllOrder()).isEmpty();
-//        assertThat(addressRepository.listAllAddress()).isEmpty();
-//
-//        // Operations
-//        Order savedOrder1 = orderRepository.saveOrder(order01);
-//        Order savedOrder2 = orderRepository.saveOrder(order02);
-//        OrderAddress savedAddress1 = addressRepository.saveAddress(order01.getAddress());
-//        OrderAddress savedAddress2 = addressRepository.saveAddress(order02.getAddress());
-//
-//        // Final assertion(s)
-//        assertThat(orderRepository.listAllOrder())
-//                .hasSize(2)
-//                .containsExactly(savedOrder1, savedOrder2);
-//        assertThat(addressRepository.listAllAddress())
-//                .hasSize(2)
-//                .containsExactly(savedAddress1, savedAddress2);
-//        assertThrows(RecordNotFoundByIdException.class, () -> orderRepository.deleteOrderById(20));
-//
-//    }
-//
-//    @Test
-//    @Transactional
-//    void test_deleteOrderAddress_deletedUnsuccessfully_idNotExist() {
-//        // Initial assertion(s)
-//        assertThat(orderRepository.listAllOrder()).isEmpty();
-//        assertThat(addressRepository.listAllAddress()).isEmpty();
-//
-//        // Operations
-//        Order savedOrder1 = orderRepository.saveOrder(order01);
-//        Order savedOrder2 = orderRepository.saveOrder(order02);
-//        OrderAddress savedAddress1 = addressRepository.saveAddress(order01.getAddress());
-//        OrderAddress savedAddress2 = addressRepository.saveAddress(order02.getAddress());
-//
-//        // Final assertion(s)
-//        assertThat(orderRepository.listAllOrder())
-//                .hasSize(2)
-//                .containsExactly(savedOrder1, savedOrder2);
-//        assertThat(addressRepository.listAllAddress())
-//                .hasSize(2)
-//                .containsExactly(savedAddress1, savedAddress2);
-//        assertThrows(RecordNotFoundByIdException.class, () -> addressRepository.deleteAddressById(45));
-//
-//    }
 }

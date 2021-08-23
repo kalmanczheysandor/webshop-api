@@ -43,11 +43,9 @@ public class OrderService {
         this.modelMapper = modelMapper;
     }
 
-
     public OrderResponse saveOrder(OrderCreateRequest command) {
 
         // Convert parent dto object to entity
-        //modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
         Order orderToSave = modelMapper.map(command, Order.class);
         orderToSave.setId(null);
         orderToSave.getOrderItems().clear();
@@ -75,6 +73,7 @@ public class OrderService {
             orderItemToSave.setOrder(null);
             orderItemToSave.setProduct(null);
 
+            // Find product and save it to item
             Product product;
             try {
                 Integer productId = item.getProductId();
@@ -85,19 +84,16 @@ public class OrderService {
                 }
                 usedProductIdList.add(productId);
 
-
                 product = productRepository.findProductById(productId);
                 orderItemToSave.setProduct(product);
             } catch (RecordNotFoundByIdException e) {
                 throw new ProductNotFoundException(e.getId());
             }
 
-
+            // Calculating prices
             float totalNet = product.getPriceNet();
             totalNet *= orderItemToSave.getQuantity();
             float totalGross = (totalNet + (totalNet * (product.getPriceVat() / 100)));
-
-
             orderItemToSave.setTotalNetPrice(totalNet);
             orderItemToSave.setTotalGrossPrice(totalGross);
 
@@ -105,15 +101,14 @@ public class OrderService {
             sumTotalGross += totalGross;
 
             // Set relationship references between entities
-
             orderToSave.addOrderItem(orderItemToSave);
             orderItemToSave.setOrder(orderToSave);
-
 
             //Save child entities
             orderRepository.saveOrderItem(orderItemToSave);
         }
 
+        // Save final prices
         orderToSave.setTotalNetPrice(sumTotalNet);
         orderToSave.setTotalGrossPrice(sumTotalGross);
 
@@ -123,9 +118,7 @@ public class OrderService {
     public OrderResponse updateOrder(int orderId, OrderUpdateRequest command) {
         try {
             Order orderCurrentState = orderRepository.findOrderById(orderId);
-
             orderCurrentState.setDeliveryStatus(command.getDeliveryStatus());
-
             Order modifiedOrder = orderRepository.updateOrder(orderCurrentState);
 
             return modelMapper.map(modifiedOrder, OrderResponse.class);
@@ -164,6 +157,7 @@ public class OrderService {
 
     public OrderItemResponse addOrderItemToOrder(int orderId, OrderItemCreateRequest command) {
 
+        // Find order
         Order parentOrder;
         try {
             parentOrder = orderRepository.findOrderById(orderId);
@@ -171,6 +165,7 @@ public class OrderService {
             throw new OrderNotFoundException(e.getId());
         }
 
+        // Find product
         Product product;
         try {
             Integer productId = command.getProductId();
@@ -180,9 +175,11 @@ public class OrderService {
             throw new ProductNotFoundException(e.getId());
         }
 
+        // Calculating prices
         float totalNet = product.getPriceNet() * command.getQuantity();
         float totalGross = totalNet + (totalNet * (product.getPriceVat() / 100));
 
+        // Setting up item to save
         OrderItem itemToSave = new OrderItem();
         itemToSave.setTotalNetPrice(totalNet);
         itemToSave.setTotalGrossPrice(totalGross);
@@ -190,16 +187,23 @@ public class OrderService {
         itemToSave.setOrder(parentOrder);
         itemToSave.setProduct(product);
 
+        // Adding item to order list
         parentOrder.addOrderItem(itemToSave);
+
+        // Save final prices
         parentOrder.setTotalNetPrice(parentOrder.getTotalNetPrice() + itemToSave.getTotalNetPrice());
         parentOrder.setTotalGrossPrice(parentOrder.getTotalGrossPrice() + itemToSave.getTotalGrossPrice());
+
+        // Save and update entities
         orderRepository.saveOrderItem(itemToSave);
         orderRepository.updateOrder(parentOrder);
+
         return modelMapper.map(itemToSave, OrderItemResponse.class);
     }
 
     public OrderItemResponse updateOrderItem(int orderId, int orderItemId, OrderItemUpdateRequest command) {
 
+        // Find order
         Order parentOrder;
         try {
             parentOrder = orderRepository.findOrderById(orderId);
@@ -207,6 +211,7 @@ public class OrderService {
             throw new OrderNotFoundException(e.getId());
         }
 
+        // Find order item
         OrderItem orderItem;
         try {
             orderItem = orderRepository.findOrderItemById(orderItemId);
@@ -219,7 +224,7 @@ public class OrderService {
             throw new OrderItemNotFoundException(e.getId());
         }
 
-
+        // Find product
         Product product;
         try {
             Integer productId = command.getProductId();
@@ -229,9 +234,9 @@ public class OrderService {
             throw new ProductNotFoundException(e.getId());
         }
 
+        // Calculating prices
         float previousTotalNet = orderItem.getTotalNetPrice();
         float previousTotalGross = orderItem.getTotalGrossPrice();
-
         float newTotalNet = product.getPriceNet() * command.getQuantity();
         float newTotalGross = newTotalNet + (newTotalNet * (product.getPriceVat() / 100));
 
@@ -239,13 +244,13 @@ public class OrderService {
         orderItem.setTotalNetPrice(newTotalNet);
         orderItem.setTotalGrossPrice(newTotalGross);
         orderItem.setQuantity(command.getQuantity());
-        //orderItem.setOrder(parentOrder);
         orderItem.setProduct(product);
 
+        // Save final prices
         parentOrder.setTotalNetPrice(parentOrder.getTotalNetPrice() - previousTotalNet + orderItem.getTotalNetPrice());
         parentOrder.setTotalGrossPrice(parentOrder.getTotalGrossPrice() - previousTotalGross + orderItem.getTotalGrossPrice());
+        // Update entity
         orderRepository.updateOrderItem(orderItem);
-        //orderRepository.updateOrder(parentOrder);
         return modelMapper.map(orderItem, OrderItemResponse.class);
     }
 
@@ -261,6 +266,7 @@ public class OrderService {
     }
 
     public OrderItemResponse findOrderItem(int orderId, int orderItemId) {
+        // Find order
         Order parentOrder;
         try {
             parentOrder = orderRepository.findOrderById(orderId);
@@ -268,6 +274,7 @@ public class OrderService {
             throw new OrderNotFoundException(e.getId());
         }
 
+        //Find order item
         OrderItem orderItem;
         try {
             orderItem = orderRepository.findOrderItemById(orderItemId);
@@ -284,6 +291,7 @@ public class OrderService {
     }
 
     public void deleteOrderItem(int orderId, int orderItemId) {
+        // Find order
         Order parentOrder;
         try {
             parentOrder = orderRepository.findOrderById(orderId);
@@ -291,6 +299,7 @@ public class OrderService {
             throw new OrderNotFoundException(e.getId());
         }
 
+        // Find order item
         OrderItem orderItem;
         try {
             orderItem = orderRepository.findOrderItemById(orderItemId);
@@ -312,6 +321,5 @@ public class OrderService {
         parentOrder.setTotalGrossPrice(parentOrder.getTotalGrossPrice() - orderItem.getTotalGrossPrice());
         orderRepository.deleteOrderItem(orderItem);
     }
-
 
 }

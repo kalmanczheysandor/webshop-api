@@ -84,9 +84,6 @@ public class OrderListAndDeleteIT {
                 .andExpect(jsonPath("$.description", is("")))
                 .andExpect(jsonPath("$.active", is(false)));
 
-
-
-
         // Creating request text in form of json
         String customerRequestText01 = "{\n" +
                 "  \"identifier\": \"customer_user\",\n" +
@@ -103,8 +100,6 @@ public class OrderListAndDeleteIT {
                 "  },\n" +
                 "  \"active\": true\n" +
                 "}";
-
-
 
         String customerRequestText02 = "{\n" +
                 "  \"identifier\": \"user02\",\n" +
@@ -137,8 +132,6 @@ public class OrderListAndDeleteIT {
                 "  },\n" +
                 "  \"active\": false\n" +
                 "}";
-
-
 
         // Statement(s) of response
         mockMvc.perform(post("/api/admin/customers/")
@@ -192,8 +185,6 @@ public class OrderListAndDeleteIT {
                 .andExpect(jsonPath("$.address.postcode", is("DA-LX-9")))
                 .andExpect(jsonPath("$.active", is(false)));
 
-
-
         // Creating request text in form of json
         String orderRequestText01 = "{\n" +
                 "  \"customerId\": 1,\n" +
@@ -237,7 +228,6 @@ public class OrderListAndDeleteIT {
                 "  ]\n" +
                 "}";
 
-
         // Statement(s) of response
         mockMvc.perform(post("/api/admin/orders/")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -276,7 +266,6 @@ public class OrderListAndDeleteIT {
                 .andExpect(jsonPath("$[2].id", is(3)))
                 .andExpect(jsonPath("$[2].customer.id", is(3)))
                 .andExpect(jsonPath("$[2].customer.firstname", is("Peter")));
-
     }
 
     @Test
