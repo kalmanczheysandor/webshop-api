@@ -58,8 +58,8 @@ public class ProductUpdateIT {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is("Alma")))
-                .andExpect(jsonPath("$.priceNet", is(115)))
-                .andExpect(jsonPath("$.priceVat", is(25.0)))
+                .andExpect(jsonPath("$.priceNet", is(115.0)))
+                .andExpect(jsonPath("$.priceVat", is(25)))
                 .andExpect(jsonPath("$.description", is("Nagyon finom")))
                 .andExpect(jsonPath("$.active", is(true)));
 
@@ -69,8 +69,8 @@ public class ProductUpdateIT {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(2)))
                 .andExpect(jsonPath("$.name", is("Körte")))
-                .andExpect(jsonPath("$.priceNet", is(1563)))
-                .andExpect(jsonPath("$.priceVat", is(5.0)))
+                .andExpect(jsonPath("$.priceNet", is(1563.0)))
+                .andExpect(jsonPath("$.priceVat", is(5)))
                 .andExpect(jsonPath("$.description", is("Ez is nagyon finom")))
                 .andExpect(jsonPath("$.active", is(false)));
 
@@ -80,8 +80,8 @@ public class ProductUpdateIT {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(3)))
                 .andExpect(jsonPath("$.name", is("Banán")))
-                .andExpect(jsonPath("$.priceNet", is(25)))
-                .andExpect(jsonPath("$.priceVat", is(15.0)))
+                .andExpect(jsonPath("$.priceNet", is(25.0)))
+                .andExpect(jsonPath("$.priceVat", is(15)))
                 .andExpect(jsonPath("$.description", is("")))
                 .andExpect(jsonPath("$.active", is(false)));
     }
@@ -104,8 +104,8 @@ public class ProductUpdateIT {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(2)))
                 .andExpect(jsonPath("$.name", is("Fogkefe")))
-                .andExpect(jsonPath("$.priceNet", is(3655)))
-                .andExpect(jsonPath("$.priceVat", is(25.0)))
+                .andExpect(jsonPath("$.priceNet", is(3655.0)))
+                .andExpect(jsonPath("$.priceVat", is(25)))
                 .andExpect(jsonPath("$.description", is("Ez egy jó fogkefe")))
                 .andExpect(jsonPath("$.active", is(true)));
     }

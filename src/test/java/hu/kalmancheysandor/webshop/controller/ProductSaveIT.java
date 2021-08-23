@@ -45,8 +45,8 @@ public class ProductSaveIT {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is("Fogkefe")))
-                .andExpect(jsonPath("$.priceNet", is(3655)))
-                .andExpect(jsonPath("$.priceVat", is(25.0)))
+                .andExpect(jsonPath("$.priceNet", is(3655.0)))
+                .andExpect(jsonPath("$.priceVat", is(25)))
                 .andExpect(jsonPath("$.description", is("Ez egy jó fogkefe")))
                 .andExpect(jsonPath("$.active", is(true)));
     }

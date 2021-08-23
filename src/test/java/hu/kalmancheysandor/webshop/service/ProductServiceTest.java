@@ -3,14 +3,25 @@ package hu.kalmancheysandor.webshop.service;
 import hu.kalmancheysandor.webshop.domain.product.Product;
 import hu.kalmancheysandor.webshop.dto.product.ProductCreateRequest;
 import hu.kalmancheysandor.webshop.dto.product.ProductResponse;
+import hu.kalmancheysandor.webshop.dto.product.ProductUpdateRequest;
 import hu.kalmancheysandor.webshop.respository.ProductRepository;
+import hu.kalmancheysandor.webshop.respository.exception.RecordNotFoundByIdException;
+import hu.kalmancheysandor.webshop.respository.exception.RecordStillInUseException;
+import hu.kalmancheysandor.webshop.service.exception.ProductNotFoundException;
+import hu.kalmancheysandor.webshop.service.exception.ProductStillInUseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.Condition;
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.Provider;
+import org.modelmapper.config.Configuration;
+import org.modelmapper.internal.InheritingConfiguration;
+import org.modelmapper.spi.*;
 
 import java.util.List;
 
@@ -25,117 +36,211 @@ class ProductServiceTest {
 
     @Mock
     ProductRepository productRepository;
+
     @Mock
     ModelMapper modelMapper;
 
     @InjectMocks
     ProductService productService;
 
-    ProductCreateRequest request01, request02, request03;
-    Product product01, product02, product03;
-    ProductResponse response01, response02, response03;
+    ProductCreateRequest productCreateRequest01, productCreateRequest02;
+    ProductUpdateRequest productUpdateRequest01, productUpdateRequest02;
+    Product productEntity01, productEntity02;
+    Product productEntity01Updated;
+    ProductResponse productResponse01, productResponse02;
+    ProductResponse productResponse01Updated;
+
 
     @BeforeEach
     void init() {
-        // Generation requests
-        request01 = new ProductCreateRequest();
-        request01.setName("Termék 1");
-        request01.setPriceNet(1005.0f);
-        request01.setPriceVat(15);
-        request01.setDescription("Valami");
-        request01.setActive(false);
 
-        request02 = new ProductCreateRequest();
-        request02.setName("Termék 2");
-        request02.setPriceNet(2000.0f);
-        request02.setPriceVat(160);
-        request02.setDescription("semmi");
-        request02.setActive(false);
+        // Generation create requests
+        productCreateRequest01 = new ProductCreateRequest();
+        productCreateRequest01.setName("Termék 1");
+        productCreateRequest01.setPriceNet(1005.0f);
+        productCreateRequest01.setPriceVat(15);
+        productCreateRequest01.setDescription("Valami");
+        productCreateRequest01.setActive(false);
 
-        request03 = new ProductCreateRequest();
-        request03.setName("Termék 3");
-        request03.setPriceNet(356.0f);
-        request03.setPriceVat(28);
-        request03.setDescription("vagy valami?");
-        request03.setActive(true);
-
-        // Generation of products
-        product01 = new Product();
-        product01.setId(1);
-        product01.setName("Termék 1");
-        product01.setPriceNet(1005.0f);
-        product01.setPriceVat(15);
-        product01.setDescription("Valami");
-        product01.setActive(false);
-
-        product02 = new Product();
-        product02.setId(2);
-        product02.setName("Termék 2");
-        product02.setPriceNet(2000.0f);
-        product02.setPriceVat(160);
-        product02.setDescription("semmi");
-        product02.setActive(false);
+        productCreateRequest02 = new ProductCreateRequest();
+        productCreateRequest02.setName("Termék 2");
+        productCreateRequest02.setPriceNet(2000.0f);
+        productCreateRequest02.setPriceVat(160);
+        productCreateRequest02.setDescription("semmi");
+        productCreateRequest02.setActive(false);
 
 
-        product03 = new Product();
-        product03.setId(3);
-        product03.setName("Termék 3");
-        product03.setPriceNet(356.0f);
-        product03.setPriceVat(28);
-        product03.setDescription("vagy valami?");
-        product03.setActive(true);
+        // Generation update requests
+        productUpdateRequest01 = new ProductUpdateRequest();
+        productUpdateRequest01.setName("Termék 1b");
+        productUpdateRequest01.setPriceNet(1005.0f);
+        productUpdateRequest01.setPriceVat(15);
+        productUpdateRequest01.setDescription("Valami");
+        productUpdateRequest01.setActive(false);
 
 
-        response01 = new ProductResponse();
-        response01.setId(1);
-        response01.setName("Termék 1");
-        response01.setPriceNet(1005.0f);
-        response01.setPriceVat(15);
-        response01.setDescription("Valami");
-        response01.setActive(false);
+        // Generation of entities
+        productEntity01 = new Product();
+        productEntity01.setId(1);
+        productEntity01.setName("Termék 1");
+        productEntity01.setPriceNet(1005.0f);
+        productEntity01.setPriceVat(15);
+        productEntity01.setDescription("Valami");
+        productEntity01.setActive(false);
 
-        response02 = new ProductResponse();
-        response02.setId(2);
-        response02.setName("Termék 2");
-        response02.setPriceNet(2000.0f);
-        response02.setPriceVat(160);
-        response02.setDescription("semmi");
-        response02.setActive(false);
+        productEntity02 = new Product();
+        productEntity02.setId(2);
+        productEntity02.setName("Termék 2");
+        productEntity02.setPriceNet(2000.0f);
+        productEntity02.setPriceVat(160);
+        productEntity02.setDescription("semmi");
+        productEntity02.setActive(false);
 
-        response03 = new ProductResponse();
-        response03.setId(3);
-        response03.setName("Termék 3");
-        response03.setPriceNet(356.0f);
-        response03.setPriceVat(28);
-        response03.setDescription("vagy valami?");
-        response03.setActive(true);
+        productEntity01Updated = new Product();
+        productEntity01Updated.setId(1);
+        productEntity01Updated.setName("Termék 1");
+        productEntity01Updated.setPriceNet(1005.0f);
+        productEntity01Updated.setPriceVat(15);
+        productEntity01Updated.setDescription("Valami");
+        productEntity01Updated.setActive(false);
+
+        productResponse01 = new ProductResponse();
+        productResponse01.setId(1);
+        productResponse01.setName("Termék 1");
+        productResponse01.setPriceNet(1005.0f);
+        productResponse01.setPriceVat(15);
+        productResponse01.setDescription("Valami");
+        productResponse01.setActive(false);
+
+        productResponse02 = new ProductResponse();
+        productResponse02.setId(2);
+        productResponse02.setName("Termék 2");
+        productResponse02.setPriceNet(2000.0f);
+        productResponse02.setPriceVat(160);
+        productResponse02.setDescription("semmi");
+        productResponse02.setActive(false);
+
+
+        productResponse01Updated = new ProductResponse();
+        productResponse01Updated.setId(1);
+        productResponse01Updated.setName("Termék 1b");
+        productResponse01Updated.setPriceNet(1005.0f);
+        productResponse01Updated.setPriceVat(15);
+        productResponse01Updated.setDescription("Valami");
+        productResponse01Updated.setActive(false);
 
 
     }
 
+    @Test
+    void test_saveProduct() {
+        // Mocking of repository method(s)
+        when(productRepository.saveProduct(productEntity01)).thenReturn(productEntity01);
+
+        // Mocking from request to entity
+        when(modelMapper.map(productCreateRequest01, Product.class)).thenReturn(productEntity01);
+
+        // Mocking from entity to response
+        when(modelMapper.map(productEntity01, ProductResponse.class)).thenReturn(productResponse01);
+
+        // Statement(s)
+        assertThat(productService.saveProduct(productCreateRequest01))
+                .isEqualTo(productResponse01);
+        verify(productRepository, times(1)).saveProduct(productEntity01);
+        verifyNoMoreInteractions(productRepository);
+    }
 
     @Test
-    void testGetDogs_twoDogsInRepository_twoDogInfosReturned() {
-        when(productRepository.listAllProduct()).thenReturn(List.of(product01, product02));
+    void test_updateProduct_whenItemIsNotFound() {
 
-        when(modelMapper.map(product01, ProductResponse.class)).thenReturn(response01);
-        when(modelMapper.map(product02, ProductResponse.class)).thenReturn(response02);
+        // Mocking of repository method(s)
+        when(productRepository.findProductById(1)).thenThrow(new RecordNotFoundByIdException(1));
+
+        // Mocking from entity to response
+        //when(modelMapper.map(productEntity01, ProductResponse.class)).thenReturn(productResponse01);
+
+        // Statement(s)
+        assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(1, productUpdateRequest01));
+        verify(productRepository, times(1)).findProductById(1);
+        verifyNoMoreInteractions(productRepository);
+
+    }
+
+
+    //doReturn(1).when(bloMock).doSomeStuff();
+    @Test
+    void test_listAllProduct() {
+        // Mocking of repository method(s)
+        when(productRepository.listAllProduct()).thenReturn(List.of(productEntity01, productEntity02));
+
+        // Mocking entity to response
+        when(modelMapper.map(productEntity01, ProductResponse.class)).thenReturn(productResponse01);
+        when(modelMapper.map(productEntity02, ProductResponse.class)).thenReturn(productResponse02);
+
+
+        // Statement(s)
         assertThat(productService.listAllProduct())
                 .hasSize(2)
-                .containsExactly(response01, response02);
+                .containsExactly(productResponse01, productResponse02);
         verify(productRepository, times(1)).listAllProduct();
         verifyNoMoreInteractions(productRepository);
     }
 
+    @Test
+    void test_findProductById_whenItemIsFound() {
+        // Mocking of repository method(s)
+        when(productRepository.findProductById(1)).thenReturn(productEntity01);
+
+        // Mocking from entity to response
+        when(modelMapper.map(productEntity01, ProductResponse.class)).thenReturn(productResponse01);
+
+        // Statement(s)
+        assertThat(productService.findProductById(1))
+                .isEqualTo(productResponse01);
+        verify(productRepository, times(1)).findProductById(1);
+        verifyNoMoreInteractions(productRepository);
+    }
 
     @Test
-    void testSaveDog_fifiInCommand_successfulSave() {
-        when(productRepository.saveProduct(any())).thenReturn(product01);
+    void test_findProductById_whenItemNotFound() {
+        // Mocking of repository method(s)
+        when(productRepository.findProductById(1)).thenThrow(new RecordNotFoundByIdException(1));
 
-        when(modelMapper.map(request01,Product.class)).thenReturn(product01);
-        when(modelMapper.map(product01, ProductResponse.class)).thenReturn(response01);
+        // Mocking from entity to response
+        //when(modelMapper.map(productEntity01, ProductResponse.class)).thenReturn(productResponse01);
 
-        ProductResponse prductSaved = productService.saveProduct(request01);
-        assertEquals(response01, prductSaved);
+        // Statement(s)
+        assertThrows(ProductNotFoundException.class, () -> productService.findProductById(1));
+
+        verify(productRepository, times(1)).findProductById(1);
+        verifyNoMoreInteractions(productRepository);
+    }
+
+    @Test
+    void test_deleteProductById_whenItemNotFound() {
+
+        // Mocking of repository method(s)
+        doThrow(new RecordNotFoundByIdException(1))
+                .when(productRepository)
+                .deleteProductById(1);
+
+        // Statement(s)
+        assertThrows(ProductNotFoundException.class, () -> productService.deleteProductById(1));
+        verify(productRepository, times(1)).deleteProductById(1);
+        verifyNoMoreInteractions(productRepository);
+    }
+
+    @Test
+    void test_deleteProductById_whenItemStillInUse() {
+
+        // Mocking of repository method(s)
+        doThrow(new RecordStillInUseException(1))
+                .when(productRepository)
+                .deleteProductById(1);
+
+        // Statement(s)
+        assertThrows(ProductStillInUseException.class, () -> productService.deleteProductById(1));
+        verify(productRepository, times(1)).deleteProductById(1);
+        verifyNoMoreInteractions(productRepository);
     }
 }
