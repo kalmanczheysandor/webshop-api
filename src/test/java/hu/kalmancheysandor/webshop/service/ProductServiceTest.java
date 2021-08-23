@@ -15,19 +15,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.Condition;
-import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.Provider;
-import org.modelmapper.config.Configuration;
-import org.modelmapper.internal.InheritingConfiguration;
-import org.modelmapper.spi.*;
-
 import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -44,7 +35,7 @@ class ProductServiceTest {
     ProductService productService;
 
     ProductCreateRequest productCreateRequest01, productCreateRequest02;
-    ProductUpdateRequest productUpdateRequest01, productUpdateRequest02;
+    ProductUpdateRequest productUpdateRequest01;
     Product productEntity01, productEntity02;
     Product productEntity01Updated;
     ProductResponse productResponse01, productResponse02;
@@ -68,7 +59,6 @@ class ProductServiceTest {
         productCreateRequest02.setPriceVat(160);
         productCreateRequest02.setDescription("semmi");
         productCreateRequest02.setActive(false);
-
 
         // Generation update requests
         productUpdateRequest01 = new ProductUpdateRequest();
@@ -104,6 +94,8 @@ class ProductServiceTest {
         productEntity01Updated.setDescription("Valami");
         productEntity01Updated.setActive(false);
 
+
+        // Generation of responses
         productResponse01 = new ProductResponse();
         productResponse01.setId(1);
         productResponse01.setName("Termék 1");
@@ -119,7 +111,6 @@ class ProductServiceTest {
         productResponse02.setPriceVat(160);
         productResponse02.setDescription("semmi");
         productResponse02.setActive(false);
-
 
         productResponse01Updated = new ProductResponse();
         productResponse01Updated.setId(1);
@@ -163,11 +154,8 @@ class ProductServiceTest {
         assertThrows(ProductNotFoundException.class, () -> productService.updateProduct(1, productUpdateRequest01));
         verify(productRepository, times(1)).findProductById(1);
         verifyNoMoreInteractions(productRepository);
-
     }
 
-
-    //doReturn(1).when(bloMock).doSomeStuff();
     @Test
     void test_listAllProduct() {
         // Mocking of repository method(s)
@@ -176,7 +164,6 @@ class ProductServiceTest {
         // Mocking entity to response
         when(modelMapper.map(productEntity01, ProductResponse.class)).thenReturn(productResponse01);
         when(modelMapper.map(productEntity02, ProductResponse.class)).thenReturn(productResponse02);
-
 
         // Statement(s)
         assertThat(productService.listAllProduct())
